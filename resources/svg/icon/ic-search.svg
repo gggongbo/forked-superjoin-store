@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-search</title>
+    <defs>
+        <path d="M8.75 1.667a7.083 7.083 0 0 1 5.564 11.468l3.775 3.776a.833.833 0 0 1-1.178 1.178l-3.776-3.775A7.083 7.083 0 1 1 8.75 1.667zm0 1.666a5.417 5.417 0 1 0 3.796 9.28l.031-.036a5.387 5.387 0 0 0 1.59-3.827A5.417 5.417 0 0 0 8.75 3.333z" id="c69vz3n7ia"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="geq5uml7bb" fill="#000000">
+            <use xlink:href="#c69vz3n7ia"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#c69vz3n7ia"/>
+        <g mask="url(#geq5uml7bb)" fill="#000000">
+            <path d="M0 0h20v20H0z"/>
+        </g>
+    </g>
+</svg>

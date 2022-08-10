@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-clock</title>
+    <defs>
+        <path d="M7.5.625a6.875 6.875 0 1 1 0 13.75 6.875 6.875 0 0 1 0-13.75zm0 1.25a5.625 5.625 0 1 0 0 11.25 5.625 5.625 0 0 0 0-11.25zm0 1.25c.345 0 .625.28.625.625v3.491l1.692 1.692a.625.625 0 0 1-.884.884L7.058 7.942a.625.625 0 0 1-.183-.442V3.75c0-.345.28-.625.625-.625z" id="7132fjqnna"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="7n61o0zzjb" fill="#000000">
+            <use xlink:href="#7132fjqnna"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#7132fjqnna"/>
+        <g mask="url(#7n61o0zzjb)" fill="#000000">
+            <path d="M0 0h15v15H0z"/>
+        </g>
+    </g>
+</svg>

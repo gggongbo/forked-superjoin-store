@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-out</title>
+    <defs>
+        <path d="M6 0a.75.75 0 0 1 0 1.5H2.25a.75.75 0 0 0-.75.75v12c0 .414.336.75.75.75H6a.75.75 0 1 1 0 1.5H2.25A2.25 2.25 0 0 1 0 14.25v-12A2.25 2.25 0 0 1 2.25 0zm4.72 4.72a.75.75 0 0 1 1.06 0l3 3a.754.754 0 0 1 .22.53l-.004-.074c.002.015.003.03.003.046L15 8.25a.763.763 0 0 1-.129.42.748.748 0 0 1-.09.11l.068-.078a.751.751 0 0 1-.005.006l-.064.072-3 3a.75.75 0 0 1-1.06-1.06L12.439 9H5.25a.75.75 0 0 1-.743-.648L4.5 8.25a.75.75 0 0 1 .75-.75h7.189l-1.72-1.72a.75.75 0 0 1-.072-.976z" id="lbzuf13kla"/>
+    </defs>
+    <g transform="translate(1.5 .75)" fill="none" fill-rule="evenodd">
+        <mask id="eg6ko1jxtb" fill="#000000">
+            <use xlink:href="#lbzuf13kla"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#lbzuf13kla"/>
+        <g mask="url(#eg6ko1jxtb)" fill="#000000">
+            <path d="M-1.5-.75h18v18h-18z"/>
+        </g>
+    </g>
+</svg>

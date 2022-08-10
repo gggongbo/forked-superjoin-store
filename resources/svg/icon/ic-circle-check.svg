@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-circle-check</title>
+    <defs>
+        <path d="M9 .75a8.25 8.25 0 1 1 0 16.5A8.25 8.25 0 0 1 9 .75zm0 1.5a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5zm3.897 3.961a.75.75 0 0 1 .078.99l-.061.07-4.361 4.5a.75.75 0 0 1-.981.085l-.072-.06-2.39-2.25a.75.75 0 0 1 .957-1.152l.072.06 1.852 1.742 3.845-3.968a.75.75 0 0 1 1.06-.017z" id="4m5aa6tqka"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="5fti9p11sb" fill="#000000">
+            <use xlink:href="#4m5aa6tqka"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#4m5aa6tqka"/>
+        <g mask="url(#5fti9p11sb)" fill="#000000">
+            <path d="M0 0h18v18H0z"/>
+        </g>
+    </g>
+</svg>

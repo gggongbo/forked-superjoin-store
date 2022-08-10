@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-chevron-left</title>
+    <defs>
+        <path d="m1.81 5.25 3.97-3.97A.75.75 0 0 0 4.72.22l-4.5 4.5a.75.75 0 0 0 0 1.06l4.5 4.5a.75.75 0 0 0 1.06-1.06L1.81 5.25z" id="3mzn6w2q2a"/>
+    </defs>
+    <g transform="translate(6 3.75)" fill="none" fill-rule="evenodd">
+        <mask id="gnfcftakkb" fill="#000000">
+            <use xlink:href="#3mzn6w2q2a"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#3mzn6w2q2a"/>
+        <g mask="url(#gnfcftakkb)" fill="#000000">
+            <path d="M-6-3.75h18v18H-6z"/>
+        </g>
+    </g>
+</svg>

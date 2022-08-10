@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-chevron-up</title>
+    <defs>
+        <path d="M9 10.19 5.03 6.22a.75.75 0 0 0-1.06 1.06l4.5 4.5a.75.75 0 0 0 1.06 0l4.5-4.5a.75.75 0 0 0-1.06-1.06L9 10.19z" id="ujzkwwpb0a"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="pxmfixguvb" fill="#000000">
+            <use xlink:href="#ujzkwwpb0a"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" transform="matrix(1 0 0 -1 0 18)" xlink:href="#ujzkwwpb0a"/>
+        <g mask="url(#pxmfixguvb)" fill="#000000">
+            <path d="M0 0h18v18H0z"/>
+        </g>
+    </g>
+</svg>

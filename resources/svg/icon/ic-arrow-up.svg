@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-arrow-up</title>
+    <defs>
+        <path d="M6.195 3.529a.667.667 0 1 1 .943.942L4.276 7.332l9.057.001c.335 0 .612.247.66.568L14 8a.667.667 0 0 1-.667.667H4.276l2.862 2.862c.234.234.258.6.07.86l-.07.082a.667.667 0 0 1-.943 0l-4-4a.679.679 0 0 1-.18-.329.67.67 0 0 1 .18-.613l-.05.056a.67.67 0 0 1 .037-.042l.013-.014z" id="enu8v3nm7a"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="y3dk8c8wdb" fill="#000000">
+            <use xlink:href="#enu8v3nm7a"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" transform="rotate(90 8 8)" xlink:href="#enu8v3nm7a"/>
+        <g mask="url(#y3dk8c8wdb)" fill="#000000">
+            <path d="M0 0h16v16H0z"/>
+        </g>
+    </g>
+</svg>

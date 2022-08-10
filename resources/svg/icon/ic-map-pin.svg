@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-map-pin</title>
+    <defs>
+        <path d="M8 0a6.667 6.667 0 0 1 6.667 6.667c0 2.247-1.202 4.45-3.183 6.541a20.755 20.755 0 0 1-3.114 2.68.667.667 0 0 1-.74 0 6.279 6.279 0 0 1-.11-.076l-.168-.12a20.755 20.755 0 0 1-2.836-2.484c-1.981-2.09-3.183-4.294-3.183-6.541A6.667 6.667 0 0 1 8 0zm0 1.333a5.333 5.333 0 0 0-5.333 5.334c0 1.835 1.048 3.757 2.817 5.625A19.437 19.437 0 0 0 8 14.515a19.437 19.437 0 0 0 2.516-2.224c1.769-1.867 2.817-3.789 2.817-5.624A5.333 5.333 0 0 0 8 1.333zM8 4a2.667 2.667 0 1 1 0 5.333A2.667 2.667 0 0 1 8 4zm0 1.333A1.333 1.333 0 1 0 8 8a1.333 1.333 0 0 0 0-2.667z" id="4afcj777la"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="7mwbmtty3b" fill="#000000">
+            <use xlink:href="#4afcj777la"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#4afcj777la"/>
+        <g mask="url(#7mwbmtty3b)" fill="#000000">
+            <path d="M0 0h16v16H0z"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-user-list</title>
+    <defs>
+        <path d="M9.75 10.5a3.75 3.75 0 0 1 3.75 3.75v1.5a.75.75 0 1 1-1.5 0v-1.5A2.25 2.25 0 0 0 9.75 12H4.5a2.25 2.25 0 0 0-2.25 2.25v1.5a.75.75 0 1 1-1.5 0v-1.5A3.75 3.75 0 0 1 4.5 10.5zm7.5-1.5a.75.75 0 1 1 0 1.5H13.5a.75.75 0 1 1 0-1.5h3.75zM7.125 1.5a3.75 3.75 0 1 1 0 7.5 3.75 3.75 0 0 1 0-7.5zM17.25 6.75a.75.75 0 1 1 0 1.5H13.5a.75.75 0 1 1 0-1.5h3.75zM7.125 3a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5zM17.25 4.5a.75.75 0 1 1 0 1.5H13.5a.75.75 0 1 1 0-1.5h3.75z" id="326krqd3ea"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="hc7jpy196b" fill="#fff">
+            <use xlink:href="#326krqd3ea"/>
+        </mask>
+        <use fill="#000" fill-rule="nonzero" xlink:href="#326krqd3ea"/>
+        <g mask="url(#hc7jpy196b)" fill="#282C34">
+            <path d="M0 0h18v18H0z"/>
+        </g>
+        <g mask="url(#hc7jpy196b)" fill="#00B3A8">
+            <path d="M12.75 4.5H18v6h-5.25z"/>
+        </g>
+    </g>
+</svg>

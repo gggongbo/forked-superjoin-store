@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="68" height="74" viewBox="0 0 68 74" xmlns="http://www.w3.org/2000/svg">
+    <title>logo/logo-icon</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="3r079pw9ya">
+            <stop stop-color="#16CBDE" offset="0%"/>
+            <stop stop-color="#14D0E2" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="31zugy06sb">
+            <stop stop-color="#F92A7E" offset="0%"/>
+            <stop stop-color="#FF3688" offset="100%"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path d="M56.343 3C62.78 3 68 8.22 68 14.657v44.686C68 65.78 62.78 71 56.343 71H11.657C5.22 71 0 65.78 0 59.343V14.657C0 8.22 5.22 3 11.657 3h44.686z" fill="#282C34"/>
+        <path d="M46.6 6.985c5.096 5.103 5.732 12.981 1.91 18.778L38.424 43.626a2.72 2.72 0 0 1-4.737 0l-10.098-17.88c-3.81-5.795-3.17-13.662 1.922-18.76 5.823-5.833 15.265-5.833 21.089 0z" fill="url(#3r079pw9ya)" transform="rotate(-120 36.055 23.81)"/>
+        <path d="M42.728 33.21c5.096 5.103 5.732 12.98 1.91 18.777L34.552 69.851a2.72 2.72 0 0 1-4.737 0L19.717 51.97c-3.81-5.796-3.17-13.663 1.922-18.761 5.823-5.832 15.265-5.832 21.089 0z" fill="url(#31zugy06sb)" transform="rotate(60 32.183 50.035)"/>
+        <path d="M41.482 32.49a15 15 0 0 1 2.596.957l-.114.191c-3.113 6.198-10.247 9.577-17.208 7.717a15 15 0 0 1-2.596-.957l.114-.191c3.114-6.197 10.247-9.576 17.208-7.717z" fill="#322D9F" opacity=".85"/>
+    </g>
+</svg>

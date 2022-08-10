@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+    <title>icon/mark-point-yellow</title>
+    <g fill="none" fill-rule="evenodd">
+        <path fill="#FFF" d="M-1716-213H204V867h-1920z"/>
+        <path fill="#FFF" d="M-20-13h200v44H-20z"/>
+        <g transform="translate(0 -.6)">
+            <circle fill="#FFCD00" cx="9" cy="9.6" r="9"/>
+            <path d="M9 1.6a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm0 1a7 7 0 1 0 0 14 7 7 0 0 0 0-14z" fill="#FFF" fill-rule="nonzero" opacity=".25"/>
+            <path d="M8.368 14v-3.156h1.188c1.908 0 3.432-.912 3.432-2.94 0-2.1-1.512-2.784-3.48-2.784H6.592V14h1.776zm1.068-4.56H8.368V6.524h1.008c1.224 0 1.872.348 1.872 1.38 0 1.02-.588 1.536-1.812 1.536z" fill="#FFF" fill-rule="nonzero" opacity=".903"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-clock-deadline</title>
+    <defs>
+        <path d="M16 6.667v2a2.66 2.66 0 0 1-.902 2c.507.448.842 1.086.895 1.802l.007.198v2h-5.333v-1.703a7 7 0 1 1 3.325-6.297H16zm-2.7 4.666-.095.004a1.33 1.33 0 0 0-1.199 1.2l-.006.13v.666h2.667v-.666l-.004-.101a1.334 1.334 0 0 0-1.13-1.218l-.132-.013-.1-.002zM7 2.667c.335 0 .612.246.66.568l.007.098v3.724L9.47 8.862a.667.667 0 0 1-.86 1.013l-.082-.07-2-2a.667.667 0 0 1-.187-.367l-.009-.105v-4c0-.368.299-.666.667-.666zM14.667 8H12v.667c0 .703.544 1.278 1.205 1.33l.096.003.1-.002a1.333 1.333 0 0 0 1.262-1.23l.004-.101V8zM7 1.333a5.667 5.667 0 1 0 4.43 9.201 2.658 2.658 0 0 1-.763-1.867v-2h1.99A5.667 5.667 0 0 0 7 1.332z" id="2m4ldeefsa"/>
+    </defs>
+    <g transform="translate(0 .667)" fill="none" fill-rule="evenodd">
+        <mask id="ffr38k7ymb" fill="#000000">
+            <use xlink:href="#2m4ldeefsa"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#2m4ldeefsa"/>
+        <g mask="url(#ffr38k7ymb)" fill="#000000">
+            <path d="M0-.667h16v16H0z"/>
+        </g>
+    </g>
+</svg>

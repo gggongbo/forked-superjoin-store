@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+    <title>icon/mark-table-new</title>
+    <g fill="none" fill-rule="evenodd">
+        <circle fill="#F16CA2" cx="9" cy="9" r="9"/>
+        <path d="M7.003 14v-3.861c0-1.105-.143-2.314-.234-3.354h.065l.975 2.067L10.591 14h1.95V4.367h-1.82v3.848c0 1.092.156 2.366.247 3.367h-.065l-.962-2.08-2.795-5.135H5.183V14h1.82z" fill="#FFF" fill-rule="nonzero"/>
+    </g>
+</svg>

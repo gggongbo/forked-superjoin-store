@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19" height="18" viewBox="0 0 19 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-qa</title>
+    <defs>
+        <path d="M9 .75a8.25 8.25 0 1 1 0 16.5A8.25 8.25 0 0 1 9 .75zm0 1.5a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5zm0 10.125a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5zm0-8.168c1.743 0 2.776 1.253 2.776 2.764 0 .998-.345 1.54-1.156 2.205l-.195.155c-.535.421-.69.613-.71.986l-.002.09v.64a.712.712 0 0 1-1.42.084l-.005-.084v-.64c0-.934.328-1.44 1.113-2.08l.19-.153c.607-.476.76-.693.76-1.203 0-.779-.462-1.34-1.351-1.34-.822 0-1.463.57-1.525 1.04l-.005.072a.712.712 0 1 1-1.425 0c0-1.284 1.32-2.536 2.955-2.536z" id="x9e7snrzoa"/>
+    </defs>
+    <g transform="translate(.94)" fill="none" fill-rule="evenodd">
+        <mask id="kmvog3lvhb" fill="#fff">
+            <use xlink:href="#x9e7snrzoa"/>
+        </mask>
+        <use fill="#000" fill-rule="nonzero" xlink:href="#x9e7snrzoa"/>
+        <g mask="url(#kmvog3lvhb)" fill="#282C34">
+            <path d="M0 0h18v18H0z"/>
+        </g>
+        <g mask="url(#kmvog3lvhb)" fill="#00B3A8">
+            <path d="M4.5 3.75h9V12h-9z"/>
+        </g>
+    </g>
+</svg>
