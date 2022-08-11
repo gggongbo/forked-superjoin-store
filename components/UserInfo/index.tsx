@@ -1,6 +1,14 @@
-import { FC } from 'react';
+import {
+  FC,
+  useState,
+  useCallback,
+  Component,
+  HTMLAttributes,
+  ReactNode,
+} from 'react';
 import styled from 'styled-components';
 import Icon from '../Icon';
+import SubText from '../basicComponent/SubText';
 
 const UserInfoBlock = styled.div`
   display: flex;
@@ -35,26 +43,72 @@ const UserId = styled.div`
   }
 `;
 
+const IconBlock = styled.a<{ logoutVisible: boolean }>`
+  border-radius: 100px;
+  border-style: solid;
+  border-width: 0px;
+  padding: 8px;
+  background-color: ${props =>
+    props.logoutVisible
+      ? `${props.theme.colors.singletons.pressGreen}60`
+      : props.theme.colors.singletons.defaultBackground};
+  :hover {
+    background-color: ${props =>
+      `${props.theme.colors.singletons.pressGreen}24`};
+  }
+  :active,
+  :visited {
+    background-color: ${props =>
+      `${props.theme.colors.singletons.pressGreen}60`};
+  }
+`;
+
+// const LogoutBlock = styled.div`
+//   width: 100px;
+//   height: 100px;
+//   background-color: red;
+//   position: absolute;
+//   margin-top: 10px;
+// `;
+
+// const LogoutBlock = styled(SubText)`
+//   /* width: 100px;
+//   height: 100px; */
+//   /* position: absolute; */
+//   margin-top: 30px;
+// `;
+
+// interface UserInfoPropType extends HTMLAttributes<HTMLDivElement> {
+//   userId: string;
+//   logoutVisible: boolean;
+// }
+
 interface UserInfoPropType {
   userId: string;
+  logoutVisible: boolean;
+  onClick: Function;
 }
 
 // TODO: onclick event add
 const UserInfo: FC<UserInfoPropType> = function UserInfo(props) {
-  const { userId } = props;
+  const { userId, logoutVisible, onClick } = props;
+  console.log('tt', logoutVisible);
   const userImage = null; // TODO: userId => get usermage login add
   return (
-    <UserInfoBlock>
+    <UserInfoBlock onClick={onClick?.()}>
       <UserImage userImage={userImage} />
       <UserId>{userId}</UserId>
-      <Icon
-        name="ChevronDown"
-        width={18}
-        height={18}
-        color="realBlack"
-        opacity={84}
-      />
+      <IconBlock logoutVisible={logoutVisible}>
+        <Icon name="ChevronDown" width={18} height={18} color="black" />
+      </IconBlock>
     </UserInfoBlock>
+    // {/* {logoutVisible && (
+    //   <LogoutBlock
+    //     title="logout"
+    //     icon={{ name: 'Out', width: 18, height: 18 }}
+    //     onClick={() => {}}
+    //   />
+    // )} */}
   );
 };
 
