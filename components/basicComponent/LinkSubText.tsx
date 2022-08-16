@@ -9,17 +9,13 @@ const buttonPalette = css<{ isSelected?: boolean }>`
   background-color: ${props =>
     props.isSelected
       ? props.theme.colors.gray[3]
-      : props.theme.colors.singletons.white};
+      : props.theme.colors.singletons.defaultBackground};
   border-radius: 6px;
-  border-width: 0px;
   padding: 20px 15px 20px 15px;
-  cursor: pointer;
   :hover {
     background-color: ${props => props.theme.colors.gray[1]};
   }
-  :active {
-    background-color: ${props => props.theme.colors.gray[3]};
-  }
+  :active,
   :visited {
     background-color: ${props => props.theme.colors.gray[3]};
   }
@@ -43,7 +39,7 @@ interface LinkSubTextPropTypes {
   icon: string;
 }
 
-const LinkSubText: FC<LinkSubTextPropTypes> = function SideNavbar(props) {
+const LinkSubText: FC<LinkSubTextPropTypes> = function LinkSubText(props) {
   const { selectedRouter, title, routerName, icon } = props;
   const isSelected = selectedRouter === routerName.split('/').pop();
 

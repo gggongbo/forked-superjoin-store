@@ -10,16 +10,16 @@ const NavbarBlock = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   width: 100vw;
   aspect-ratio: 26;
   min-height: 50px;
-  /* position: fixed; */
   top: 0px;
   padding: 0px 32px;
-  background: ${props => props.theme.colors.singletons.white};
-  -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  background: ${props => props.theme.colors.singletons.defaultBackground};
+  -webkit-box-shadow: 0px 1px 3px 0px
+    ${props => `${props.theme.colors.singletons.realBlack}20`};
+  box-shadow: 0px 1px 3px 0px
+    ${props => `${props.theme.colors.singletons.realBlack}20`};
   z-index: 999;
   @media ${({ theme }) => theme.media.mobile} {
     padding: 0px 20px;
@@ -91,7 +91,7 @@ const TopNavbar: FC = function TopNavbar() {
       </TitleBlock>
       <UserInfoBlock>
         <VerticalDivider isVertical />
-        <UserInfo userId="testId@test.com" />
+        <UserInfo />
       </UserInfoBlock>
     </NavbarBlock>
   );

@@ -1,4 +1,5 @@
 export const singletons = {
+  defaultBackground: '#ffffff',
   white: '#ffffff',
   black: '#282c34',
   realBlack: '#000000',

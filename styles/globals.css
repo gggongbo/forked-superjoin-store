@@ -18,6 +18,12 @@ a {
   text-decoration: none;
 }
 
+button {
+  border-width: 0;
+  background-color: inherit;
+  cursor: auto;
+}
+
 * {
   box-sizing: border-box;
 }

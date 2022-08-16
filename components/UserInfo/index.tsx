@@ -1,9 +1,11 @@
-import { FC } from 'react';
+import { FC, useState, useCallback, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Icon from '../Icon';
+import SubText from '../basicComponent/SubText';
 
 const UserInfoBlock = styled.div`
   display: flex;
+  position: relative;
   flex-direction: row;
   align-items: center;
 `;
@@ -24,7 +26,7 @@ const UserId = styled.div`
   margin: 0px 16px 0px 16px;
   /* opacity: 0.84; */
   font-size: 14px;
-  color: ${props => props.theme.colors.singletons.realBlack}84;
+  color: ${props => `${props.theme.colors.singletons.realBlack}84`};
   word-break: keep-all;
   @media ${({ theme }) => theme.media.tablet} {
     margin: 0px 8px 0px 8px;
@@ -35,25 +37,71 @@ const UserId = styled.div`
   }
 `;
 
-interface UserInfoPropType {
-  userId: string;
-}
+const IconBlock = styled.div<{ logoutVisible: boolean }>`
+  border-radius: 100px;
+  border-style: solid;
+  border-width: 0px;
+  padding: 8px;
+  background-color: ${props =>
+    props.logoutVisible
+      ? `${props.theme.colors.singletons.pressGreen}60`
+      : props.theme.colors.singletons.defaultBackground};
+  :hover {
+    background-color: ${props =>
+      `${props.theme.colors.singletons.pressGreen}24`};
+  }
+  :active,
+  :visited {
+    background-color: ${props =>
+      `${props.theme.colors.singletons.pressGreen}60`};
+  }
+`;
 
-// TODO: onclick event add
-const UserInfo: FC<UserInfoPropType> = function UserInfo(props) {
-  const { userId } = props;
+const LogoutBlock = styled.div<{ contentHeight?: number }>`
+  position: absolute;
+  display: flex;
+  right: 0px;
+  top: ${props => (props.contentHeight || 0) + 2}px;
+  width: 151px;
+  aspect-ratio: 2.9;
+`;
+
+// TODO: user info get event add
+const UserInfo: FC = function UserInfo() {
+  const userId = 'testId@test.com';
   const userImage = null; // TODO: userId => get usermage login add
+  const [logoutVisible, setLogoutVisible] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+  const contentRef = useRef(null);
+  const onUserInfoPress = useCallback(
+    () => setLogoutVisible(prev => !prev),
+    [],
+  );
+
+  useEffect(() => {
+    if (contentRef.current) {
+      const { clientHeight } = contentRef.current;
+      setContentHeight(clientHeight);
+    }
+  }, []);
+
+  // TODO: outside click event
   return (
-    <UserInfoBlock>
+    <UserInfoBlock onClick={onUserInfoPress} ref={contentRef}>
       <UserImage userImage={userImage} />
       <UserId>{userId}</UserId>
-      <Icon
-        name="ChevronDown"
-        width={18}
-        height={18}
-        color="realBlack"
-        opacity={84}
-      />
+      <IconBlock logoutVisible={logoutVisible}>
+        <Icon name="ChevronDown" width={18} height={18} color="black" />
+      </IconBlock>
+      {logoutVisible && (
+        <LogoutBlock contentHeight={contentHeight}>
+          <SubText
+            title="로그아웃"
+            icon={{ name: 'Out', width: 18, height: 18 }}
+            onClick={() => {}}
+          />
+        </LogoutBlock>
+      )}
     </UserInfoBlock>
   );
 };

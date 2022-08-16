@@ -11,7 +11,7 @@ const MakeOfferBlock = styled.main`
   justify-content: center; //test setting
 `;
 
-const MakeOffer: NextPage = function Home() {
+const MakeOffer: NextPage = function MakeOffer() {
   return (
     <MakeOfferBlock>
       <p>MakeOffer</p>
