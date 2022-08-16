@@ -11,7 +11,7 @@ const SupportBlock = styled.main`
   justify-content: center; //test setting
 `;
 
-const Support: NextPage = function Home() {
+const Support: NextPage = function Support() {
   return (
     <SupportBlock>
       <p>Support</p>

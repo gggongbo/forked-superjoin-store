@@ -12,9 +12,11 @@ interface LayoutProps {
 const LayoutBlock = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  position: relative;
   width: 100vw;
   min-height: 100vh;
+  color: ${props => props.theme.colors.singletons.black}; //default color
 `;
 
 const ContentBlock = styled.div`

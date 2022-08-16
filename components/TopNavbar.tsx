@@ -1,26 +1,25 @@
-import { FC, useState, useCallback } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';
 import logoTitle from '@resources/svg/logo/logo-title.svg';
 import Divider from './basicComponent/Divider';
 import Oval from './basicComponent/Oval';
 import UserInfo from './UserInfo';
-import SubText from './basicComponent/SubText';
 
 const NavbarBlock = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   width: 100vw;
   aspect-ratio: 26;
   min-height: 50px;
-  /* position: fixed; */
   top: 0px;
   padding: 0px 32px;
   background: ${props => props.theme.colors.singletons.defaultBackground};
-  -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0px 1px 3px 0px
+    ${props => `${props.theme.colors.singletons.realBlack}20`};
+  box-shadow: 0px 1px 3px 0px
+    ${props => `${props.theme.colors.singletons.realBlack}20`};
   z-index: 999;
   @media ${({ theme }) => theme.media.mobile} {
     padding: 0px 20px;
@@ -81,25 +80,7 @@ const VerticalDivider = styled(Divider)`
   }
 `;
 
-const LogoutBlock = styled(SubText)`
-  /* width: 100px;
-  height: 100px; */
-  position: absolute;
-  margin-top: 30px;
-`;
-
 const TopNavbar: FC = function TopNavbar() {
-  const [logoutVisible, setLogoutVisible] = useState(false);
-
-  const onUserInfoPress = useCallback(
-    () =>
-      setLogoutVisible(prev => {
-        console.log('p', prev);
-        return !prev;
-      }),
-    [],
-  );
-
   return (
     <NavbarBlock>
       <TitleBlock>
@@ -110,19 +91,8 @@ const TopNavbar: FC = function TopNavbar() {
       </TitleBlock>
       <UserInfoBlock>
         <VerticalDivider isVertical />
-        <UserInfo
-          userId="testId@test.com"
-          logoutVisible={logoutVisible}
-          onClick={onUserInfoPress}
-        />
+        <UserInfo />
       </UserInfoBlock>
-      <LogoutBlock
-        title="logout"
-        icon={{ name: 'Out', width: 18, height: 18 }}
-        onClick={() => {
-          console.log('log out clicked');
-        }}
-      />
     </NavbarBlock>
   );
 };
