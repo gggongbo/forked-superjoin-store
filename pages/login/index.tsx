@@ -1,9 +1,12 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';
 import logoTitle from '@resources/svg/logo/logo-title.svg';
 import loginBg from '@resources/svg/img/img-login-bg.svg';
 import styled from 'styled-components';
 import Oval from '@components/basicComponent/Oval';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 
 const LoginBlock = styled.main`
   width: 100vw;
@@ -64,7 +67,6 @@ const LoginOval = styled(Oval)`
 
 const Text = styled.div`
   margin: 7%;
-  font-family: 'NotoSansCJKkr';
   font-size: 35px;
   color: #282c34;
 `;
@@ -79,10 +81,9 @@ const Button = styled.button`
   height: 44px;
   margin: auto;
   border: none;
-  font-family: 'NotoSansCJKkr';
-  font-size: 14px;
+  font-size: 20px;
   border-radius: 6px;
-  background: #0d6efd;
+  background: #282c34;
   color: #ffffff;
 
   :disabled {
@@ -109,7 +110,7 @@ const InputBox = styled.input`
 `;
 
 const InputDiv = styled.div`
-  margin: auto 18% 6% 10%;
+  margin: auto 18% 2% 10%;
   text-align: left;
 `;
 
@@ -119,6 +120,7 @@ const StyledLabel = styled.label`
   align-items: center;
   user-select: none;
   cursor: default;
+
   &:before {
     display: block;
     content: '';
@@ -127,6 +129,7 @@ const StyledLabel = styled.label`
     background-color: #eaeaea;
     border-radius: 50%;
   }
+
   &:after {
     position: absolute;
     top: 50%;
@@ -143,7 +146,7 @@ const StyledLabel = styled.label`
     background-size: 100% 100%;
     background-position: 50%;
     background-repeat: no-repeat;
-    background-color: blue;
+    background-color: #282c34;
   }
 `;
 
@@ -155,6 +158,7 @@ const StyledInput = styled.input`
   overflow: hidden;
   white-space: nowrap;
   width: 1px;
+
   &:checked + ${StyledLabel} {
     :after {
       opacity: 1;
@@ -166,7 +170,48 @@ const StyledP = styled.p`
   margin-left: 0.5rem;
 `;
 
+const Label = styled.label`
+  font-size: 12px;
+  color: #e63d22;
+  text-align: left;
+`;
+
 const Login: NextPage = function Home() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [autoLogin, setAutoLogin] = useState(true);
+  const [emailError, setEmailError] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const auto = localStorage.getItem('autoLogin');
+    if (auto === 'true') {
+      setAutoLogin(true);
+    } else {
+      setAutoLogin(false);
+    }
+  }, []);
+
+  const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
+    const emailRegex =
+      /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
+    if (!e.target.value || emailRegex.test(e.target.value)) {
+      setEmailError(false);
+    } else setEmailError(true);
+    setEmail(e.target.value);
+  };
+
+  function onSubmit() {
+    if (emailError) {
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          router.push('/');
+        })
+        .catch(() => alert('로그인 실패'));
+    }
+  }
+
   return (
     <LoginBlock>
       <LoginDiv>
@@ -181,23 +226,56 @@ const Login: NextPage = function Home() {
           <Text style={{ margin: '21% 0% 12%', fontSize: '35px' }}>로그인</Text>
           <InputDiv>
             <p>Email</p>
-            <InputBox id="email" placeholder="Email 입력" />
+            <InputBox
+              style={{
+                border: `solid 1px ${!emailError ? '#e63d22' : '#eaeaea'}`,
+              }}
+              id="email"
+              placeholder="Email 입력"
+              onChange={e => onChangeEmail(e)}
+            />
+            {!emailError ? <Label>이메일을 작성해주세요</Label> : null}
           </InputDiv>
           <InputDiv>
             <p>비밀번호</p>
-            <InputBox id="password" placeholder="password" type="password" />
+            <InputBox
+              id="password"
+              placeholder="password"
+              type="password"
+              onChange={e => setPassword(e.target.value)}
+            />
           </InputDiv>
           <InputDiv>
-            <StyledInput type="checkbox" id="autoLogin" name="autoLogin" />
+            <StyledInput
+              onChange={() => {
+                setAutoLogin(!autoLogin);
+                localStorage.setItem('autoLogin', String(!autoLogin));
+              }}
+              type="checkbox"
+              id="autoLogin"
+              name="autoLogin"
+              checked={autoLogin}
+            />
             <StyledLabel htmlFor="autoLogin">
               <StyledP>자동로그인</StyledP>
             </StyledLabel>
-            <Button>로그인</Button>
+            <Button
+              onClick={e => {
+                e.preventDefault();
+                onSubmit();
+              }}
+            >
+              로그인
+            </Button>
           </InputDiv>
         </RightBox>
       </LoginDiv>
     </LoginBlock>
   );
 };
-
 export default Login;
+
+Login.getInitialProps = async (ctx: { pathname: string }) => {
+  const { pathname } = ctx;
+  return { pathname };
+};

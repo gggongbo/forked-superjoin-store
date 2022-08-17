@@ -3,6 +3,10 @@ import { ThemeProvider } from 'styled-components';
 import '@styles/globals.css';
 import { theme } from '@styles/theme/index';
 import Layout from '@components/Layout';
+import { withAuthUser, AuthAction } from 'next-firebase-auth';
+import initAuth from '@service/login/initAuth';
+
+initAuth();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,4 +19,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+// export default MyApp;
+
+export default withAuthUser({
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: '/login',
+  // @ts-ignore
+})(MyApp);

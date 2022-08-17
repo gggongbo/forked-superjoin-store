@@ -6,7 +6,7 @@ import TopNavbar from './TopNavbar';
 import SideNavbar from './SideNavbar';
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children: React.ReactElement;
 }
 
 const LayoutBlock = styled.div`
@@ -42,12 +42,19 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
         <meta name="description" content="Superjoin" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* TODO: session, cookie 있으면 login render  */}
-      <TopNavbar />
-      <ContentBlock>
-        <SideNavbar />
-        <MainBlock>{children}</MainBlock>
-      </ContentBlock>
+      {children && children.props.pathname !== '/login' ? (
+        <>
+          <TopNavbar />
+          <ContentBlock>
+            <SideNavbar />
+            <MainBlock>{children}</MainBlock>
+          </ContentBlock>
+        </>
+      ) : (
+        <ContentBlock>
+          <MainBlock>{children}</MainBlock>
+        </ContentBlock>
+      )}
     </LayoutBlock>
   );
 };

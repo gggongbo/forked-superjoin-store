@@ -1,5 +1,6 @@
 import { FC, useState, useCallback, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { useAuthUser } from 'next-firebase-auth';
 import Icon from '../Icon';
 import SubText from '../basicComponent/SubText';
 
@@ -46,10 +47,12 @@ const IconBlock = styled.div<{ logoutVisible: boolean }>`
     props.logoutVisible
       ? `${props.theme.colors.singletons.pressGreen}60`
       : props.theme.colors.singletons.defaultBackground};
+
   :hover {
     background-color: ${props =>
       `${props.theme.colors.singletons.pressGreen}24`};
   }
+
   :active,
   :visited {
     background-color: ${props =>
@@ -66,10 +69,10 @@ const LogoutBlock = styled.div<{ contentHeight?: number }>`
   aspect-ratio: 2.9;
 `;
 
-// TODO: user info get event add
 const UserInfo: FC = function UserInfo() {
-  const userId = 'testId@test.com';
-  const userImage = null; // TODO: userId => get usermage login add
+  const AuthUser = useAuthUser();
+  const userId = AuthUser.email || 'unknown';
+  const userImage = AuthUser.photoURL || null; // TODO: userId => get usermage login add
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const contentRef = useRef(null);
@@ -83,7 +86,22 @@ const UserInfo: FC = function UserInfo() {
       const { clientHeight } = contentRef.current;
       setContentHeight(clientHeight);
     }
-  }, []);
+
+    const preventClose = () => {
+      // TODO reload 시에도 동작을 함
+      const auto = localStorage.getItem('autoLogin');
+      if (auto === 'false') {
+        AuthUser.signOut();
+      }
+    };
+
+    (() => {
+      window.addEventListener('beforeunload', preventClose);
+    })();
+    return () => {
+      window.removeEventListener('beforeunload', preventClose);
+    };
+  }, [AuthUser]);
 
   // TODO: outside click event
   return (
@@ -98,7 +116,7 @@ const UserInfo: FC = function UserInfo() {
           <SubText
             title="로그아웃"
             icon={{ name: 'Out', width: 18, height: 18 }}
-            onClick={() => {}}
+            onClick={() => AuthUser.signOut()}
           />
         </LogoutBlock>
       )}
