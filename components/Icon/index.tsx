@@ -9,6 +9,7 @@ interface IconPropType {
   color?: string;
   colorIndex?: number;
   opacity?: number | string;
+  onClick?: () => void;
 }
 
 interface IconType {
@@ -25,6 +26,10 @@ const Icons: IconsType = {
   ...IconList,
 };
 
+const IconBlock = styled.div`
+  display: flex;
+`;
+
 const ColoredIcon = styled.div<{
   name: string;
   width?: number;
@@ -33,8 +38,8 @@ const ColoredIcon = styled.div<{
   colorIndex?: number;
   opacity?: number | string;
 }>`
-  width: ${props => props.width || 0}px;
-  height: ${props => props.height || 0}px;
+  width: ${({ width }) => width || 0}px;
+  height: ${({ height }) => height || 0}px;
   background-color: ${props =>
     props.colorIndex
       ? props.theme.colors[props.color][props.colorIndex] + props.opacity
@@ -51,18 +56,18 @@ const DefaultIcon = styled.div<{
   width?: number;
   height?: number;
 }>`
-  width: ${props => props.width || 0}px;
-  height: ${props => props.height || 0}px;
+  width: ${({ width }) => width || 0}px;
+  height: ${({ height }) => height || 0}px;
   background-image: url(${props => Icons[props.name]?.src});
   background-position: center;
   background-size: cover;
 `;
 
 const Icon: FC<IconPropType> = function Icon(props) {
-  const { name, width, height, color, colorIndex, opacity } = props;
+  const { name, width, height, color, colorIndex, opacity, onClick } = props;
 
   return (
-    <div>
+    <IconBlock>
       {color && color?.length > 0 ? (
         <ColoredIcon
           name={name}
@@ -71,11 +76,17 @@ const Icon: FC<IconPropType> = function Icon(props) {
           color={color}
           colorIndex={colorIndex}
           opacity={opacity}
+          onClick={onClick}
         />
       ) : (
-        <DefaultIcon name={name} width={width} height={height} />
+        <DefaultIcon
+          name={name}
+          width={width}
+          height={height}
+          onClick={onClick}
+        />
       )}
-    </div>
+    </IconBlock>
   );
 };
 
@@ -85,5 +96,6 @@ Icon.defaultProps = {
   color: undefined,
   colorIndex: undefined,
   opacity: '',
+  onClick: () => {},
 };
 export default Icon;

@@ -21,6 +21,10 @@ import Trash from '@resources/svg/icon/ic-trash.svg';
 import UserList from '@resources/svg/icon/ic-user-list.svg';
 import UserNow from '@resources/svg/icon/ic-user-now.svg';
 import Users from '@resources/svg/icon/ic-users.svg';
+import MarkPointGray from '@resources/svg/icon/mark-point-gray.svg';
+import MarkPointYellow from '@resources/svg/icon/mark-point-yellow.svg';
+import MarkQ from '@resources/svg/icon/mark-q.svg';
+import MarkTableNew from '@resources/svg/icon/mark-table-new.svg';
 
 export {
   ArrowUp,
@@ -46,4 +50,8 @@ export {
   UserList,
   UserNow,
   Users,
+  MarkPointGray,
+  MarkPointYellow,
+  MarkQ,
+  MarkTableNew,
 };

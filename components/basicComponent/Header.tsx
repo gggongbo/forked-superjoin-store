@@ -1,60 +1,64 @@
 import { FC, ReactNode } from 'react';
-import styled, { CSSObject } from 'styled-components';
+import styled, { CSSProp } from 'styled-components';
 
 const HeaderBlock = styled.div<{
-  customStyle?: CSSObject;
+  customStyle?: CSSProp;
 }>`
-  ${props => props.customStyle};
+  ${({ customStyle }) => customStyle};
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100%;
+  min-height: 42px;
+  margin-left: 8px;
 `;
-const HeaderTitleBlock = styled.a<{ titleStyle?: CSSObject }>`
-  ${props => props.titleStyle};
+
+const HeaderTitleBlock = styled.a<{ titleStyle?: CSSProp }>`
+  ${({ titleStyle }) => titleStyle};
   font-size: 24px;
   font-weight: 500;
   letter-spacing: -0.55px;
 `;
 
 interface HeaderPropTypes {
-  title: string;
+  title?: string;
+  titleComponent?: ReactNode;
   leftComponent?: ReactNode;
   rightComponent?: ReactNode;
-  customStyle?: CSSObject;
-  titleStyle?: CSSObject;
+  customStyle?: CSSProp;
+  titleStyle?: CSSProp;
   onClick?: () => void;
-  titleOnClick?: () => void;
 }
 
 const Header: FC<HeaderPropTypes> = function Header(props) {
   const {
     title,
+    titleComponent,
     leftComponent,
     rightComponent,
     customStyle,
     titleStyle,
     onClick,
-    titleOnClick,
   } = props;
   return (
     <HeaderBlock onClick={onClick} customStyle={customStyle}>
       {leftComponent && leftComponent}
-      <HeaderTitleBlock onClick={titleOnClick} titleStyle={titleStyle}>
-        {title}
-      </HeaderTitleBlock>
+      {titleComponent || (
+        <HeaderTitleBlock titleStyle={titleStyle}>{title}</HeaderTitleBlock>
+      )}
       {rightComponent && rightComponent}
     </HeaderBlock>
   );
 };
 
 Header.defaultProps = {
+  title: '',
+  titleComponent: null,
   leftComponent: null,
   rightComponent: null,
   customStyle: {},
   titleStyle: {},
   onClick: () => {},
-  titleOnClick: () => {},
 };
 
 export default Header;
