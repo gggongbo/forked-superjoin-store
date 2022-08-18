@@ -5,16 +5,16 @@ import Icon from '../Icon';
 const SubTextBlock = styled.div`
   display: flex;
   flex: 1;
-  background-color: ${props => props.theme.colors.singletons.defaultBackground};
+  background-color: ${({ theme }) => theme.colors.singletons.defaultBackground};
   border-radius: 6px;
   -webkit-box-shadow: 0px 2px 10px 0px
-    ${props => `${props.theme.colors.singletons.realBlack}20`};
+    ${({ theme }) => `${theme.colors.singletons.realBlack}20`};
   box-shadow: 0px 2px 10px 0px
-    ${props => `${props.theme.colors.singletons.realBlack}20`};
+    ${({ theme }) => `${theme.colors.singletons.realBlack}20`};
   z-index: 1000;
 `;
 
-const SubHoverBlock = styled.a`
+const SubHoverBlock = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -22,19 +22,19 @@ const SubHoverBlock = styled.a`
   margin: 8px 0px 8px 0px;
   padding: 8px 15px 8px 15px;
   :hover {
-    background-color: ${props =>
-      `${props.theme.colors.singletons.pressGreen}24`};
+    background-color: ${({ theme }) =>
+      `${theme.colors.singletons.pressGreen}24`};
   }
   :active,
   :visited {
-    background-color: ${props =>
-      `${props.theme.colors.singletons.pressGreen}60`};
+    background-color: ${({ theme }) =>
+      `${theme.colors.singletons.pressGreen}60`};
   }
 `;
 
 const SubTextTitle = styled.a`
   font-size: 14px;
-  color: ${props => props.theme.colors.singletons.black};
+  color: ${({ theme }) => theme.colors.singletons.black};
   margin-left: 10px;
 `;
 

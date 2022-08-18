@@ -12,7 +12,7 @@ const RewardBlock = styled.main`
 const RewardContentBlock = styled.div`
   display: flex;
   /* flex: 1; */
-  margin-top: 22px;
+  margin-top: 30px;
   padding: 10px;
   flex-direction: column;
 `;

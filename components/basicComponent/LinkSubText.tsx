@@ -13,11 +13,11 @@ const buttonPalette = css<{ isSelected?: boolean }>`
   border-radius: 6px;
   padding: 20px 15px 20px 15px;
   :hover {
-    background-color: ${props => props.theme.colors.gray[1]};
+    background-color: ${({ theme }) => theme.colors.gray[1]};
   }
   :active,
   :visited {
-    background-color: ${props => props.theme.colors.gray[3]};
+    background-color: ${({ theme }) => theme.colors.gray[3]};
   }
 `;
 
@@ -28,7 +28,7 @@ const LinkSubTextBlock = styled.button`
 const SubLinkText = styled.a`
   font-size: 15px;
   font-weight: 500;
-  color: ${props => props.theme.colors.singletons.black};
+  color: ${({ theme }) => theme.colors.singletons.black};
   margin-left: 14px;
 `;
 
