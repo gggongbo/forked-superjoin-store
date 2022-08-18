@@ -24,16 +24,16 @@ const UserImage = styled.div<{ userImage?: string | null }>`
 `;
 
 const UserId = styled.div`
-  margin: 0px 16px 0px 16px;
+  margin: 0 16px;
   /* opacity: 0.84; */
   font-size: 14px;
   color: ${props => `${props.theme.colors.singletons.realBlack}84`};
   word-break: keep-all;
   @media ${({ theme }) => theme.media.tablet} {
-    margin: 0px 8px 0px 8px;
+    margin: 0 8px;
   }
   @media ${({ theme }) => theme.media.mobile} {
-    margin: 0px 2px 0px 2px;
+    margin: 0 2px;
     font-size: 10px;
   }
 `;
@@ -70,9 +70,10 @@ const LogoutBlock = styled.div<{ contentHeight?: number }>`
 `;
 
 const UserInfo: FC = function UserInfo() {
-  const AuthUser = useAuthUser();
-  const userId = AuthUser.email || 'unknown';
-  const userImage = AuthUser.photoURL || null; // TODO: userId => get usermage login add
+  // const AuthUser = useAuthUser();
+  const AuthUser: any = null;
+  const userId = AuthUser?.email || 'unknown';
+  const userImage = AuthUser?.photoURL || null; // TODO: 앱유저의 프로필 사진을 가져오도록
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const contentRef = useRef(null);
