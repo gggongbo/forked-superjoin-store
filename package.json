@@ -18,9 +18,12 @@
     "babel-plugin-styled-components": "^2.0.7",
     "express": "^4.18.1",
     "file-loader": "^6.2.0",
+    "firebase": "^9.9.2",
+    "firebase-admin": "^11.0.1",
     "lru-cache": "^7.13.2",
     "module-alias": "^2.2.2",
     "next": "12.2.4",
+    "next-firebase-auth": "^1.0.0-canary.14",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "styled-components": "^5.3.5"
