@@ -4,8 +4,8 @@ const initAuth = () => {
   init({
     authPageURL: '/login',
     appPageURL: '/makeoffer',
-    loginAPIEndpoint: '/api/login', // required
-    logoutAPIEndpoint: '/api/logout', // required
+    loginAPIEndpoint: '/api/auth/login', // required
+    logoutAPIEndpoint: '/api/auth/logout', // required
     onLoginRequestError: err => {
       console.error(err);
     },

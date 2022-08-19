@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'styled-components';
 import '@styles/globals.css';
-import { theme } from '@styles/theme/index';
+import { theme } from '@styles/theme';
 import Layout from '@components/Layout';
 import { withAuthUser, AuthAction } from 'next-firebase-auth';
 import initAuth from '@service/login/initAuth';
@@ -19,10 +19,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+// export default MyApp;
 
-// export default withAuthUser({
-//   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-//   authPageURL: '/login',
-//   // @ts-ignore
-// })(MyApp);
+export default withAuthUser({
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: '/login',
+  // @ts-ignore
+})(MyApp);

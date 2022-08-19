@@ -72,7 +72,11 @@ const Support: NextPage = function Support() {
         titleComponent={headertitleComponent}
         leftComponent={headerLeftComponent}
       />
-      {supportType === 'qa' ? <QaSupport /> : <AskSupport />}
+      {supportType === 'qa' ? (
+        <QaSupport />
+      ) : (
+        <AskSupport supportType={setSupportType} />
+      )}
     </SupportBlock>
   );
 };

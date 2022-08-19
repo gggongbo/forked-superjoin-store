@@ -57,10 +57,12 @@ interface InputTextProps {
   width?: number;
   height?: number;
   isArea?: boolean;
+  // eslint-disable-next-line no-unused-vars
+  onChange?: (e: any) => void;
 }
 
 const InputText: FC<InputTextProps> = function InputText(props) {
-  const { rightComponent, width = 0, height = 0, isArea } = props;
+  const { rightComponent, width = 0, height = 0, isArea, onChange } = props;
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -70,12 +72,14 @@ const InputText: FC<InputTextProps> = function InputText(props) {
           <InputTextArea
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            onChange={onChange}
           />
         </InputTextAreaBlock>
       ) : (
         <InputTextfield
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          onChange={onChange}
         />
       )}
       {rightComponent && rightComponent}
@@ -88,6 +92,7 @@ InputText.defaultProps = {
   width: 0,
   height: 0,
   isArea: false,
+  onChange: () => {},
 };
 
 export default InputText;

@@ -90,10 +90,6 @@ const Button = styled.button`
     background: #cfcfcf;
   }
 
-  :hover {
-    background-color: blue;
-  }
-
   :active {
     position: relative;
     top: 1px;
@@ -239,7 +235,6 @@ const Login: NextPage = function Home() {
           <InputDiv>
             <p>비밀번호</p>
             <InputBox
-              id="password"
               placeholder="password"
               type="password"
               onChange={e => setPassword(e.target.value)}
@@ -252,14 +247,13 @@ const Login: NextPage = function Home() {
                 localStorage.setItem('autoLogin', String(!autoLogin));
               }}
               type="checkbox"
-              id="autoLogin"
-              name="autoLogin"
               checked={autoLogin}
             />
             <StyledLabel htmlFor="autoLogin">
               <StyledP>자동로그인</StyledP>
             </StyledLabel>
             <Button
+              disabled={!emailError}
               onClick={e => {
                 e.preventDefault();
                 onSubmit();

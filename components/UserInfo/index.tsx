@@ -70,8 +70,8 @@ const LogoutBlock = styled.div<{ contentHeight?: number }>`
 `;
 
 const UserInfo: FC = function UserInfo() {
-  // const AuthUser = useAuthUser();
-  const AuthUser: any = null;
+  const AuthUser = useAuthUser();
+  // const AuthUser: any = null;
   const userId = AuthUser?.email || 'unknown';
   const userImage = AuthUser?.photoURL || null; // TODO: 앱유저의 프로필 사진을 가져오도록
   const [logoutVisible, setLogoutVisible] = useState(false);

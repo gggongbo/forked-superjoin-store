@@ -33,8 +33,7 @@ if (dev) {
   // eslint-disable-next-line no-restricted-syntax
   for (const info of prerenderList) {
     const { name, path } = info;
-    const html = fs.readFileSync(`./out/${name}.html`, 'utf8');
-    prerenderCache[path] = html;
+    prerenderCache[path] = fs.readFileSync(`./out/${name}.html`, 'utf8');
   }
 }
 
@@ -73,6 +72,10 @@ async function renderAndCache(req, res) {
 
 app.prepare().then(() => {
   const server = express();
+  server.get('/', (req, res) => {
+    res.status(200).json({ hi: 'hi' });
+  });
+
   server.get('/page/:id', (req, res) => {
     res.redirect(`/page${req.params.id}`); // page/1 요청 들어오면 page1으로 리다이렉트
   });

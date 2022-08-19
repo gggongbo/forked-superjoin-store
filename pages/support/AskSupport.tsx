@@ -4,6 +4,9 @@ import InputText from '@components/basicComponent/InputText';
 import InfoText from '@components/basicComponent/InfoText';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Button from '@components/basicComponent/Button';
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { useAuthUser } from 'next-firebase-auth';
+import axios from 'axios';
 
 const AskSupportBlock = styled.form`
   display: flex;
@@ -29,32 +32,70 @@ const buttonStyle = css`
   margin-top: 32px;
 `;
 
-const AskSupport: NextPage = function AskSupport() {
+interface AskSupportProps {
+  supportType: Dispatch<SetStateAction<string>>;
+}
+
+const AskSupport: NextPage<AskSupportProps> = function AskSupport({
+  supportType,
+}) {
+  const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
+  const { email } = useAuthUser();
+  const validation = title.length !== 0 && text.length !== 0;
+
+  const send = async () => {
+    const ok = window.confirm('문의하기 전송');
+    if (ok) {
+      const param = { email, title, text };
+      await axios
+        .post(`http://localhost:3000/api/email/askSupport`, param)
+        .then(() => {
+          alert('문의가 완료되었습니다.');
+          supportType('qa');
+        });
+    }
+  };
+
   return (
     <AskSupportBlock>
       <InfoText
         width={340}
         content="문의하신 내용은 인증하신 이메일로 답변을 보내드립니다."
       />
-
       <ContentBlock>
         <VerticalSubText
           title="제목"
-          content={<InputText />}
+          content={
+            <InputText
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
+            />
+          }
           customStyle={subjectStyle}
         />
         <VerticalSubText
           title="내용"
-          content={<InputText height={392} isArea />}
+          content={
+            <InputText
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setText(e.target.value)
+              }
+              height={392}
+              isArea
+            />
+          }
           customStyle={contentStyle}
         />
         <Button
           text="문의하기"
           type="button"
           onClick={() => {
-            alert('click');
+            send();
           }}
           customStyle={buttonStyle}
+          disabled={!validation}
         />
       </ContentBlock>
     </AskSupportBlock>

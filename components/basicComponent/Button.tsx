@@ -23,6 +23,10 @@ const ButtonBlock = styled.button<{
   box-shadow: 0px 1px 1px 0px
     ${({ theme }) => `${theme.colors.singletons.realBlack}10`};
   ${({ customStyle }) => customStyle};
+
+  :disabled {
+    background: #cfcfcf;
+  }
 `;
 
 const ButtonText = styled.div<{ textStyle?: CSSProp }>`
@@ -43,6 +47,7 @@ interface ButtonProps {
   onClick?: () => void;
   customStyle?: CSSProp;
   textStyle?: CSSProp;
+  disabled?: boolean;
 }
 
 const Button: FC<ButtonProps> = function Button(props) {
@@ -56,6 +61,7 @@ const Button: FC<ButtonProps> = function Button(props) {
     textStyle,
     type = 'button',
     onClick,
+    disabled,
   } = props;
   return (
     <ButtonBlock
@@ -66,6 +72,7 @@ const Button: FC<ButtonProps> = function Button(props) {
       customStyle={customStyle}
       type={type}
       onClick={onClick}
+      disabled={disabled}
     >
       <ButtonText textStyle={textStyle}>{text}</ButtonText>
     </ButtonBlock>
@@ -81,6 +88,7 @@ Button.defaultProps = {
   onClick: () => {},
   customStyle: {},
   textStyle: {},
+  disabled: false,
 };
 
 export default Button;
