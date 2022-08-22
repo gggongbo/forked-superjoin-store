@@ -23,11 +23,8 @@ export const singletons = {
   lifeBlue: '#6495ED',
   religionGreen: '#008080',
   animalPurple: '#6A5ACD',
-  // primaryAppBackground: '#ffffff',
-  // darkFooter: '#27292D',
-  // grayFooter: '#F1EFEE',
-  // primaryPink: '#df2f76',
-  // primaryTeal: '#04b2c4',
+  enabledGray: '#d9d9d9',
+  backgroundGray: '#f9f8f8',
 };
 
 export const text = {

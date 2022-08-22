@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import Accordion from '@components/basicComponent/Accordion';
 
 const AccordionBlock = styled.div`
-  width: 100%;
+  width: 70%;
+  margin-top: 24px;
+  margin-left: 8px;
 `;
 
 const QaSupport: NextPage = function QaSupport() {

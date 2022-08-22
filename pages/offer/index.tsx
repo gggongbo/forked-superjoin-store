@@ -7,7 +7,10 @@ import SelectInputText from '@components/basicComponent/SelectInputText';
 import ReceiveOffer from './ReceiveOffer';
 import SendOffer from './SendOffer';
 
-const optionList = ['제목', '내용'];
+const optionList = [
+  { name: '제목', value: 'title' },
+  { name: '내용', value: 'content' },
+];
 
 const OfferBlock = styled.main`
   display: flex;

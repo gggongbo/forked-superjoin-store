@@ -8,16 +8,23 @@ const buttonPalette = css<{ isSelected?: boolean }>`
   flex-direction: row;
   background-color: ${props =>
     props.isSelected
+      ? props.theme.colors.singletons.white
+      : props.theme.colors.singletons.backgroundGray};
+  border: 1px solid;
+  border-color: ${props =>
+    props.isSelected
       ? props.theme.colors.gray[3]
-      : props.theme.colors.singletons.defaultBackground};
+      : props.theme.colors.singletons.backgroundGray};
+
   border-radius: 6px;
   padding: 20px 15px 20px 15px;
   :hover {
-    background-color: ${({ theme }) => theme.colors.gray[1]};
+    background-color: ${({ theme }) => `${theme.colors.singletons.white}60`};
   }
   :active,
   :visited {
-    background-color: ${({ theme }) => theme.colors.gray[3]};
+    background-color: ${({ theme }) => theme.colors.singletons.white};
+    border-color: ${({ theme }) => theme.colors.gray[3]};
   }
 `;
 

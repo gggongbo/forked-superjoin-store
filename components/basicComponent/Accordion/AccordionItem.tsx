@@ -10,6 +10,15 @@ const AccordionItemBlock = styled.div<{ contentVisible: boolean }>`
   border-style: solid;
   border-width: 0px 0px 1px 0px;
   border-color: ${({ theme }) => theme.colors.gray[3]};
+  :hover {
+    background-color: ${({ theme }) =>
+      `${theme.colors.singletons.pressGreen}24`};
+  }
+  :active,
+  :visited {
+    background-color: ${({ theme }) =>
+      `${theme.colors.singletons.pressGreen}60`};
+  }
 `;
 
 const AccordionItemTitle = styled.div`
@@ -45,7 +54,7 @@ const ContentBlock = styled.div`
   padding: 16px 20px;
   margin-bottom: 16px;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.gray[1]};
+  background-color: ${({ theme }) => theme.colors.gray[2]};
 `;
 
 const ContentText = styled.div`

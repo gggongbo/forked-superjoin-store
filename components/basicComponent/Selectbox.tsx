@@ -7,9 +7,9 @@ import {
   KeyboardEvent,
   MouseEvent,
 } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useInClick } from '@hooks/useInClick';
-import { Option } from '~/types/basicComponent';
+import { Option, PlaceholderColor } from '~/types/basicComponent';
 import Icon from '../Icon';
 
 const SelectBoxBlock = styled.div<{ width: number }>`
@@ -31,7 +31,7 @@ const SelectBlock = styled.label<{ inClicked: boolean; borderRadius?: string }>`
   border-color: ${props =>
     props.inClicked
       ? props.theme.colors.singletons.textGreen
-      : props.theme.colors.gray[3]};
+      : props.theme.colors.singletons.enabledGray};
   :hover {
     border-color: ${props =>
       props.inClicked
@@ -40,7 +40,21 @@ const SelectBlock = styled.label<{ inClicked: boolean; borderRadius?: string }>`
   }
 `;
 
-const Select = styled.select`
+const placeholderTextColor = css<{
+  placeholderColor: PlaceholderColor;
+}>`
+  ${({ placeholderColor, theme }) =>
+    placeholderColor.index
+      ? theme.colors[placeholderColor.color][placeholderColor.index] +
+        (placeholderColor?.opacity || '')
+      : (theme.colors.singletons[placeholderColor.color] ||
+          placeholderColor.color) + (placeholderColor.opacity || '')};
+`;
+
+const Select = styled.select<{
+  isPlaceholder: boolean;
+  placeholderColor: PlaceholderColor;
+}>`
   border: 0px;
   margin-right: 16px;
   margin-left: 16px;
@@ -50,6 +64,8 @@ const Select = styled.select`
   appearance: none;
   font-size: 14px;
   font-family: 'Noto Sans KR';
+  color: ${({ isPlaceholder, theme }) =>
+    isPlaceholder ? placeholderTextColor : theme.colors.singletons.black};
 `;
 
 const SelectItemBlock = styled.ul<{
@@ -93,15 +109,24 @@ const SelectItem = styled.li<{ isSelected: boolean }>`
 interface SelectboxProps {
   optionList: Option[];
   defaultOption?: Option;
+  placeholder?: string;
+  placeholderColor?: PlaceholderColor;
   width?: number;
   borderRadius?: string;
 }
 
 const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
-  const { optionList = [], defaultOption, width = 0, borderRadius } = props;
+  const {
+    optionList = [],
+    defaultOption,
+    placeholder,
+    placeholderColor = { color: 'text', index: 2, opacity: '' },
+    width = 0,
+    borderRadius,
+  } = props;
   const selectRef = useRef(null);
   const { inClicked, setInClikced } = useInClick(selectRef);
-  const [selectOption, setSelectOption] = useState(defaultOption);
+  const [selectOption, setSelectOption] = useState(defaultOption?.value);
   const [selectHeight, setSelectHeight] = useState(0);
 
   useEffect(() => {
@@ -129,7 +154,7 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
 
   const handleSelectBox = useCallback(
     (e: any, option?: Option) => {
-      const optionValue = option || e.target.value;
+      const optionValue = option?.value || e.target.value;
       setSelectOption(optionValue);
       setInClikced(false);
     },
@@ -147,10 +172,18 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
         inClicked={inClicked}
         borderRadius={borderRadius}
       >
-        <Select value={selectOption} onChange={handleSelectBox}>
+        <Select
+          value={selectOption}
+          onChange={handleSelectBox}
+          placeholderColor={placeholderColor}
+          isPlaceholder={!selectOption || selectOption?.length === 0}
+        >
+          <option value="" disabled selected hidden>
+            {placeholder}
+          </option>
           {optionList?.map((option: Option) => (
-            <option key={option} value={option}>
-              {option}
+            <option key={option?.value} value={option?.value}>
+              {option?.name}
             </option>
           ))}
         </Select>
@@ -164,11 +197,11 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
         >
           {optionList?.map((option: Option) => (
             <SelectItem
-              key={option}
+              key={option?.value}
               onClick={e => handleSelectBox(e, option)}
-              isSelected={option === selectOption}
+              isSelected={option?.value === selectOption}
             >
-              {option}
+              {option?.name}
             </SelectItem>
           ))}
         </SelectItemBlock>
@@ -178,7 +211,9 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
 };
 
 SelectBox.defaultProps = {
-  defaultOption: '',
+  defaultOption: { name: '', value: '' },
+  placeholder: '',
+  placeholderColor: { color: 'text', index: 2, opacity: '' },
   width: 0,
   borderRadius: '6px',
 };
