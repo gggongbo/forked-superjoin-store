@@ -22,7 +22,7 @@ const InputTextBlock = styled.div<{ isFocused: boolean }>`
   border-color: ${props =>
     props.isFocused
       ? props.theme.colors.singletons.textGreen
-      : props.theme.colors.gray[3]};
+      : props.theme.colors.singletons.enabledGray};
   :hover {
     border-color: ${props =>
       props.isFocused

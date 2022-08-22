@@ -24,8 +24,12 @@ const ButtonBlock = styled.button<{
     ${({ theme }) => `${theme.colors.singletons.realBlack}10`};
   ${({ customStyle }) => customStyle};
 
+  :hover {
+    background-color: ${({ theme }) => `${theme.colors.singletons.black}50`};
+  }
+
   :disabled {
-    background: #cfcfcf;
+    background: ${({ theme }) => theme.colors.gray[4]};
   }
 `;
 
