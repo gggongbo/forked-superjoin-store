@@ -11,7 +11,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       })
       .catch(() => res.status(500).json({}));
   }
-  return res.status(405).json(`${req.method} Method Not Allowd`);
+  return res.status(405).json(`${req.method} Method Not Allowed`);
 };
 
 export default handler;

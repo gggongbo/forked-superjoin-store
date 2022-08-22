@@ -6,7 +6,7 @@ import InputText from '@components/basicComponent/InputText';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Button from '@components/basicComponent/Button';
 import Header from '@components/basicComponent/Header';
-import SelectBox from '~/components/basicComponent/Selectbox';
+import SelectBox from '@components/basicComponent/Selectbox';
 import { categoryList } from '@constants/category';
 
 const MakeOfferBlock = styled.main`

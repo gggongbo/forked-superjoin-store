@@ -44,6 +44,7 @@ const AskSupport: NextPage<AskSupportProps> = function AskSupport({
   const { email } = useAuthUser();
   const validation = title.length !== 0 && text.length !== 0;
 
+  // TODO 도메인 설정 후 url 변경
   const send = async () => {
     const ok = window.confirm('문의하기 전송');
     if (ok) {

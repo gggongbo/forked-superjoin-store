@@ -25,6 +25,8 @@ import MarkPointGray from '@resources/svg/icon/mark-point-gray.svg';
 import MarkPointYellow from '@resources/svg/icon/mark-point-yellow.svg';
 import MarkQ from '@resources/svg/icon/mark-q.svg';
 import MarkTableNew from '@resources/svg/icon/mark-table-new.svg';
+import EyeOff from '@resources/svg/icon/ic-eye-off.svg';
+import EyeOn from '@resources/svg/icon/ic-eye-on.svg';
 
 export {
   ArrowUp,
@@ -38,6 +40,8 @@ export {
   ClockDeadLine,
   ClockDone,
   Clock,
+  EyeOff,
+  EyeOn,
   ListFilter,
   MapPin,
   Offer,
