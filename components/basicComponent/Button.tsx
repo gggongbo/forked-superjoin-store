@@ -48,7 +48,8 @@ interface ButtonProps {
   colorIndex?: number;
   opacity?: number | string;
   type?: ButtonType;
-  onClick?: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onClick?: (e: any) => void;
   customStyle?: CSSProp;
   textStyle?: CSSProp;
   disabled?: boolean;

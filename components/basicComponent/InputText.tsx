@@ -1,6 +1,7 @@
 import { FC, ReactNode, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { PlaceholderColor } from '~/types/basicComponent';
+import Icon from '@components/Icon';
 
 const InputTextBlock = styled.div<{
   isFocused: boolean;
@@ -12,12 +13,13 @@ const InputTextBlock = styled.div<{
   align-items: center;
   width: ${({ width }) => (width > 0 ? `${width}px` : '100%')};
   height: ${({ height }) => (height > 0 ? `${height}px` : '100%')};
-  border: solid 1px;
   border-radius: 6px;
-  border-color: ${props =>
-    props.isFocused
-      ? props.theme.colors.singletons.textGreen
-      : props.theme.colors.singletons.enabledGray};
+  border: 1px solid
+    ${props =>
+      props.isFocused
+        ? props.theme.colors.singletons.textGreen
+        : props.theme.colors.singletons.enabledGray};
+
   :hover {
     border-color: ${props =>
       props.isFocused
@@ -44,21 +46,25 @@ const placeholderStyle = css<{
   ::-webkit-input-placeholder {
     ${placeholderColorStyle};
   }
+
   ::-moz-placeholder {
     ${placeholderColorStyle};
   }
+
   :-ms-input-placeholder {
     ${placeholderColorStyle};
   }
+
   :-moz-placeholder {
     ${placeholderColorStyle};
   }
+
   ::placeholder {
     ${placeholderColorStyle};
   }
 `;
 
-const InputTextfield = styled.input<{
+const InputTextField = styled.input<{
   placeholderColor: PlaceholderColor;
 }>`
   width: 100%;
@@ -92,6 +98,7 @@ const InputTextArea = styled.textarea<{
 `;
 
 interface InputTextProps {
+  onPassword?: boolean;
   type?: string;
   rightComponent?: ReactNode;
   width?: number;
@@ -101,10 +108,16 @@ interface InputTextProps {
   placeholderColor?: PlaceholderColor;
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
+  // eslint-disable-next-line no-unused-vars
+  onClick?: (e: any) => void;
+  style?: object;
+  showPassword?: boolean;
+  setShowPassword?: () => void;
 }
 
 const InputText: FC<InputTextProps> = function InputText(props) {
   const {
+    onPassword,
     type,
     rightComponent,
     width = 0,
@@ -112,31 +125,52 @@ const InputText: FC<InputTextProps> = function InputText(props) {
     isArea,
     placeholder,
     placeholderColor = { color: 'text', index: 2, opacity: '' },
+    style,
     onChange,
+    onClick,
+    showPassword,
+    setShowPassword,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <InputTextBlock isFocused={isFocused} width={width} height={height}>
+    <InputTextBlock
+      isFocused={isFocused}
+      width={width}
+      height={height}
+      style={style}
+    >
       {isArea ? (
         <InputTextAreaBlock>
           <InputTextArea
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onClick={onClick}
             onChange={onChange}
             placeholder={placeholder}
             placeholderColor={placeholderColor}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
           />
         </InputTextAreaBlock>
       ) : (
-        <InputTextfield
-          type={type}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onChange={onChange}
-          placeholder={placeholder}
-          placeholderColor={placeholderColor}
-        />
+        <>
+          <InputTextField
+            type={type}
+            onClick={onClick}
+            onChange={onChange}
+            placeholder={placeholder}
+            placeholderColor={placeholderColor}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+          />
+          {onPassword ? (
+            <Icon
+              name={showPassword ? 'EyeOn' : 'EyeOff'}
+              width={20}
+              height={20}
+              onClick={() => setShowPassword?.()}
+            />
+          ) : null}
+        </>
       )}
       {rightComponent && rightComponent}
     </InputTextBlock>
@@ -144,6 +178,9 @@ const InputText: FC<InputTextProps> = function InputText(props) {
 };
 
 InputText.defaultProps = {
+  showPassword: false,
+  setShowPassword: () => {},
+  onPassword: false,
   type: 'text',
   rightComponent: null,
   width: 0,
@@ -151,7 +188,9 @@ InputText.defaultProps = {
   isArea: false,
   placeholder: '',
   placeholderColor: { color: 'text', index: 2, opacity: '' },
+  style: {},
   onChange: () => {},
+  onClick: () => {},
 };
 
 export default InputText;

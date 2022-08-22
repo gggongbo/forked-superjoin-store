@@ -5,8 +5,11 @@ import logoTitle from '@resources/svg/logo/logo-title.svg';
 import loginBg from '@resources/svg/img/img-login-bg.svg';
 import styled from 'styled-components';
 import Oval from '@components/basicComponent/Oval';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import InputText from '@components/basicComponent/InputText';
+import Button from '@components/basicComponent/Button';
+import { Check } from '@components/Icon/basic';
 
 const LoginBlock = styled.main`
   width: 100vw;
@@ -52,7 +55,7 @@ const LogoTitle = styled.div`
 const Rectangle = styled.div`
   width: 1px;
   height: 80%;
-  margin: 50px 0px;
+  margin: 50px 0;
   background-color: #eaeaea;
 `;
 
@@ -74,35 +77,6 @@ const Text = styled.div`
 const RightBox = styled.div`
   flex: 2;
   text-align: center;
-`;
-
-const Button = styled.button`
-  width: 100%;
-  height: 44px;
-  margin: auto;
-  border: none;
-  font-size: 20px;
-  border-radius: 6px;
-  background: #282c34;
-  color: #ffffff;
-
-  :disabled {
-    background: #cfcfcf;
-  }
-
-  :active {
-    position: relative;
-    top: 1px;
-  }
-`;
-
-const InputBox = styled.input`
-  width: 100%;
-  height: 35px;
-  padding-left: 20px;
-  border-radius: 6px;
-  border: solid 1px #eaeaea;
-  background-color: #ffffff;
 `;
 
 const InputDiv = styled.div`
@@ -134,11 +108,11 @@ const StyledLabel = styled.label`
     display: block;
     opacity: 0;
     content: '';
-    height: 1.5rem;
-    width: 1.5rem;
+    height: 1.2rem;
+    width: 1.2rem;
     border: 2px solid transparent;
     border-radius: 50%;
-    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+    background-image: url(${Check.src});
     background-size: 100% 100%;
     background-position: 50%;
     background-repeat: no-repeat;
@@ -176,8 +150,13 @@ const Login: NextPage = function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [autoLogin, setAutoLogin] = useState(true);
-  const [emailError, setEmailError] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+
+  function changeShowPassword() {
+    setShowPassword(!showPassword);
+  }
 
   useEffect(() => {
     const auto = localStorage.getItem('autoLogin');
@@ -188,23 +167,16 @@ const Login: NextPage = function Home() {
     }
   }, []);
 
-  const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    const emailRegex =
-      /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
-    if (!e.target.value || emailRegex.test(e.target.value)) {
-      setEmailError(false);
-    } else setEmailError(true);
-    setEmail(e.target.value);
-  };
-
   function onSubmit() {
-    if (emailError) {
+    if (!loginError) {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
           router.push('/');
         })
-        .catch(() => alert('로그인 실패'));
+        .catch(() => {
+          setLoginError(true);
+        });
     }
   }
 
@@ -221,24 +193,35 @@ const Login: NextPage = function Home() {
         <RightBox>
           <Text style={{ margin: '21% 0% 12%', fontSize: '35px' }}>로그인</Text>
           <InputDiv>
-            <p>Email</p>
-            <InputBox
+            <p>아이디</p>
+            <InputText
+              height={35}
               style={{
-                border: `solid 1px ${!emailError ? '#e63d22' : '#eaeaea'}`,
+                border: `solid 1px ${loginError ? '#e63d22' : '#eaeaea'}`,
               }}
-              id="email"
+              onClick={() => setLoginError(false)}
               placeholder="Email 입력"
-              onChange={e => onChangeEmail(e)}
+              onChange={e => setEmail(e.target.value)}
             />
-            {!emailError ? <Label>이메일을 작성해주세요</Label> : null}
           </InputDiv>
           <InputDiv>
             <p>비밀번호</p>
-            <InputBox
+            <InputText
+              height={35}
+              style={{
+                border: `solid 1px ${loginError ? '#e63d22' : '#eaeaea'}`,
+              }}
+              onClick={() => setLoginError(false)}
               placeholder="password"
-              type="password"
               onChange={e => setPassword(e.target.value)}
+              type={showPassword ? 'text' : 'password'}
+              onPassword
+              showPassword={showPassword}
+              setShowPassword={() => changeShowPassword()}
             />
+            {loginError ? (
+              <Label>아이디 혹은 비밀번호를 잘 못 입력했습니다.</Label>
+            ) : null}
           </InputDiv>
           <InputDiv>
             <StyledInput
@@ -246,6 +229,7 @@ const Login: NextPage = function Home() {
                 setAutoLogin(!autoLogin);
                 localStorage.setItem('autoLogin', String(!autoLogin));
               }}
+              id="autoLogin"
               type="checkbox"
               checked={autoLogin}
             />
@@ -253,14 +237,13 @@ const Login: NextPage = function Home() {
               <StyledP>자동로그인</StyledP>
             </StyledLabel>
             <Button
-              disabled={!emailError}
+              disabled={loginError}
               onClick={e => {
                 e.preventDefault();
                 onSubmit();
               }}
-            >
-              로그인
-            </Button>
+              text="로그인"
+            />
           </InputDiv>
         </RightBox>
       </LoginDiv>

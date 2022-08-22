@@ -19,8 +19,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-// export default MyApp;
-
 export default withAuthUser({
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   authPageURL: '/login',

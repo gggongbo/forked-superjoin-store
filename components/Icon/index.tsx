@@ -9,7 +9,8 @@ interface IconPropType {
   color?: string;
   colorIndex?: number;
   opacity?: number | string;
-  onClick?: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onClick?: (e: any) => void;
 }
 
 interface IconType {
