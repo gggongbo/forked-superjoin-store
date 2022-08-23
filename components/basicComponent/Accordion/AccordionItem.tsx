@@ -36,10 +36,11 @@ const TitleBlock = styled.div`
   align-items: center;
 `;
 
-const Title = styled.div`
-  text-align: center;
+const Title = styled.pre`
+  font-family: 'Noto Sans KR';
   font-size: 15px;
   font-weight: 500;
+  text-align: center;
   margin-left: 11px;
 `;
 
@@ -57,7 +58,8 @@ const ContentBlock = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[2]};
 `;
 
-const ContentText = styled.div`
+const ContentText = styled.pre`
+  font-family: 'Noto Sans KR';
   font-size: 14px;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text[4]};
