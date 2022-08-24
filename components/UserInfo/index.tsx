@@ -1,7 +1,6 @@
 import { FC, useState, useCallback, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuthUser } from 'next-firebase-auth';
-import getByEmailPhotoURL from '@service/login/profile';
 import Icon from '../Icon';
 import SubText from '../basicComponent/SubText';
 
@@ -72,12 +71,10 @@ const LogoutBlock = styled.div<{ contentHeight?: number }>`
 
 const UserInfo: FC = function UserInfo() {
   const AuthUser = useAuthUser();
-  // const userId = AuthUser?.email || 'unknown';
-  const [userId, setUserId] = useState<any>('unknown');
+  const userId = AuthUser?.email || 'unknown';
+  const userImage = AuthUser?.photoURL || null;
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
-  // const userImage = AuthUser?.photoURL || null; // TODO: 앱유저의 프로필 사진을 가져오도록
-  const [userImage, setUserImage] = useState<any>(null);
   const contentRef = useRef(null);
   const onUserInfoPress = useCallback(
     () => setLogoutVisible(prev => !prev),
@@ -88,9 +85,7 @@ const UserInfo: FC = function UserInfo() {
       const { clientHeight } = contentRef.current;
       setContentHeight(clientHeight);
     }
-    setUserId(AuthUser?.email);
-    // @ts-ignore
-    getByEmailPhotoURL(userId).then((url: object) => setUserImage(url?.image));
+
     const preventClose = () => {
       // TODO reload 시에도 동작을 함
       const auto = localStorage.getItem('autoLogin');
