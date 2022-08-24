@@ -1,4 +1,4 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -11,7 +11,8 @@ const firebaseConfig = {
   measurementId: 'G-167LQDWY1R',
 };
 
-const app = initializeApp(firebaseConfig, { name: 'client' });
+initializeApp(firebaseConfig, 'client');
+const app = getApp('client');
 const db = getFirestore(app);
 
 export { db };

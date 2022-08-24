@@ -71,9 +71,8 @@ const LogoutBlock = styled.div<{ contentHeight?: number }>`
 
 const UserInfo: FC = function UserInfo() {
   const AuthUser = useAuthUser();
-  // const AuthUser: any = null;
   const userId = AuthUser?.email || 'unknown';
-  const userImage = AuthUser?.photoURL || null; // TODO: 앱유저의 프로필 사진을 가져오도록
+  const userImage = AuthUser?.photoURL || null;
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [contentHeight, setContentHeight] = useState(0);
   const contentRef = useRef(null);
@@ -81,7 +80,6 @@ const UserInfo: FC = function UserInfo() {
     () => setLogoutVisible(prev => !prev),
     [],
   );
-
   useEffect(() => {
     if (contentRef.current) {
       const { clientHeight } = contentRef.current;
@@ -102,7 +100,7 @@ const UserInfo: FC = function UserInfo() {
     return () => {
       window.removeEventListener('beforeunload', preventClose);
     };
-  }, [AuthUser]);
+  }, [AuthUser, userId]);
 
   // TODO: outside click event
   return (
