@@ -12,22 +12,10 @@ import Button from '@components/basicComponent/Button';
 import { Check } from '@components/Icon/basic';
 
 const LoginBlock = styled.main`
-  width: 100vw;
-  height: 100vh;
-  text-align: center;
-  background-color: #f1efee;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-image: url(${loginBg.src});
-`;
-
-const LoginDiv = styled.div`
-  height: 65.5%;
-  width: 53%;
-  margin: 10% auto;
   display: flex;
-  background-color: rgba(255, 255, 255, 0);
+  width: 100%;
+  height: 100%;
+  background-color: #f1efee;
 `;
 
 const LogoIcon = styled.div`
@@ -56,7 +44,7 @@ const Rectangle = styled.div`
   width: 1px;
   height: 80%;
   margin: 50px 0;
-  background-color: #eaeaea;
+  background-color: #d9d9d9;
 `;
 
 const LeftBox = styled.div`
@@ -146,6 +134,51 @@ const Label = styled.label`
   text-align: left;
 `;
 
+const SideDiv = styled.div`
+  width: 24%;
+`;
+
+const CenterDiv = styled.div`
+  align-items: center;
+  width: 52%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-image: url(${loginBg.src});
+`;
+
+const LoginDiv = styled.div`
+  height: 14.5%;
+  background-color: rgba(255, 255, 255, 0);
+`;
+
+const LoginDivCenter = styled.div`
+  height: 71%;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0);
+`;
+
+const LoginBox = styled.div`
+  width: 74.5%;
+  height: 64.5%;
+  margin: -50px 0 0 -50px;
+  top: 23%;
+  left: 17%;
+  position: absolute;
+  display: flex;
+  background-color: rgba(255, 255, 255, 0);
+`;
+
+const LoginBottom = styled.div`
+  display: flex;
+  position: absolute;
+  width: 74.5%;
+  height: 64.5%;
+  margin: -50px 0 0 -50px;
+  top: 98%;
+  left: 35%;
+`;
+
 const Login: NextPage = function Home() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -182,71 +215,94 @@ const Login: NextPage = function Home() {
 
   return (
     <LoginBlock>
-      <LoginDiv>
-        <LeftBox>
-          <LogoIcon />
-          <LogoTitle />
-          <LoginOval width={8} height={8} />
-          <Text>셀프 관리 서비스</Text>
-        </LeftBox>
-        <Rectangle />
-        <RightBox>
-          <Text style={{ margin: '21% 0% 12%', fontSize: '35px' }}>로그인</Text>
-          <InputDiv>
-            <p>아이디</p>
-            <InputText
-              height={35}
-              style={{
-                border: `solid 1px ${loginError ? '#e63d22' : '#eaeaea'}`,
-              }}
-              onClick={() => setLoginError(false)}
-              placeholder="Email 입력"
-              onChange={e => setEmail(e.target.value)}
+      <SideDiv />
+      <CenterDiv>
+        <LoginDiv />
+        <LoginDivCenter>
+          <LoginBox>
+            <LeftBox>
+              <LogoIcon />
+              <LogoTitle />
+              <LoginOval width={8} height={8} />
+              <Text>셀프 관리 서비스</Text>
+            </LeftBox>
+            <Rectangle />
+            <RightBox>
+              <Text style={{ margin: '21% 0% 12%', fontSize: '35px' }}>
+                로그인
+              </Text>
+              <InputDiv>
+                <p>아이디</p>
+                <InputText
+                  height={35}
+                  style={{
+                    border: `solid 1px ${loginError ? '#e63d22' : '#d9d9d9'}`,
+                  }}
+                  onClick={() => setLoginError(false)}
+                  placeholder="Email 입력"
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </InputDiv>
+              <InputDiv>
+                <p>비밀번호</p>
+                <InputText
+                  height={35}
+                  style={{
+                    border: `solid 1px ${loginError ? '#e63d22' : '#d9d9d9'}`,
+                  }}
+                  onClick={() => setLoginError(false)}
+                  placeholder="password"
+                  onChange={e => setPassword(e.target.value)}
+                  type={showPassword ? 'text' : 'password'}
+                  onPassword
+                  showPassword={showPassword}
+                  setShowPassword={() => changeShowPassword()}
+                />
+                {loginError ? (
+                  <Label>아이디 혹은 비밀번호를 잘 못 입력했습니다.</Label>
+                ) : null}
+              </InputDiv>
+              <InputDiv>
+                <StyledInput
+                  onChange={() => {
+                    setAutoLogin(!autoLogin);
+                    localStorage.setItem('autoLogin', String(!autoLogin));
+                  }}
+                  id="autoLogin"
+                  type="checkbox"
+                  checked={autoLogin}
+                />
+                <StyledLabel htmlFor="autoLogin">
+                  <StyledP>자동로그인</StyledP>
+                </StyledLabel>
+                <Button
+                  disabled={loginError}
+                  onClick={e => {
+                    e.preventDefault();
+                    onSubmit();
+                  }}
+                  text="로그인"
+                />
+              </InputDiv>
+            </RightBox>
+          </LoginBox>
+        </LoginDivCenter>
+        <LoginDiv style={{ position: 'relative' }}>
+          <LoginBottom>
+            <img
+              src={logoTitle.src}
+              alt="logoTitle"
+              width={50}
+              height={30}
+              style={{ width: '10%' }}
             />
-          </InputDiv>
-          <InputDiv>
-            <p>비밀번호</p>
-            <InputText
-              height={35}
-              style={{
-                border: `solid 1px ${loginError ? '#e63d22' : '#eaeaea'}`,
-              }}
-              onClick={() => setLoginError(false)}
-              placeholder="password"
-              onChange={e => setPassword(e.target.value)}
-              type={showPassword ? 'text' : 'password'}
-              onPassword
-              showPassword={showPassword}
-              setShowPassword={() => changeShowPassword()}
-            />
-            {loginError ? (
-              <Label>아이디 혹은 비밀번호를 잘 못 입력했습니다.</Label>
-            ) : null}
-          </InputDiv>
-          <InputDiv>
-            <StyledInput
-              onChange={() => {
-                setAutoLogin(!autoLogin);
-                localStorage.setItem('autoLogin', String(!autoLogin));
-              }}
-              id="autoLogin"
-              type="checkbox"
-              checked={autoLogin}
-            />
-            <StyledLabel htmlFor="autoLogin">
-              <StyledP>자동로그인</StyledP>
-            </StyledLabel>
-            <Button
-              disabled={loginError}
-              onClick={e => {
-                e.preventDefault();
-                onSubmit();
-              }}
-              text="로그인"
-            />
-          </InputDiv>
-        </RightBox>
-      </LoginDiv>
+            <p style={{ margin: '0' }}>
+              &nbsp;&nbsp;&nbsp;Copyright ⓒ Superjoin Corp. All rights reserved.
+            </p>
+          </LoginBottom>
+        </LoginDiv>
+      </CenterDiv>
+      <SideDiv />
     </LoginBlock>
   );
 };
