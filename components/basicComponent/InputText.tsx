@@ -1,7 +1,8 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useState, useCallback, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { PlaceholderColor } from '~/types/basicComponent';
 import Icon from '@components/Icon';
+import { debounce } from 'lodash';
 
 const InputTextBlock = styled.div<{
   isFocused: boolean;
@@ -13,6 +14,7 @@ const InputTextBlock = styled.div<{
   align-items: center;
   width: ${({ width }) => (width > 0 ? `${width}px` : '100%')};
   height: ${({ height }) => (height > 0 ? `${height}px` : '100%')};
+  padding: 10px 12px 10px 0px;
   border-radius: 6px;
   border: 1px solid
     ${props =>
@@ -72,14 +74,16 @@ const InputTextField = styled.input<{
   border: 0px;
   outline: none;
   font-size: 14px;
-  margin: 10px 16px;
+  margin-right: 4px;
+  margin-left: 16px;
   ${placeholderStyle};
 `;
 
 const InputTextAreaBlock = styled.div`
   width: 100%;
   height: 100%;
-  padding: 10px 16px;
+  padding-right: 4px;
+  padding-left: 16px;
 `;
 
 const InputTextArea = styled.textarea<{
@@ -100,6 +104,7 @@ const InputTextArea = styled.textarea<{
 interface InputTextProps {
   onPassword?: boolean;
   type?: string;
+  valueType?: string | undefined;
   rightComponent?: ReactNode;
   width?: number;
   height?: number;
@@ -119,6 +124,7 @@ const InputText: FC<InputTextProps> = function InputText(props) {
   const {
     onPassword,
     type,
+    valueType,
     rightComponent,
     width = 0,
     height = 0,
@@ -133,6 +139,31 @@ const InputText: FC<InputTextProps> = function InputText(props) {
   } = props;
   const [isFocused, setIsFocused] = useState(false);
 
+  const onChangeInput = useCallback(
+    (event: any) => {
+      const getInputType = valueType;
+      const getInputValue = event.target.value;
+      const getInput = { type: getInputType, value: getInputValue };
+      const { target } = event;
+      target.valueObject = getInput;
+      const chengedEvent = { ...event, target };
+      onChange?.(chengedEvent);
+    },
+    [onChange, valueType],
+  );
+
+  const debounceSetInput = useMemo(
+    () => debounce(onChangeInput, 300),
+    [onChangeInput],
+  );
+
+  const handleInput = useCallback(
+    (e: any) => {
+      debounceSetInput(e);
+    },
+    [debounceSetInput],
+  );
+
   return (
     <InputTextBlock
       isFocused={isFocused}
@@ -144,7 +175,7 @@ const InputText: FC<InputTextProps> = function InputText(props) {
         <InputTextAreaBlock>
           <InputTextArea
             onClick={onClick}
-            onChange={onChange}
+            onChange={handleInput}
             placeholder={placeholder}
             placeholderColor={placeholderColor}
             onFocus={() => setIsFocused(true)}
@@ -156,7 +187,7 @@ const InputText: FC<InputTextProps> = function InputText(props) {
           <InputTextField
             type={type}
             onClick={onClick}
-            onChange={onChange}
+            onChange={handleInput}
             placeholder={placeholder}
             placeholderColor={placeholderColor}
             onFocus={() => setIsFocused(true)}
@@ -182,6 +213,7 @@ InputText.defaultProps = {
   setShowPassword: () => {},
   onPassword: false,
   type: 'text',
+  valueType: undefined,
   rightComponent: null,
   width: 0,
   height: 0,

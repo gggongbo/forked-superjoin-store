@@ -1,9 +1,13 @@
 import type { NextPage } from 'next';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import Divider from '@components/basicComponent/Divider';
 import Header from '@components/basicComponent/Header';
 import SelectInputText from '@components/basicComponent/SelectInputText';
+import InputText from '@components/basicComponent/InputText';
+import Icon from '@components/Icon';
+import { Search } from '~/types/basicComponent';
+import { debounce } from 'lodash';
 import ReceiveOffer from './ReceiveOffer';
 import SendOffer from './SendOffer';
 
@@ -47,7 +51,25 @@ const HeaderRightBlock = styled.div`
 `;
 
 const Offer: NextPage = function Offer() {
-  const [offerType, setOfferType] = useState('send');
+  const [offerType, setOfferType] = useState<string>('send');
+  const [input, setInput] = useState<Search>();
+  const [search, setSearch] = useState<Search>();
+
+  const onInputChange = useCallback((event: any) => {
+    setInput(event.target.valueObject);
+  }, []);
+
+  const debounceSetInput = useMemo(
+    () => debounce(onInputChange, 300),
+    [onInputChange],
+  );
+
+  const handleInputChange = useCallback(
+    (e: any) => {
+      debounceSetInput(e);
+    },
+    [debounceSetInput],
+  );
 
   const headerLeftComponent = useMemo(() => {
     return (
@@ -67,10 +89,34 @@ const Offer: NextPage = function Offer() {
   const headerRightComponent = useMemo(() => {
     return (
       <HeaderRightBlock>
-        <SelectInputText optionList={optionList} />
+        {offerType === 'send' ? (
+          <InputText
+            width={280}
+            placeholder="제목 검색"
+            valueType={optionList[0].value}
+            onChange={handleInputChange}
+            rightComponent={
+              <Icon
+                width={20}
+                height={20}
+                name="Search"
+                color="realBlack"
+                onClick={() => {
+                  setSearch(input);
+                }}
+              />
+            }
+          />
+        ) : (
+          // todo: change handelr test and 수정하기
+          <SelectInputText
+            optionList={optionList}
+            onChange={handleInputChange}
+          />
+        )}
       </HeaderRightBlock>
     );
-  }, []);
+  }, [input, offerType, handleInputChange]);
 
   const headertitleComponent = useMemo(() => {
     return (
@@ -93,7 +139,11 @@ const Offer: NextPage = function Offer() {
         leftComponent={headerLeftComponent}
         rightComponent={headerRightComponent}
       />
-      {offerType === 'send' ? <SendOffer /> : <ReceiveOffer />}
+      {offerType === 'send' ? (
+        <SendOffer search={search} />
+      ) : (
+        <ReceiveOffer search={search} />
+      )}
     </OfferBlock>
   );
 };

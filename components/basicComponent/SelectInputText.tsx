@@ -1,6 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { Option } from '~/types/basicComponent';
+import { debounce } from 'lodash';
 import Icon from '../Icon';
 import SelectBox from './Selectbox';
 
@@ -40,25 +41,67 @@ const InputTextfield = styled.input`
 `;
 
 interface SelectInputTextProps {
-  onClick?: () => void;
   optionList: Option[];
+  // eslint-disable-next-line no-unused-vars
+  onChange?: (e: any) => void;
+  // eslint-disable-next-line no-unused-vars
+  onClick?: (e: any) => void;
 }
 
 const SelectInputText: FC<SelectInputTextProps> = function InputText(props) {
-  const { onClick, optionList } = props;
+  const { optionList, onChange, onClick } = props;
   const [isFocused, setIsFocused] = useState(false);
+  const [inputType, setInputType] = useState<string>();
+  const [inputValue, setInputValue] = useState<string>();
+
+  const handleSelectInputBox = useCallback(
+    (e: any) => {
+      const getInput = { type: inputType, value: inputValue };
+      const { target } = e;
+      target.valueObject = getInput;
+      const chengedEvent = { ...e, target };
+      onChange?.(chengedEvent);
+    },
+    [inputType, inputValue, onChange],
+  );
+
+  const onChangeInputValue = useCallback((event: any) => {
+    setInputValue(event.target.value);
+  }, []);
+
+  const debounceSetInputValue = useMemo(
+    () => debounce(onChangeInputValue, 300),
+    [onChangeInputValue],
+  );
+
+  const handleInput = useCallback(
+    (e: any) => {
+      debounceSetInputValue(e);
+    },
+    [debounceSetInputValue],
+  );
 
   return (
-    <SelectInputBlock>
+    <SelectInputBlock
+      onChange={handleSelectInputBox}
+      onMouseDown={handleSelectInputBox}
+    >
       <SelectBox
         optionList={optionList}
         width={133}
         borderRadius="6px 0px 0px 6px"
+        onChange={e => {
+          setInputType(e.target.selectValue);
+        }}
+        placeholder="제목"
       />
       <InputTextBlock isFocused={isFocused}>
         <InputTextfield
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          onChange={e => {
+            handleInput(e);
+          }}
         />
         <Icon
           name="Search"
@@ -73,6 +116,7 @@ const SelectInputText: FC<SelectInputTextProps> = function InputText(props) {
 };
 
 SelectInputText.defaultProps = {
+  onChange: () => {},
   onClick: () => {},
 };
 

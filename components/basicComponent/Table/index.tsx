@@ -1,23 +1,39 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import {
   useTable,
   useExpanded,
-  // useFilters,
-  useGlobalFilter,
+  useFilters,
   useSortBy,
+  usePagination,
 } from 'react-table';
-import styled from 'styled-components';
-import { FC } from 'react';
+import styled, { css } from 'styled-components';
+import { FC, Fragment, useEffect, useMemo, useState } from 'react';
 import Icon from '../../Icon';
+import SelectBox from '../Selectbox';
+import Divider from '../Divider';
+import IconButton from '../IconButton';
 
 interface TableProps {
   columns: any;
   data: Object[];
   renderRowSubComponent?: any;
   expandEnable?: boolean;
+  fetchData: any;
+  // loading: boolean;
+  pageSizeList?: number[] | undefined;
+  pageCount: number;
 }
 
-const TableBlock = styled.table`
+const defaultPageSizeList = [10, 25, 50, 75, 100];
+
+const TableBlock = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const TableContentBlock = styled.table`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   border-collapse: collapse;
 `;
@@ -29,7 +45,6 @@ const HeadBlock = styled.thead`
 const HeadRowBlock = styled.tr`
   display: flex;
   flex-direction: row;
-  /* justify-content: space-between; */
 `;
 const HeadColumnBlock = styled.th<{ width?: string | number; flex: boolean }>`
   display: flex;
@@ -38,7 +53,6 @@ const HeadColumnBlock = styled.th<{ width?: string | number; flex: boolean }>`
   width: ${({ width }) => width}px;
   padding: 12px 20px;
   align-items: center;
-  border: 1px solid black;
   font-size: 14px;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text[4]};
@@ -49,9 +63,7 @@ const BodyBlock = styled.tbody``;
 const BodyRowBlock = styled.tr`
   display: flex;
   flex-direction: row;
-  /* justify-content: space-between; */
 `;
-const BodyRowWrapper = styled.span``;
 
 const BodyColumnBlock = styled.td<{ width?: string | number; flex: boolean }>`
   display: flex;
@@ -59,11 +71,22 @@ const BodyColumnBlock = styled.td<{ width?: string | number; flex: boolean }>`
   flex-direction: row;
   width: ${({ width }) => width}px;
   padding: 12px 20px;
-  border: 1px solid black;
+  border-width: 0px;
+  border-style: solid;
+  border-bottom-width: 1px;
+  border-color: ${({ theme }) => theme.colors.gray[3]};
   align-items: center;
   font-size: 14px;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text[6]};
+`;
+
+const FilterBlock = styled.div``;
+const sortIconStyle = css`
+  margin-left: 10px;
+  :hover {
+    background-color: ${({ theme }) => theme.colors.singletons.green};
+  }
 `;
 const ExpandedRowBlock = styled.tr<{ isExpanded: boolean }>`
   display: flex;
@@ -77,7 +100,7 @@ const ExpandedColumnBlock = styled.td<{ isExpanded: boolean }>`
   display: flex;
   flex-basis: 100%;
   padding: 8px 46px 16px 46px;
-  background-color: ${({ theme }) => theme.colors.gray[1]};
+  /* background-color: ${({ theme }) => theme.colors.gray[1]}; */
 `;
 
 const ArrowBlock = styled.div<{ isExpanded: boolean }>`
@@ -87,75 +110,226 @@ const ArrowBlock = styled.div<{ isExpanded: boolean }>`
   margin-right: 12px;
 `;
 
+const PaginationBlock = styled.div`
+  margin: 14px 14px 14px 0px;
+  display: flex;
+  align-self: flex-end;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const PerPageTextBlock = styled.div`
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.text[4]};
+  margin-right: 12px;
+`;
+
+const PageInfoText = styled.div`
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.text[4]};
+  margin-right: 20px;
+`;
+
+const DividerBlock = styled.div`
+  height: 100%;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+`;
+
+// todo: pagination fc 분리
 const Table: FC<TableProps> = function Table(props) {
-  const { columns, data, renderRowSubComponent, expandEnable } = props;
+  const {
+    columns,
+    data,
+    renderRowSubComponent,
+    expandEnable,
+    fetchData,
+    // loading,
+    pageSizeList = defaultPageSizeList,
+    pageCount: pageCountFromServer,
+  } = props;
+
+  const defaultColumn = useMemo(
+    () => ({
+      Filter: () => null,
+    }),
+    [],
+  );
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
-    // state,
-    // setFilter,
-  } = useTable({ columns, data }, useGlobalFilter, useSortBy, useExpanded);
+    page,
+    // canPreviousPage,
+    // canNextPage,
+    // pageCount,
+    // gotoPage,
+    // nextPage,
+    // previousPage,
+    pageOptions,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      // filter setting
+      defaultColumn,
+      // pagination setting
+      initialState: {
+        pageIndex: 0,
+        pageSize: pageSizeList[0],
+      },
+      manualPagination: true,
+      pageCount: pageCountFromServer,
+    },
+    useFilters,
+    useSortBy,
+    useExpanded,
+    usePagination,
+  );
 
+  const [tablePageIndex, setTablePageIndex] = useState(pageIndex);
+
+  useEffect(() => {
+    setTablePageIndex(0);
+  }, [pageSize]);
+
+  useEffect(() => {
+    fetchData({ pageIndex: tablePageIndex, pageSize });
+  }, [fetchData, pageSize, tablePageIndex]);
+
+  /* eslint-disable react/jsx-props-no-spreading */
+  /* eslint-disable no-nested-ternary */
+  /* eslint-disable react/button-has-type */
   return (
-    <TableBlock {...getTableProps()}>
-      <HeadBlock>
-        {headerGroups.map(headerGroup => (
-          <HeadRowBlock {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column, index) => {
-              //   <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-              return (
-                <HeadColumnBlock
-                  {...column.getHeaderProps()}
-                  width={column.width}
-                  flex={index === 0}
-                >
-                  {column.render('Header')}
-                </HeadColumnBlock>
-              );
-            })}
-          </HeadRowBlock>
-        ))}
-      </HeadBlock>
-      <BodyBlock {...getTableBodyProps()}>
-        {rows.map(row => {
-          prepareRow(row);
-          return (
-            <BodyRowWrapper {...row.getRowProps()}>
-              <BodyRowBlock>
-                {row.cells.map((cell, index) => {
-                  return (
-                    <BodyColumnBlock
-                      {...cell.getCellProps()}
-                      width={cell.column.width}
-                      flex={index === 0}
-                    >
-                      {index === 0 && expandEnable && (
-                        <ArrowBlock
-                          {...row.getToggleRowExpandedProps()}
-                          isExpanded={row.isExpanded}
-                        >
-                          <Icon name="ChevronDown" width={18} height={18} />
-                        </ArrowBlock>
-                      )}
-                      {cell.render('Cell')}
-                    </BodyColumnBlock>
-                  );
-                })}
-              </BodyRowBlock>
-              {row.isExpanded ? (
-                <ExpandedRowBlock isExpanded={row.isExpanded}>
-                  <ExpandedColumnBlock isExpanded={row.isExpanded}>
-                    {renderRowSubComponent({ row })}
-                  </ExpandedColumnBlock>
-                </ExpandedRowBlock>
-              ) : null}
-            </BodyRowWrapper>
-          );
-        })}
-      </BodyBlock>
+    <TableBlock>
+      {pageSizeList?.length > 0 && (
+        <>
+          <TableContentBlock {...getTableProps()}>
+            <HeadBlock>
+              {headerGroups.map(headerGroup => (
+                <HeadRowBlock {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column, index) => {
+                    return (
+                      <HeadColumnBlock
+                        {...column.getHeaderProps(
+                          column.getSortByToggleProps(),
+                        )}
+                        width={column.width}
+                        flex={index === 0}
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={index}
+                      >
+                        {column.render('Header')}
+                        {column.canSort ? (
+                          <Icon
+                            name={column.isSortedDesc ? 'ArrowDown' : 'ArrowUp'}
+                            width={16}
+                            height={16}
+                            customStyle={sortIconStyle}
+                            color="realBlack"
+                          />
+                        ) : null}
+                        <FilterBlock>
+                          {column.canFilter ? column.render('Filter') : null}
+                        </FilterBlock>
+                      </HeadColumnBlock>
+                    );
+                  })}
+                </HeadRowBlock>
+              ))}
+            </HeadBlock>
+            <BodyBlock {...getTableBodyProps()}>
+              {page.map(row => {
+                prepareRow(row);
+                return (
+                  <Fragment key={row.id}>
+                    <BodyRowBlock {...row.getRowProps()}>
+                      {row.cells.map((cell, index) => {
+                        return (
+                          <BodyColumnBlock
+                            {...cell.getCellProps()}
+                            width={cell.column.width}
+                            flex={index === 0}
+                            // eslint-disable-next-line react/no-array-index-key
+                            key={index}
+                          >
+                            {index === 0 && expandEnable && (
+                              <ArrowBlock
+                                {...row.getToggleRowExpandedProps()}
+                                isExpanded={row.isExpanded}
+                              >
+                                <Icon
+                                  name="ChevronDown"
+                                  width={18}
+                                  height={18}
+                                />
+                              </ArrowBlock>
+                            )}
+                            {cell.render('Cell')}
+                          </BodyColumnBlock>
+                        );
+                      })}
+                    </BodyRowBlock>
+                    {row.isExpanded ? (
+                      <ExpandedRowBlock isExpanded={row.isExpanded}>
+                        <ExpandedColumnBlock isExpanded={row.isExpanded}>
+                          {renderRowSubComponent({ row })}
+                        </ExpandedColumnBlock>
+                      </ExpandedRowBlock>
+                    ) : null}
+                  </Fragment>
+                );
+              })}
+            </BodyBlock>
+          </TableContentBlock>
+          <PaginationBlock>
+            <PerPageTextBlock>Rows per page :</PerPageTextBlock>
+            <SelectBox
+              defaultOption={{
+                name: pageSize,
+                value: pageSize,
+              }}
+              optionList={pageSizeList.map(showPageSize => ({
+                name: showPageSize,
+                value: showPageSize,
+              }))}
+              width={60}
+              customSize="small"
+              onChange={e => {
+                setPageSize(Number(e.target.selectValue));
+              }}
+            />
+            <DividerBlock>
+              <Divider isVertical />
+            </DividerBlock>
+            <PageInfoText>
+              {tablePageIndex === 0
+                ? tablePageIndex + 1
+                : tablePageIndex + pageSize}
+              -{(tablePageIndex + 1) * pageSize} of{' '}
+              {pageSize * pageOptions.length}
+            </PageInfoText>
+            <IconButton
+              icon={{ name: 'ChevronLeft', width: 18, height: 18 }}
+              onClick={() => setTablePageIndex(prev => (prev ? prev - 1 : 0))}
+              disabled={tablePageIndex === 0}
+            />
+            <IconButton
+              icon={{ name: 'ChevronRight', width: 18, height: 18 }}
+              onClick={() =>
+                setTablePageIndex(prev => (prev ? prev + 1 : pageIndex + 1))
+              }
+              disabled={tablePageIndex === pageOptions.length - 1}
+            />
+          </PaginationBlock>
+        </>
+      )}
     </TableBlock>
   );
 };
@@ -163,5 +337,6 @@ const Table: FC<TableProps> = function Table(props) {
 Table.defaultProps = {
   renderRowSubComponent: () => {},
   expandEnable: false,
+  pageSizeList: defaultPageSizeList,
 };
 export default Table;
