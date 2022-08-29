@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css, CSSProp } from 'styled-components';
 import { FC } from 'react';
 import * as IconList from './basic';
 
@@ -9,6 +9,7 @@ interface IconPropType {
   color?: string;
   colorIndex?: number;
   opacity?: number | string;
+  customStyle?: CSSProp;
   // eslint-disable-next-line no-unused-vars
   onClick?: (e: any) => void;
 }
@@ -31,6 +32,16 @@ const IconBlock = styled.div`
   display: flex;
 `;
 
+const iconStyle = css<{
+  width?: number;
+  height?: number;
+  customStyle?: CSSProp;
+}>`
+  width: ${({ width }) => width || 0}px;
+  height: ${({ height }) => height || 0}px;
+  ${({ customStyle }) => customStyle};
+`;
+
 const ColoredIcon = styled.div<{
   name: string;
   width?: number;
@@ -38,9 +49,8 @@ const ColoredIcon = styled.div<{
   color: string;
   colorIndex?: number;
   opacity?: number | string;
+  customStyle?: CSSProp;
 }>`
-  width: ${({ width }) => width || 0}px;
-  height: ${({ height }) => height || 0}px;
   background-color: ${props =>
     props.colorIndex
       ? props.theme.colors[props.color][props.colorIndex] + props.opacity
@@ -50,22 +60,32 @@ const ColoredIcon = styled.div<{
   mask-repeat: no-repeat;
   mask-position: center;
   mask-size: auto;
+  ${iconStyle};
 `;
 
 const DefaultIcon = styled.div<{
   name: string;
   width?: number;
   height?: number;
+  customStyle?: CSSProp;
 }>`
-  width: ${({ width }) => width || 0}px;
-  height: ${({ height }) => height || 0}px;
   background-image: url(${props => Icons[props.name]?.src});
   background-position: center;
   background-size: cover;
+  ${iconStyle};
 `;
 
 const Icon: FC<IconPropType> = function Icon(props) {
-  const { name, width, height, color, colorIndex, opacity, onClick } = props;
+  const {
+    name,
+    width,
+    height,
+    color,
+    colorIndex,
+    opacity,
+    customStyle,
+    onClick,
+  } = props;
 
   return (
     <IconBlock>
@@ -77,6 +97,7 @@ const Icon: FC<IconPropType> = function Icon(props) {
           color={color}
           colorIndex={colorIndex}
           opacity={opacity}
+          customStyle={customStyle}
           onClick={onClick}
         />
       ) : (
@@ -84,6 +105,7 @@ const Icon: FC<IconPropType> = function Icon(props) {
           name={name}
           width={width}
           height={height}
+          customStyle={customStyle}
           onClick={onClick}
         />
       )}
@@ -97,6 +119,7 @@ Icon.defaultProps = {
   color: undefined,
   colorIndex: undefined,
   opacity: '',
+  customStyle: {},
   onClick: () => {},
 };
 export default Icon;

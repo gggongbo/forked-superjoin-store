@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { IconType } from '~/types/basicComponent';
 import Icon from '../Icon';
 
 const SubTextBlock = styled.div`
@@ -40,7 +41,7 @@ const SubTextTitle = styled.a`
 
 interface SubTextPropTypes {
   title: string;
-  icon: { name: string; width: number; height: number };
+  icon: IconType;
   onClick: () => void;
 }
 

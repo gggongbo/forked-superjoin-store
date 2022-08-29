@@ -1,65 +1,46 @@
-import { Row, FilterValue } from 'react-table';
-// import styled from 'styled-components';
+import { Row, FilterValue, Column, IdType } from 'react-table';
 import { FC, useMemo } from 'react';
-
-// Define a default UI for filtering
-// function DefaultColumnFilter({
-//   column: { filterValue, preFilteredRows, setFilter },
-// }) {
-//   const count = preFilteredRows.length;
-
-//   return (
-//     <input
-//       value={filterValue || ''}
-//       onChange={e => {
-//         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-//       }}
-//       placeholder={`Search ${count} records...`}
-//     />
-//   );
-// }
+import { Option } from '~/types/basicComponent';
+import Checkbox from '../Checkbox';
 
 interface SelectColumnFilterProps {
-  column: {
+  column: Column<any> & {
     filterValue: FilterValue;
-    // eslint-disable-next-line no-unused-vars
-    setFilter: (props: FilterValue) => void;
+    setFilter: Function;
     preFilteredRows: Row[];
-    id: number;
+    id: IdType<any>;
   };
 }
 
+// 로우 핉터링 로직
+const FilterIncludes = (
+  rows: Row[],
+  id: IdType<any>,
+  filterValue: FilterValue,
+) =>
+  rows.filter((row: Row) => {
+    // value name 따로 관리하고 싶으면 수정 필요
+    const rowValue = row.values[id];
+    return filterValue.includes(rowValue);
+  });
+
+// 체크박스 필터 컴포넌트
 const SelectColumnFilter: FC<SelectColumnFilterProps> =
-  function SelectColumnFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-  }) {
-    // Calculate the options for filtering
-    // using the preFilteredRows
+  function SelectColumnFilter({ column: { setFilter, preFilteredRows, id } }) {
     const options: FilterValue[] = useMemo(() => {
-      const newOptions = new Set();
-      preFilteredRows.forEach(row => {
-        newOptions.add(row.values[id]);
+      const optionArray: Option[] = [];
+      preFilteredRows.forEach((row: Row) => {
+        const option = { name: row.values[id], value: row.values[id] };
+        const optionFindIndex = optionArray.findIndex(
+          (optionItem: Option) =>
+            JSON.stringify(optionItem) === JSON.stringify(option),
+        );
+        if (optionFindIndex < 0) optionArray.push(option);
       });
-      return Array.from(newOptions.values());
+      return optionArray;
     }, [id, preFilteredRows]);
 
-    // Render a multi-select box
-    return (
-      <select
-        value={filterValue}
-        onChange={e => {
-          setFilter(e.target.value || undefined);
-        }}
-      >
-        <option value="">All</option>
-        {options.map((option, i) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <option key={i} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    );
+    return <Checkbox optionList={options} width={100} setFilter={setFilter} />;
   };
 
-export default SelectColumnFilter;
+export { SelectColumnFilter, FilterIncludes };

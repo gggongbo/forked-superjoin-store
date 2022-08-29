@@ -1,8 +1,10 @@
 import ArrowUp from '@resources/svg/icon/ic-arrow-up.svg';
+import ArrowDown from '@resources/svg/icon/ic-arrow-down.svg';
 import CalendarN from '@resources/svg/icon/ic-calendar-n.svg';
 import Check from '@resources/svg/icon/ic-check.svg';
-import ChevronDown from '@resources/svg/icon/ic-chevron-down.svg';
 import ChevronLeft from '@resources/svg/icon/ic-chevron-left.svg';
+import ChevronRight from '@resources/svg/icon/ic-chevron-right.svg';
+import ChevronDown from '@resources/svg/icon/ic-chevron-down.svg';
 import ChevronUp from '@resources/svg/icon/ic-chevron-up.svg';
 import CircleCancel from '@resources/svg/icon/ic-circle-cancel.svg';
 import CircleCheck from '@resources/svg/icon/ic-circle-check.svg';
@@ -30,10 +32,12 @@ import EyeOn from '@resources/svg/icon/ic-eye-on.svg';
 
 export {
   ArrowUp,
+  ArrowDown,
   CalendarN,
   Check,
-  ChevronDown,
   ChevronLeft,
+  ChevronRight,
+  ChevronDown,
   ChevronUp,
   CircleCancel,
   CircleCheck,
