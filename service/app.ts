@@ -1,5 +1,6 @@
 import { initializeApp, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY as string,
@@ -11,8 +12,14 @@ const firebaseConfig = {
   measurementId: 'G-167LQDWY1R',
 };
 
-initializeApp(firebaseConfig, 'client');
-const app = getApp('client');
-const db = getFirestore(app);
+try {
+  initializeApp(firebaseConfig);
+} catch (e) {
+  initializeApp(firebaseConfig, 'client');
+}
 
-export { db };
+const app = getApp();
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+export { db, auth };

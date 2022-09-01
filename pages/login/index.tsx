@@ -205,7 +205,7 @@ const Login: NextPage = function Home() {
       const auth = getAuth();
       signInWithEmailAndPassword(auth, email, password)
         .then(() => {
-          router.push('/');
+          router.push('/makeoffer');
         })
         .catch(() => {
           setLoginError(true);
@@ -294,7 +294,7 @@ const Login: NextPage = function Home() {
               alt="logoTitle"
               width={50}
               height={30}
-              style={{ width: '10%' }}
+              style={{ width: '18%' }}
             />
             <p style={{ margin: '0' }}>
               &nbsp;&nbsp;&nbsp;Copyright ⓒ Superjoin Corp. All rights reserved.

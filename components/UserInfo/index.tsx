@@ -1,6 +1,7 @@
 import { FC, useState, useCallback, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuthUser } from 'next-firebase-auth';
+import { userService } from '@service/user';
 import Icon from '../Icon';
 import SubText from '../basicComponent/SubText';
 
@@ -14,6 +15,7 @@ const UserInfoBlock = styled.div`
 const UserImage = styled.div<{ userImage?: string | null }>`
   width: 36px;
   aspect-ratio: 1;
+  border-radius: 8px;
   background-image: url(${props => props.userImage});
   background-color: gray;
   background-position: center;
@@ -60,12 +62,12 @@ const IconBlock = styled.div<{ logoutVisible: boolean }>`
   }
 `;
 
-const LogoutBlock = styled.div<{ contentHeight?: number }>`
+const UserBlock = styled.div<{ contentHeight?: number }>`
   position: absolute;
   display: flex;
   right: 0px;
   top: ${props => (props.contentHeight || 0) + 2}px;
-  width: 151px;
+  width: 155px;
   aspect-ratio: 2.9;
 `;
 
@@ -111,13 +113,22 @@ const UserInfo: FC = function UserInfo() {
         <Icon name="ChevronDown" width={18} height={18} color="black" />
       </IconBlock>
       {logoutVisible && (
-        <LogoutBlock contentHeight={contentHeight}>
-          <SubText
-            title="로그아웃"
-            icon={{ name: 'Out', width: 18, height: 18 }}
-            onClick={() => AuthUser.signOut()}
-          />
-        </LogoutBlock>
+        <>
+          <UserBlock contentHeight={contentHeight}>
+            <SubText
+              title="로그아웃"
+              icon={{ name: 'Out', width: 18, height: 18 }}
+              onClick={() => AuthUser.signOut()}
+            />
+          </UserBlock>
+          <UserBlock contentHeight={contentHeight + 58}>
+            <SubText
+              title="비밀번호 초기화"
+              icon={{ name: 'Out', width: 18, height: 18 }}
+              onClick={() => userService.updatePassword(userId)}
+            />
+          </UserBlock>
+        </>
       )}
     </UserInfoBlock>
   );
