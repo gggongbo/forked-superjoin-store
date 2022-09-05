@@ -4,7 +4,13 @@ import InputText from '@components/basicComponent/InputText';
 import InfoText from '@components/basicComponent/InfoText';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Button from '@components/basicComponent/Button';
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
 import { useAuthUser } from 'next-firebase-auth';
 import axios from 'axios';
 
@@ -41,8 +47,12 @@ const AskSupport: NextPage<AskSupportProps> = function AskSupport({
 }) {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [validation, setValidation] = useState(false);
   const { email } = useAuthUser();
-  const validation = title.length !== 0 && text.length !== 0;
+
+  useEffect(() => {
+    setValidation(title.length !== 0 && text.length !== 0);
+  }, [text, title]);
 
   // TODO 도메인 설정 후 url 변경
   const send = async () => {
