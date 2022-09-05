@@ -5,6 +5,7 @@ import logoTitle from '@resources/svg/logo/logo-title.svg';
 import loginBg from '@resources/svg/img/img-login-bg.svg';
 import styled from 'styled-components';
 import Oval from '@components/basicComponent/Oval';
+import ErrorLabel from '@components/basicComponent/ErrorLabel';
 import { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
 import InputText from '@components/basicComponent/InputText';
@@ -126,12 +127,6 @@ const StyledInput = styled.input`
 
 const StyledP = styled.p`
   margin-left: 0.5rem;
-`;
-
-const Label = styled.label`
-  font-size: 12px;
-  color: #e63d22;
-  text-align: left;
 `;
 
 const SideDiv = styled.div`
@@ -259,7 +254,9 @@ const Login: NextPage = function Home() {
                   setShowPassword={() => changeShowPassword()}
                 />
                 {loginError ? (
-                  <Label>아이디 혹은 비밀번호를 잘 못 입력했습니다.</Label>
+                  <ErrorLabel>
+                    아이디 혹은 비밀번호를 잘 못 입력했습니다.
+                  </ErrorLabel>
                 ) : null}
               </InputDiv>
               <InputDiv>
