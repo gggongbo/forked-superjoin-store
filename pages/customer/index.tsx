@@ -1,22 +1,122 @@
 import type { NextPage } from 'next';
-
 import styled from 'styled-components';
-// import Customer01 from './Customer01';
-// import Customer02 from './Customer02';
+import Header from '@components/basicComponent/Header';
+import { useMemo, useEffect, useState, useCallback } from 'react';
+import { Search } from '~/types/basicComponent';
+import SelectInputText from '@components/basicComponent/SelectInputText';
+import * as Columns from '@constants/tableColumns';
+import Divider from '@components/basicComponent/Divider';
+import NearSendCustomer from './NearSendCustomer';
+import NearReceiveCustomer from './NearReceiveCustomer';
+
+const optionList = [
+  { name: 'ID', value: 'id' },
+  { name: '닉네임', value: 'nickname' },
+];
 
 const CustomerBlock = styled.main`
   display: flex;
   flex-direction: column;
-  align-items: center; //test setting
-  justify-content: center; //test setting
+  padding: 24px;
 `;
 
-const Customer: NextPage = function Home() {
+const HeaderBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const HeaderText = styled.div<{ customerType: string; defaultValue: string }>`
+  display: flex;
+  font-size: 24px;
+  letter-spacing: -0.55px;
+  font-weight: ${props => props.customerType === props.defaultValue && 500};
+  color: ${props =>
+    props.customerType === props.defaultValue
+      ? props.theme.colors.text[6]
+      : props.theme.colors.text[2]};
+`;
+
+const HeaderDivider = styled(Divider)`
+  margin: 0px 20px 0px 20px;
+  height: 24px;
+  border-color: ${props => props.theme.colors.gray[6]};
+`;
+
+const HeaderRightBlock = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: flex-end;
+`;
+
+const Customer: NextPage = function Customer() {
+  const [customerType, setCustomerType] = useState<string>('send');
+  const [input, setInput] = useState<Search>();
+  const [search, setSearch] = useState<Search>();
+
+  useEffect(() => {
+    setSearch(undefined);
+  }, [customerType]);
+
+  const handleInputChange = useCallback((e: any) => {
+    setInput(e.target.valueObject);
+  }, []);
+
+  const headerLeftComponent = useMemo(() => {
+    return (
+      <HeaderBlock>
+        <HeaderText
+          onClick={() => setCustomerType('send')}
+          customerType={customerType}
+          defaultValue="send"
+        >
+          근처 멤버 관리 (보낸 제안)
+        </HeaderText>
+        <HeaderDivider isVertical />
+      </HeaderBlock>
+    );
+  }, [customerType]);
+
+  const headertitleComponent = useMemo(() => {
+    return (
+      <HeaderBlock>
+        <HeaderText
+          onClick={() => setCustomerType('receive')}
+          customerType={customerType}
+          defaultValue="receive"
+        >
+          근처 멤버 관리 (받은 제안)
+        </HeaderText>
+      </HeaderBlock>
+    );
+  }, [customerType]);
+
+  const headerRightComponent = useMemo(() => {
+    return (
+      <HeaderRightBlock>
+        <SelectInputText
+          optionList={optionList}
+          onChange={handleInputChange}
+          onClick={() => {
+            setSearch(input);
+          }}
+        />
+      </HeaderRightBlock>
+    );
+  }, [input, handleInputChange]);
+
   return (
     <CustomerBlock>
-      <p>Customer</p>
-      {/* <Customer01 />
-      <Customer02 /> */}
+      <Header
+        titleComponent={headertitleComponent}
+        leftComponent={headerLeftComponent}
+        rightComponent={headerRightComponent}
+      />
+      {customerType === 'send' ? (
+        <NearSendCustomer columns={Columns.NearCustomer} search={search} />
+      ) : (
+        <NearReceiveCustomer columns={Columns.NearCustomer} search={search} />
+      )}
     </CustomerBlock>
   );
 };

@@ -230,7 +230,7 @@ const Login: NextPage = function Home() {
                 <p>아이디</p>
                 <InputText
                   height={35}
-                  style={{
+                  customStyle={{
                     border: `solid 1px ${loginError ? '#e63d22' : '#d9d9d9'}`,
                   }}
                   onClick={() => setLoginError(false)}
@@ -242,7 +242,7 @@ const Login: NextPage = function Home() {
                 <p>비밀번호</p>
                 <InputText
                   height={35}
-                  style={{
+                  customStyle={{
                     border: `solid 1px ${loginError ? '#e63d22' : '#d9d9d9'}`,
                   }}
                   onClick={() => setLoginError(false)}

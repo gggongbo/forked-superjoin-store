@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useAuthUser } from 'next-firebase-auth';
 import { userService } from '@service/user';
 import Icon from '../Icon';
-import SubText from '../basicComponent/SubText';
+import SubTextButton from '../basicComponent/SubTextButton';
 
 const UserInfoBlock = styled.div`
   display: flex;
@@ -115,14 +115,14 @@ const UserInfo: FC = function UserInfo() {
       {logoutVisible && (
         <>
           <UserBlock contentHeight={contentHeight}>
-            <SubText
+            <SubTextButton
               title="로그아웃"
               icon={{ name: 'Out', width: 18, height: 18 }}
               onClick={() => AuthUser.signOut()}
             />
           </UserBlock>
           <UserBlock contentHeight={contentHeight + 58}>
-            <SubText
+            <SubTextButton
               title="비밀번호 초기화"
               icon={{ name: 'Out', width: 18, height: 18 }}
               onClick={() => userService.updatePassword(userId)}

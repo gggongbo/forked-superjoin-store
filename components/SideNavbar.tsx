@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import routerName from '@constants/router';
-import LinkSubText from './basicComponent/LinkSubText';
+import SubTextLink from './basicComponent/SubTextLink';
 
 const NavbarBlock = styled.div<{ selectedMenu?: string }>`
   display: flex;
@@ -27,31 +27,31 @@ const SideNavbar: FC = function SideNavbar() {
 
   return (
     <NavbarBlock>
-      <LinkSubText
-        title="방문 제안(지금 만나요)"
+      <SubTextLink
+        title="방문 제안 (함께해요)"
         icon="UserNow"
         routerName={routerName.MakeOffer}
         selectedRouter={selectedRouter}
       />
-      <LinkSubText
+      <SubTextLink
         title="제안 관리"
         icon="Offer"
         routerName={routerName.Offer}
         selectedRouter={selectedRouter}
       />
-      <LinkSubText
+      <SubTextLink
         title="고객 관리"
         icon="UserList"
         routerName={routerName.Customer}
         selectedRouter={selectedRouter}
       />
-      <LinkSubText
+      <SubTextLink
         title="리워드 관리"
         icon="Point2"
         routerName={routerName.Reward}
         selectedRouter={selectedRouter}
       />
-      <LinkSubText
+      <SubTextLink
         title="고객 센터"
         icon="Qa"
         routerName={routerName.Support}

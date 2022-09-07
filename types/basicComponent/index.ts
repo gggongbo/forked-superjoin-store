@@ -1,5 +1,4 @@
-// import { ReactNode } from 'react';
-// import { Column, ColumnInterface } from 'react-table';
+import { Row } from 'react-table';
 
 export type Option = {
   name: string | number;
@@ -10,6 +9,9 @@ export type IconType = {
   name: string;
   width: number;
   height: number;
+  color?: string | undefined;
+  colorIndex?: number | undefined;
+  opacity?: number | undefined;
 };
 
 export type Button = 'button' | 'submit' | 'reset' | undefined;
@@ -24,3 +26,8 @@ export type Search = {
   type: string;
   value: string;
 };
+
+export interface SubRowProps {
+  row: Row<any>;
+  type?: string;
+}

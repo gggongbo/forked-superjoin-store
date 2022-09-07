@@ -35,13 +35,14 @@ const SelectBlock = styled.label<{
   padding: ${({ customSize }) => {
     switch (customSize) {
       case 'small':
-        return '5px 8px 5px 0px';
+        return '5px 8px 5px 12px';
       case 'medium':
-        return '10px 12px 10px 0px';
+        return '10px 12px 10px 16px';
       default:
         return null;
     }
   }};
+
   border-color: ${props =>
     props.inClicked
       ? props.theme.colors.singletons.textGreen
@@ -68,17 +69,9 @@ const Select = styled.select<{
   placeholderValue: number | string | undefined;
   customSize?: string;
 }>`
+  display: flex;
+  flex: 1;
   border: 0px;
-  margin: ${({ customSize }) => {
-    switch (customSize) {
-      case 'small':
-        return '0px 0px 0px 12px';
-      case 'medium':
-        return '0px 16px 0px 16px';
-      default:
-        return null;
-    }
-  }};
   outline: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -240,7 +233,7 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
       >
         <Select
           value={selectOption}
-          // onChange={handleSelectBox}
+          onChange={handleSelectBox}
           customSize={customSize}
           placeholderColor={placeholderColor}
           placeholderValue={placeholder}

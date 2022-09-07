@@ -1,5 +1,4 @@
 import { singletons } from '@styles/theme/colors';
-import { Category } from '~/types/category';
 
 const {
   babyYellow,
@@ -111,20 +110,3 @@ export {
   RELIGION,
   ETC,
 };
-
-const categoryList: Category[] = [];
-categoryList.push(TALK);
-categoryList.push(LIFE);
-categoryList.push(TRAVEL);
-categoryList.push(SPORTS);
-categoryList.push(STUDY);
-categoryList.push(BABY);
-categoryList.push(RELIGION);
-categoryList.push(GAME);
-categoryList.push(FOOD);
-categoryList.push(ANIMAL);
-categoryList.push(CULTURE);
-categoryList.push(SHOPPING);
-categoryList.push(ETC);
-
-export { categoryList };

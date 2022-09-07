@@ -10,6 +10,7 @@ interface IconPropType {
   colorIndex?: number;
   opacity?: number | string;
   customStyle?: CSSProp;
+  disabled?: boolean;
   // eslint-disable-next-line no-unused-vars
   onClick?: (e: any) => void;
 }
@@ -36,10 +37,11 @@ const iconStyle = css<{
   width?: number;
   height?: number;
   customStyle?: CSSProp;
+  disabled?: boolean;
 }>`
   width: ${({ width }) => width || 0}px;
   height: ${({ height }) => height || 0}px;
-  ${({ customStyle }) => customStyle};
+  ${({ customStyle, disabled }) => !disabled && customStyle};
 `;
 
 const ColoredIcon = styled.div<{
@@ -50,6 +52,7 @@ const ColoredIcon = styled.div<{
   colorIndex?: number;
   opacity?: number | string;
   customStyle?: CSSProp;
+  disabled?: boolean;
 }>`
   background-color: ${props =>
     props.colorIndex
@@ -68,6 +71,7 @@ const DefaultIcon = styled.div<{
   width?: number;
   height?: number;
   customStyle?: CSSProp;
+  disabled?: boolean;
 }>`
   background-image: url(${props => Icons[props.name]?.src});
   background-position: center;
@@ -84,6 +88,7 @@ const Icon: FC<IconPropType> = function Icon(props) {
     colorIndex,
     opacity,
     customStyle,
+    disabled,
     onClick,
   } = props;
 
@@ -98,6 +103,7 @@ const Icon: FC<IconPropType> = function Icon(props) {
           colorIndex={colorIndex}
           opacity={opacity}
           customStyle={customStyle}
+          disabled={disabled}
           onClick={onClick}
         />
       ) : (
@@ -106,6 +112,7 @@ const Icon: FC<IconPropType> = function Icon(props) {
           width={width}
           height={height}
           customStyle={customStyle}
+          disabled={disabled}
           onClick={onClick}
         />
       )}
@@ -120,6 +127,7 @@ Icon.defaultProps = {
   colorIndex: undefined,
   opacity: '',
   customStyle: {},
+  disabled: false,
   onClick: () => {},
 };
 export default Icon;

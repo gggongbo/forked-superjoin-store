@@ -5,7 +5,7 @@ import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Button from '@components/basicComponent/Button';
 import Header from '@components/basicComponent/Header';
 import SelectBox from '@components/basicComponent/Selectbox';
-import { categoryList } from '@constants/category';
+import { categoryList } from '@constants/categoryList';
 import { useEffect, useState } from 'react';
 import { useAuthUser } from 'next-firebase-auth';
 import { offerService } from '@service/offer';

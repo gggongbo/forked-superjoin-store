@@ -28,7 +28,7 @@ const buttonPalette = css<{ isSelected?: boolean }>`
   }
 `;
 
-const LinkSubTextBlock = styled.button`
+const SubTextLinkBlock = styled.button`
   ${buttonPalette};
 `;
 
@@ -39,24 +39,24 @@ const SubLinkText = styled.a`
   margin-left: 14px;
 `;
 
-interface LinkSubTextPropTypes {
+interface SubTextLinkPropTypes {
   selectedRouter: string;
   title: string;
   routerName: string;
   icon: string;
 }
 
-const LinkSubText: FC<LinkSubTextPropTypes> = function LinkSubText(props) {
+const SubTextLink: FC<SubTextLinkPropTypes> = function SubTextLink(props) {
   const { selectedRouter, title, routerName, icon } = props;
   const isSelected = selectedRouter === routerName.split('/').pop();
 
   return (
     <Link href={routerName} passHref>
-      <LinkSubTextBlock isSelected={isSelected}>
+      <SubTextLinkBlock isSelected={isSelected}>
         <Icon name={icon} width={18} height={18} />
         <SubLinkText>{title}</SubLinkText>
-      </LinkSubTextBlock>
+      </SubTextLinkBlock>
     </Link>
   );
 };
-export default LinkSubText;
+export default SubTextLink;

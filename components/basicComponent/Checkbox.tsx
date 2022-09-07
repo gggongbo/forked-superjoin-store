@@ -14,14 +14,10 @@ import Icon from '../Icon';
 import Oval from './Oval';
 
 const CheckboxBlock = styled.label<{
-  width: number | string;
   inClicked: boolean;
-  borderRadius?: string;
 }>`
   display: flex;
   flex-direction: column;
-  position: relative;
-  width: ${({ width }) => (width > 0 ? `${width}px` : width || '100%')};
 `;
 
 const iconStyle = css`
@@ -39,14 +35,15 @@ const IconBlock = styled.div`
 `;
 
 const CheckboxItemBlock = styled.ul<{
-  selectHeight: number;
+  checkboxPosition: { width: number; height: number };
 }>`
   list-style-type: none;
   display: flex;
   flex-direction: column;
   position: absolute;
-  width: 100%;
-  margin-top: ${({ selectHeight }) => (selectHeight || 0) + 3}px;
+  margin-top: ${({ checkboxPosition }) => (checkboxPosition.height || 0) + 3}px;
+  margin-left: ${({ checkboxPosition }) =>
+    -((checkboxPosition.width || 0) + 8)}px;
   padding: 8px 0px;
   border-radius: 6px;
   overflow-y: auto;
@@ -85,24 +82,25 @@ const CheckboxText = styled.div`
 
 interface CheckboxProps {
   optionList: Option[];
-  width?: number | string;
   setFilter?: Function;
 }
 
-// TODO : select error
 const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
-  const { optionList = [], width = 0, setFilter } = props;
+  const { optionList = [], setFilter } = props;
   const [checkedOptionList, setCheckedOptionList] = useState<
     (string | number)[]
   >([]);
-  const selectRef = useRef(null);
-  const { inClicked, setInClikced } = useInClick(selectRef);
-  const [selectHeight, setSelectHeight] = useState(0);
+  const checkboxRef = useRef(null);
+  const { inClicked, setInClikced } = useInClick(checkboxRef);
+  const [checkboxPosition, setCheckboxPosition] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
-    if (selectRef.current) {
-      const { clientHeight } = selectRef.current;
-      setSelectHeight(clientHeight);
+    if (checkboxRef.current) {
+      const { clientHeight, clientWidth } = checkboxRef.current;
+      setCheckboxPosition({ width: clientWidth, height: clientHeight });
     }
   }, []);
 
@@ -116,7 +114,6 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     e.preventDefault();
-    // }
   }, []);
 
   const handleCheckBox = useCallback(
@@ -142,11 +139,10 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
     <CheckboxBlock
       role="group"
       aria-label="checkbox"
-      ref={selectRef}
+      ref={checkboxRef}
       onKeyDown={handleKeyDown}
       onClick={handleOpenCheckBox}
       inClicked={inClicked}
-      width={width}
     >
       <IconBlock>
         {inClicked ? (
@@ -172,12 +168,11 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
         <CheckboxItemBlock
           role="group"
           aria-label="dropdown-list"
-          selectHeight={selectHeight}
+          checkboxPosition={checkboxPosition}
         >
           {optionList.map((option: Option) => {
             return (
               <CheckboxItem
-                // eslint-disable-next-line react/no-array-index-key
                 value={option?.value}
                 key={option?.value}
                 onMouseUp={e => handleCheckBox(e, option)}
@@ -200,7 +195,6 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
 };
 
 Checkbox.defaultProps = {
-  width: 0,
   setFilter: () => {},
 };
 
