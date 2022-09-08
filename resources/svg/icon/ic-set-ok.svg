@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-set-ok</title>
+    <defs>
+        <linearGradient x1="17.079%" y1="21.57%" x2="130.434%" y2="77.851%" id="76gdun3xla">
+            <stop stop-color="#00B3A8" offset="0%"/>
+            <stop stop-color="#3A8BD2" offset="100%"/>
+        </linearGradient>
+        <path d="M11.574 3.63 5.5 9.704 3.093 7.296a.917.917 0 0 0-1.297 1.297l3.056 3.055a.917.917 0 0 0 1.296 0l6.722-6.722a.917.917 0 0 0-1.296-1.296z" id="6nrzhdsdpb"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <circle fill="url(#76gdun3xla)" cx="11" cy="11" r="11"/>
+        <g transform="translate(3.667 3.667)">
+            <mask id="1qbrpu307c" fill="#fff">
+                <use xlink:href="#6nrzhdsdpb"/>
+            </mask>
+            <use fill="#000" fill-rule="nonzero" xlink:href="#6nrzhdsdpb"/>
+            <g mask="url(#1qbrpu307c)" fill="#FFF">
+                <path d="M0 0h14.667v14.667H0z"/>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -22,7 +22,6 @@ const ButtonBlock = styled.button<{
     ${({ theme }) => `${theme.colors.singletons.realBlack}10`};
   box-shadow: 0px 1px 1px 0px
     ${({ theme }) => `${theme.colors.singletons.realBlack}10`};
-  ${({ customStyle }) => customStyle};
 
   :hover {
     background-color: ${({ theme }) => `${theme.colors.singletons.black}50`};
@@ -31,28 +30,31 @@ const ButtonBlock = styled.button<{
   :disabled {
     background: ${({ theme }) => theme.colors.gray[4]};
   }
+
+  ${({ customStyle }) => customStyle};
 `;
 
-const ButtonText = styled.div<{ textStyle?: CSSProp }>`
+const ButtonText = styled.div<{ textStyle?: CSSProp; disabled?: boolean }>`
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-  color: ${({ theme }) => theme.colors.singletons.white};
+  color: ${({ disabled, theme }) =>
+    disabled ? theme.colors.text[1] : theme.colors.singletons.white};
   ${({ textStyle }) => textStyle};
 `;
 
 interface ButtonProps {
   width?: number;
-  text: string;
+  text?: string | undefined;
   color?: string;
   colorIndex?: number;
   opacity?: number | string;
   type?: ButtonType;
-  // eslint-disable-next-line no-unused-vars
-  onClick?: (e: any) => void;
   customStyle?: CSSProp;
   textStyle?: CSSProp;
   disabled?: boolean;
+  // eslint-disable-next-line no-unused-vars
+  onClick?: (e: any) => void;
 }
 
 const Button: FC<ButtonProps> = function Button(props) {
@@ -79,13 +81,16 @@ const Button: FC<ButtonProps> = function Button(props) {
       onClick={onClick}
       disabled={disabled}
     >
-      <ButtonText textStyle={textStyle}>{text}</ButtonText>
+      <ButtonText textStyle={textStyle} disabled={disabled}>
+        {text}
+      </ButtonText>
     </ButtonBlock>
   );
 };
 
 Button.defaultProps = {
   width: 0,
+  text: undefined,
   color: 'black',
   colorIndex: undefined,
   opacity: '',

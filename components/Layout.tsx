@@ -15,7 +15,7 @@ const LayoutBlock = styled.div`
   /* justify-content: space-between; */
   position: relative;
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
   color: ${props => props.theme.colors.singletons.black}; //default color
 `;
 

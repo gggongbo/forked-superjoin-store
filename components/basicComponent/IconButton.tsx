@@ -7,9 +7,6 @@ const ButtonBlock = styled.button<{
   width: number;
   customStyle?: CSSProp;
 }>`
-  /* flex: 1; */
-  /* display: flex; */
-  /* width: ${({ width }) => (width > 0 ? `${width}px` : '100%')}; */
   aspect-ratio: 1;
   padding: 5px;
   align-items: center;

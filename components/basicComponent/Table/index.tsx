@@ -17,10 +17,11 @@ interface TableProps {
   data: Object[];
   renderRowSubComponent?: any;
   expandEnable?: boolean;
-  fetchData: any;
-  // loading: boolean;
+  fetchData: Function;
   pageSizeList?: number[] | undefined;
+  loading?: boolean;
   pageCount: number;
+  type?: string;
 }
 
 const defaultPageSizeList = [10, 25, 50, 75, 100];
@@ -50,17 +51,35 @@ const HeadColumnBlock = styled.th<{ width?: string | number; flex: boolean }>`
   display: flex;
   flex: ${({ flex }) => (flex ? 1 : 'none')};
   flex-direction: row;
+  justify-content: space-between;
   width: ${({ width }) => width}px;
-  padding: 12px 20px;
+  padding: 12px 0px 12px 20px;
   align-items: center;
   font-size: 14px;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text[4]};
 `;
 
+const HeadColumnContentBlock = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+`;
+
+const FilterBlock = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const sortIconStyle = css`
+  margin-left: 10px;
+  :hover {
+    background-color: ${({ theme }) => theme.colors.singletons.green};
+  }
+`;
+
 const BodyBlock = styled.tbody``;
 
-const BodyRowBlock = styled.tr`
+const BodyRowBlock = styled.tr<{ type?: string }>`
   display: flex;
   flex-direction: row;
 `;
@@ -71,23 +90,12 @@ const BodyColumnBlock = styled.td<{ width?: string | number; flex: boolean }>`
   flex-direction: row;
   width: ${({ width }) => width}px;
   padding: 12px 20px;
-  border-width: 0px;
-  border-style: solid;
-  border-bottom-width: 1px;
-  border-color: ${({ theme }) => theme.colors.gray[3]};
   align-items: center;
   font-size: 14px;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text[6]};
 `;
 
-const FilterBlock = styled.div``;
-const sortIconStyle = css`
-  margin-left: 10px;
-  :hover {
-    background-color: ${({ theme }) => theme.colors.singletons.green};
-  }
-`;
 const ExpandedRowBlock = styled.tr<{ isExpanded: boolean }>`
   display: flex;
   flex-wrap: wrap;
@@ -100,7 +108,6 @@ const ExpandedColumnBlock = styled.td<{ isExpanded: boolean }>`
   display: flex;
   flex-basis: 100%;
   padding: 8px 46px 16px 46px;
-  /* background-color: ${({ theme }) => theme.colors.gray[1]}; */
 `;
 
 const ArrowBlock = styled.div<{ isExpanded: boolean }>`
@@ -146,9 +153,10 @@ const Table: FC<TableProps> = function Table(props) {
     renderRowSubComponent,
     expandEnable,
     fetchData,
-    // loading,
+    loading,
     pageSizeList = defaultPageSizeList,
     pageCount: pageCountFromServer,
+    type,
   } = props;
 
   const defaultColumn = useMemo(
@@ -196,10 +204,6 @@ const Table: FC<TableProps> = function Table(props) {
   const [tablePageIndex, setTablePageIndex] = useState(pageIndex);
 
   useEffect(() => {
-    setTablePageIndex(0);
-  }, [pageSize]);
-
-  useEffect(() => {
     fetchData({ pageIndex: tablePageIndex, pageSize });
   }, [fetchData, pageSize, tablePageIndex]);
 
@@ -212,9 +216,9 @@ const Table: FC<TableProps> = function Table(props) {
         <>
           <TableContentBlock {...getTableProps()}>
             <HeadBlock>
-              {headerGroups.map(headerGroup => (
+              {headerGroups?.map(headerGroup => (
                 <HeadRowBlock {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column, index) => {
+                  {headerGroup.headers?.map((column, index) => {
                     return (
                       <HeadColumnBlock
                         {...column.getHeaderProps(
@@ -225,16 +229,20 @@ const Table: FC<TableProps> = function Table(props) {
                         // eslint-disable-next-line react/no-array-index-key
                         key={index}
                       >
-                        {column.render('Header')}
-                        {column.canSort ? (
-                          <Icon
-                            name={column.isSortedDesc ? 'ArrowDown' : 'ArrowUp'}
-                            width={16}
-                            height={16}
-                            customStyle={sortIconStyle}
-                            color="realBlack"
-                          />
-                        ) : null}
+                        <HeadColumnContentBlock>
+                          {column.render('Header')}
+                          {column.canSort ? (
+                            <Icon
+                              name={
+                                column.isSortedDesc ? 'ArrowDown' : 'ArrowUp'
+                              }
+                              width={16}
+                              height={16}
+                              customStyle={sortIconStyle}
+                              color="realBlack"
+                            />
+                          ) : null}
+                        </HeadColumnContentBlock>
                         <FilterBlock>
                           {column.canFilter ? column.render('Filter') : null}
                         </FilterBlock>
@@ -245,12 +253,12 @@ const Table: FC<TableProps> = function Table(props) {
               ))}
             </HeadBlock>
             <BodyBlock {...getTableBodyProps()}>
-              {page.map(row => {
+              {page?.map(row => {
                 prepareRow(row);
                 return (
                   <Fragment key={row.id}>
                     <BodyRowBlock {...row.getRowProps()}>
-                      {row.cells.map((cell, index) => {
+                      {row.cells?.map((cell, index) => {
                         return (
                           <BodyColumnBlock
                             {...cell.getCellProps()}
@@ -279,55 +287,59 @@ const Table: FC<TableProps> = function Table(props) {
                     {row.isExpanded ? (
                       <ExpandedRowBlock isExpanded={row.isExpanded}>
                         <ExpandedColumnBlock isExpanded={row.isExpanded}>
-                          {renderRowSubComponent({ row })}
+                          {renderRowSubComponent({ row, type })}
                         </ExpandedColumnBlock>
                       </ExpandedRowBlock>
                     ) : null}
+                    <Divider isVertical={false} />
                   </Fragment>
                 );
               })}
             </BodyBlock>
           </TableContentBlock>
-          <PaginationBlock>
-            <PerPageTextBlock>Rows per page :</PerPageTextBlock>
-            <SelectBox
-              defaultOption={{
-                name: pageSize,
-                value: pageSize,
-              }}
-              optionList={pageSizeList.map(showPageSize => ({
-                name: showPageSize,
-                value: showPageSize,
-              }))}
-              width={60}
-              customSize="small"
-              onChange={e => {
-                setPageSize(Number(e.target.selectValue));
-              }}
-            />
-            <DividerBlock>
-              <Divider isVertical />
-            </DividerBlock>
-            <PageInfoText>
-              {tablePageIndex === 0
-                ? tablePageIndex + 1
-                : tablePageIndex + pageSize}
-              -{(tablePageIndex + 1) * pageSize} of{' '}
-              {pageSize * pageOptions.length}
-            </PageInfoText>
-            <IconButton
-              icon={{ name: 'ChevronLeft', width: 18, height: 18 }}
-              onClick={() => setTablePageIndex(prev => (prev ? prev - 1 : 0))}
-              disabled={tablePageIndex === 0}
-            />
-            <IconButton
-              icon={{ name: 'ChevronRight', width: 18, height: 18 }}
-              onClick={() =>
-                setTablePageIndex(prev => (prev ? prev + 1 : pageIndex + 1))
-              }
-              disabled={tablePageIndex === pageOptions.length - 1}
-            />
-          </PaginationBlock>
+          {!loading && (
+            <PaginationBlock>
+              <PerPageTextBlock>Rows per page :</PerPageTextBlock>
+              <SelectBox
+                defaultOption={{
+                  name: pageSize,
+                  value: pageSize,
+                }}
+                optionList={pageSizeList?.map(showPageSize => ({
+                  name: showPageSize,
+                  value: showPageSize,
+                }))}
+                width={60}
+                customSize="small"
+                onChange={e => {
+                  setPageSize(Number(e.target.selectValue));
+                  setTablePageIndex(0);
+                }}
+              />
+              <DividerBlock>
+                <Divider isVertical />
+              </DividerBlock>
+              <PageInfoText>
+                {tablePageIndex === 0
+                  ? tablePageIndex + 1
+                  : tablePageIndex + pageSize}
+                -{(tablePageIndex + 1) * pageSize} of{' '}
+                {pageSize * pageOptions.length}
+              </PageInfoText>
+              <IconButton
+                icon={{ name: 'ChevronLeft', width: 18, height: 18 }}
+                onClick={() => setTablePageIndex(prev => (prev ? prev - 1 : 0))}
+                disabled={tablePageIndex === 0}
+              />
+              <IconButton
+                icon={{ name: 'ChevronRight', width: 18, height: 18 }}
+                onClick={() =>
+                  setTablePageIndex(prev => (prev ? prev + 1 : pageIndex + 1))
+                }
+                disabled={tablePageIndex === pageOptions.length - 1}
+              />
+            </PaginationBlock>
+          )}
         </>
       )}
     </TableBlock>
@@ -337,6 +349,8 @@ const Table: FC<TableProps> = function Table(props) {
 Table.defaultProps = {
   renderRowSubComponent: () => {},
   expandEnable: false,
+  loading: false,
   pageSizeList: defaultPageSizeList,
+  type: '',
 };
 export default Table;

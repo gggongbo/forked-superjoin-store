@@ -93,7 +93,7 @@ const SelectInputText: FC<SelectInputTextProps> = function InputText(props) {
         onChange={e => {
           setInputType(e.target.selectValue);
         }}
-        placeholder="제목"
+        placeholder={optionList[0]?.name}
       />
       <InputTextBlock isFocused={isFocused}>
         <InputTextfield

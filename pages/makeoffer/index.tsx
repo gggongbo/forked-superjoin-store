@@ -5,7 +5,7 @@ import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Button from '@components/basicComponent/Button';
 import Header from '@components/basicComponent/Header';
 import SelectBox from '@components/basicComponent/Selectbox';
-import { categoryList } from '@constants/category';
+import { categoryList } from '@constants/categoryList';
 import { useEffect, useState } from 'react';
 import { useAuthUser } from 'next-firebase-auth';
 import { offerService } from '@service/offer';
@@ -23,10 +23,6 @@ const ContentBlock = styled.form`
   flex-direction: column;
   padding: 16px 8px;
   width: 576px;
-`;
-
-const subjectStyle = css`
-  margin-top: 16px;
 `;
 
 const mediumContentStyle = css`
@@ -82,7 +78,6 @@ const MakeOffer: NextPage = function MakeOffer() {
   return (
     <MakeOfferBlock>
       <Header title="방문 제안" />
-
       <ContentBlock>
         <VerticalSubText
           title="제목"
@@ -92,7 +87,6 @@ const MakeOffer: NextPage = function MakeOffer() {
               onChange={e => setTitle(e.target.value)}
             />
           }
-          customStyle={subjectStyle}
         />
         <VerticalSubText
           title="카테고리"

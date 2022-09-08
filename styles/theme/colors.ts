@@ -1,5 +1,6 @@
 export const singletons = {
   defaultBackground: '#ffffff',
+  loginBackground: '#f1efee',
   white: '#ffffff',
   black: '#282c34',
   realBlack: '#000000',
@@ -7,6 +8,7 @@ export const singletons = {
   pressGreen: '#def7f5',
   textGreen: '#009c92',
   contentBoxGreen: '#48d2ca',
+  errorRed: '#e63d22',
   cancelRed: '#ffe7e8',
   red: '#f17274',
   pink: '#f16ca2',

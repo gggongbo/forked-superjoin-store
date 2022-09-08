@@ -8,12 +8,11 @@ const HeaderBlock = styled.div<{
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%;
   min-height: 42px;
   margin-left: 8px;
 `;
 
-const HeaderTitleBlock = styled.a<{ titleStyle?: CSSProp }>`
+const HeaderTitleBlock = styled.div<{ titleStyle?: CSSProp }>`
   ${({ titleStyle }) => titleStyle};
   font-size: 24px;
   font-weight: 500;
