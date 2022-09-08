@@ -25,10 +25,6 @@ const ContentBlock = styled.form`
   width: 576px;
 `;
 
-const subjectStyle = css`
-  margin-top: 16px;
-`;
-
 const mediumContentStyle = css`
   margin-top: 16px;
 `;
@@ -82,7 +78,6 @@ const MakeOffer: NextPage = function MakeOffer() {
   return (
     <MakeOfferBlock>
       <Header title="방문 제안" />
-
       <ContentBlock>
         <VerticalSubText
           title="제목"
@@ -92,7 +87,6 @@ const MakeOffer: NextPage = function MakeOffer() {
               onChange={e => setTitle(e.target.value)}
             />
           }
-          customStyle={subjectStyle}
         />
         <VerticalSubText
           title="카테고리"

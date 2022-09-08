@@ -1,15 +1,15 @@
 import { FC, ReactNode, useState, useCallback, useMemo } from 'react';
 import styled, { css, CSSProp } from 'styled-components';
 import { PlaceholderColor } from '~/types/basicComponent';
-import Icon from '@components/Icon';
 import { debounce } from 'lodash';
 
 const InputTextBlock = styled.div<{
-  isFocused: boolean;
   width: number;
   height: number;
-  customStyle?: CSSProp;
+  isFocused: boolean;
+  isError?: boolean;
   disabled?: boolean;
+  customStyle?: CSSProp;
 }>`
   display: flex;
   flex-direction: row;
@@ -23,6 +23,8 @@ const InputTextBlock = styled.div<{
       isFocused
         ? theme.colors.singletons.textGreen
         : theme.colors.singletons.enabledGray};
+  border-color: ${({ isError, theme }) =>
+    isError && theme.colors.singletons.errorRed};
   border-color: ${({ disabled, theme }) => disabled && theme.colors.gray[2]};
 
   :hover {
@@ -117,20 +119,18 @@ const InputTextArea = styled.textarea<{
 `;
 
 interface InputTextProps {
-  onPassword?: boolean;
   type?: string;
   defaultValue?: string | number | undefined;
   valueType?: string | undefined;
-  rightComponent?: ReactNode;
   width?: number;
   height?: number;
   isArea?: boolean;
+  isError?: boolean;
   disabled?: boolean;
   placeholder?: string;
   placeholderColor?: PlaceholderColor;
+  rightComponent?: ReactNode;
   customStyle?: CSSProp;
-  showPassword?: boolean;
-  setShowPassword?: () => void;
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
   // eslint-disable-next-line no-unused-vars
@@ -139,22 +139,20 @@ interface InputTextProps {
 
 const InputText: FC<InputTextProps> = function InputText(props) {
   const {
-    onPassword,
     type,
     defaultValue,
     valueType,
-    rightComponent,
     width = 0,
     height = 0,
     isArea,
+    isError,
     disabled,
     placeholder,
     placeholderColor = { color: 'text', index: 2, opacity: '' },
     customStyle,
+    rightComponent,
     onChange,
     onClick,
-    showPassword,
-    setShowPassword,
   } = props;
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -185,9 +183,10 @@ const InputText: FC<InputTextProps> = function InputText(props) {
 
   return (
     <InputTextBlock
-      isFocused={isFocused}
       width={width}
       height={height}
+      isFocused={isFocused}
+      isError={isError}
       disabled={disabled}
       customStyle={customStyle}
     >
@@ -205,27 +204,17 @@ const InputText: FC<InputTextProps> = function InputText(props) {
           />
         </InputTextAreaBlock>
       ) : (
-        <>
-          <InputTextField
-            type={type}
-            defaultValue={defaultValue}
-            disabled={disabled}
-            onClick={onClick}
-            onChange={handleInput}
-            placeholder={placeholder}
-            placeholderColor={placeholderColor}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-          />
-          {onPassword ? (
-            <Icon
-              name={showPassword ? 'EyeOn' : 'EyeOff'}
-              width={20}
-              height={20}
-              onClick={() => setShowPassword?.()}
-            />
-          ) : null}
-        </>
+        <InputTextField
+          type={type}
+          defaultValue={defaultValue}
+          disabled={disabled}
+          onClick={onClick}
+          onChange={handleInput}
+          placeholder={placeholder}
+          placeholderColor={placeholderColor}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
       )}
       {rightComponent && rightComponent}
     </InputTextBlock>
@@ -233,19 +222,17 @@ const InputText: FC<InputTextProps> = function InputText(props) {
 };
 
 InputText.defaultProps = {
-  showPassword: false,
-  setShowPassword: () => {},
-  onPassword: false,
   type: 'text',
   defaultValue: undefined,
   valueType: undefined,
-  rightComponent: null,
   width: 0,
   height: 0,
   isArea: false,
+  isError: false,
   disabled: false,
   placeholder: '',
   placeholderColor: { color: 'text', index: 2, opacity: '' },
+  rightComponent: null,
   customStyle: {},
   onChange: () => {},
   onClick: () => {},
