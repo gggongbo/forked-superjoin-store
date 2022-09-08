@@ -5,6 +5,7 @@ import { useMemo, useCallback, useState, useEffect } from 'react';
 import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { OfferProps } from '~/types/offer';
+import { useReactQuery } from '~/hooks/useReactQuery';
 
 const SendOfferBlock = styled.main`
   display: flex;
@@ -23,6 +24,9 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
   const [pageCount, setPageCount] = useState<number>(0);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
+  // test
+  const test: any = useReactQuery('getSendOffer');
+  if (test && test?.data) console.log('tt', test?.data);
 
   const {
     getFetchedData,

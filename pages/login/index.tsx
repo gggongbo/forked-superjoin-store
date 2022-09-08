@@ -13,6 +13,8 @@ import Divider from '@components/basicComponent/Divider';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Icon from '@components/Icon';
 import CheckboxText from '@components/basicComponent/CheckboxText';
+import { useAppDispatch } from '~/store';
+import { userActions } from '~/slice/user';
 
 const LoginBlock = styled.main`
   display: flex;
@@ -160,6 +162,7 @@ const Login: NextPage = function Login() {
   const [passwordBoxHeight, setPasswordBoxHeight] = useState<number>(0);
   const passwordBoxRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const auto = localStorage.getItem('autoLogin');
@@ -181,6 +184,8 @@ const Login: NextPage = function Login() {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
           .then(() => {
+            if (auth?.currentUser?.uid)
+              dispatch(userActions.setCurrentUser(auth?.currentUser?.uid));
             router.push('/makeoffer');
           })
           .catch(() => {
@@ -188,7 +193,7 @@ const Login: NextPage = function Login() {
           });
       }
     },
-    [email, loginError, password, router],
+    [dispatch, email, loginError, password, router],
   );
 
   return (
