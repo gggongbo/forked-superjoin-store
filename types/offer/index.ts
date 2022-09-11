@@ -5,6 +5,7 @@ export interface OfferProps {
   search?: Search;
   type?: string;
 }
+
 export type MakeOffer = {
   title: string;
   category: string;
@@ -15,3 +16,16 @@ export type MakeOffer = {
   email: string | null;
   storeInfo?: object;
 };
+
+export interface Store {
+  user: {
+    currentUser: {
+      uid: string;
+      location: {
+        longitude: number;
+        latitude: number;
+        geohash: string;
+      };
+    };
+  };
+}

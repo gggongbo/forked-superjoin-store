@@ -15,6 +15,7 @@ import Icon from '@components/Icon';
 import CheckboxText from '@components/basicComponent/CheckboxText';
 import { useAppDispatch } from '~/store';
 import { userActions } from '~/slice/user';
+import { userService } from '@service/user';
 
 const LoginBlock = styled.main`
   display: flex;
@@ -183,9 +184,16 @@ const Login: NextPage = function Login() {
       if (!loginError) {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
-          .then(() => {
-            if (auth?.currentUser?.uid)
-              dispatch(userActions.setCurrentUser(auth?.currentUser?.uid));
+          .then(async () => {
+            if (auth?.currentUser?.uid) {
+              if (auth?.currentUser?.email != null) {
+                dispatch(
+                  userActions.setCurrentUser(
+                    await userService.findStoreInfo(auth?.currentUser?.email),
+                  ),
+                );
+              }
+            }
             router.push('/makeoffer');
           })
           .catch(() => {

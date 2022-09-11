@@ -15,7 +15,7 @@ const send = async (email: string, subject: string, text: string) => {
     from: email,
     to: 'support@superjo.in',
     subject: `[업체 문의] ${subject}`,
-    text: `text : ${text}\n email : ${email}`,
+    text,
   };
 
   transporter.sendMail(

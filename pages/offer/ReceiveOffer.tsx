@@ -70,7 +70,7 @@ const ReceiveOffer: NextPage<OfferProps> = function ReceiveOffer(props) {
         callEndTime: 30,
         deadline: new Date(),
         description: '-',
-        maxNumofUser: 3,
+        maxNumOfUser: 3,
         callMemberList: [
           { userId: '11', userPhoto: 'tt' },
           { userId: '22', userPhoto: 'tt' },
