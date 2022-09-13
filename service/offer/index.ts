@@ -18,7 +18,13 @@ const creatOffer = async (data: MakeOffer) => {
   }
 };
 
+// TODO url 설정 필요
+const getSendOffer = (uid: string) => {
+  return axios.get(`http://localhost:3002/store/sendoffers/${uid}`);
+};
+
 export const offerService = {
   creatOffer,
   findStoreInfo,
+  getSendOffer,
 };

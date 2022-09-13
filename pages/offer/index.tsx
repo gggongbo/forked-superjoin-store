@@ -8,6 +8,10 @@ import InputText from '@components/basicComponent/InputText';
 import Icon from '@components/Icon';
 import * as Columns from '@constants/tableColumns';
 import { Search } from '~/types/basicComponent';
+import IconButton from '@components/basicComponent/IconButton';
+import { useSelector } from 'react-redux';
+import { offerService } from '@service/offer';
+import { Store } from '../../types/offer';
 import ReceiveOffer from './ReceiveOffer';
 import SendOffer from './SendOffer';
 
@@ -40,7 +44,7 @@ const HeaderText = styled.div<{ offerType: string; defaultValue: string }>`
 `;
 
 const HeaderDivider = styled(Divider)`
-  margin: 0px 20px 0px 20px;
+  margin: 0 20px;
   height: 24px;
   border-color: ${props => props.theme.colors.gray[6]};
 `;
@@ -56,6 +60,9 @@ const Offer: NextPage = function Offer() {
   const [offerType, setOfferType] = useState<string>('send');
   const [input, setInput] = useState<Search>();
   const [search, setSearch] = useState<Search>();
+  const [data, setData] = useState([]);
+
+  const uid = useSelector<Store>(storeInfo => storeInfo.user.currentUser.uid);
 
   useEffect(() => {
     setSearch(undefined);
@@ -84,23 +91,33 @@ const Offer: NextPage = function Offer() {
     return (
       <HeaderRightBlock>
         {offerType === 'send' ? (
-          <InputText
-            width={280}
-            placeholder="제목 검색"
-            valueType={optionList[0].value}
-            onChange={handleInputChange}
-            rightComponent={
-              <Icon
-                width={20}
-                height={20}
-                name="Search"
-                color="realBlack"
-                onClick={() => {
-                  setSearch(input);
-                }}
-              />
-            }
-          />
+          <>
+            <IconButton
+              icon={{ name: 'Refresh', width: 32, height: 32 }}
+              onClick={() => {
+                offerService
+                  .getSendOffer(uid as string)
+                  .then(callList => setData(callList.data));
+              }}
+            />
+            <InputText
+              width={280}
+              placeholder="제목 검색"
+              valueType={optionList[0].value}
+              onChange={handleInputChange}
+              rightComponent={
+                <Icon
+                  width={20}
+                  height={20}
+                  name="Search"
+                  color="realBlack"
+                  onClick={() => {
+                    setSearch(input);
+                  }}
+                />
+              }
+            />
+          </>
         ) : (
           <SelectInputText
             optionList={optionList}
@@ -112,9 +129,9 @@ const Offer: NextPage = function Offer() {
         )}
       </HeaderRightBlock>
     );
-  }, [input, offerType, handleInputChange]);
+  }, [offerType, handleInputChange, uid, input]);
 
-  const headertitleComponent = useMemo(() => {
+  const headerTitleComponent = useMemo(() => {
     return (
       <HeaderBlock>
         <HeaderText
@@ -131,7 +148,7 @@ const Offer: NextPage = function Offer() {
   return (
     <OfferBlock>
       <Header
-        titleComponent={headertitleComponent}
+        titleComponent={headerTitleComponent}
         leftComponent={headerLeftComponent}
         rightComponent={headerRightComponent}
       />
@@ -140,12 +157,14 @@ const Offer: NextPage = function Offer() {
           columns={Columns.SendOffer}
           search={search}
           type={offerType}
+          data={data}
         />
       ) : (
         <ReceiveOffer
           columns={Columns.ReceiveOffer}
           search={search}
           type={offerType}
+          data={[]}
         />
       )}
     </OfferBlock>

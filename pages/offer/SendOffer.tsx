@@ -4,9 +4,7 @@ import Table from '@components/basicComponent/Table';
 import { useMemo, useCallback, useState, useEffect } from 'react';
 import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { OfferProps, Store } from '~/types/offer';
-import { useReactQuery } from '~/hooks/useReactQuery';
-import { useSelector } from 'react-redux';
+import { OfferProps } from '~/types/offer';
 
 const SendOfferBlock = styled.main`
   display: flex;
@@ -19,14 +17,17 @@ const TableBlock = styled.div`
 `;
 
 const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
-  const { columns, search, type } = props;
+  const { columns, search, type, data } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
   const [isMounted, setIsMounted] = useState<boolean>(false);
-  const [initData, setInitData] = useState([]);
+  const [initData, setInitData] = useState(data);
   const pageSizeList = [10, 25, 50, 75, 100];
-  const uid = useSelector<Store>(storeInfo => storeInfo.user.currentUser.uid);
+
+  useEffect(() => {
+    setInitData(data);
+  }, [data, initData]);
 
   const {
     getFetchedData,
@@ -37,8 +38,6 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
     callDeleteButtonComponent,
     renderRowSubComponent,
   } = useTableComponent();
-
-  useReactQuery('getSendOffer', uid as string, setInitData);
 
   useEffect(() => {
     if (tableData) setIsMounted(true);
@@ -93,17 +92,25 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
       initData &&
       initData
         ?.map((filterData: any) => {
-          const { category, title, callSendTime, callEndTime, status, callId } =
-            filterData;
+          const {
+            category,
+            title,
+            callSendTime,
+            callEndTime,
+            status,
+            callId,
+            createdAt,
+          } = filterData;
 
           filterData.title =
-            typeof callSendTime === 'object'
+            typeof title === 'object'
               ? title
               : callTitleComponent(category, title);
+
           filterData.callSendTime =
             typeof callSendTime === 'object'
-              ? `${getFormattedDate(callSendTime, true)}
-            ${getFormattedTime(callSendTime, true)}`
+              ? `${getFormattedDate(createdAt, true)}
+            ${getFormattedTime(createdAt, true)}`
               : callSendTime;
           filterData.callEndTime = callEndTimeComponent(callEndTime, status);
           filterData.callStatus = callStatusComponent(status);

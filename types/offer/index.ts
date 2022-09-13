@@ -4,6 +4,7 @@ export interface OfferProps {
   columns: any;
   search?: Search;
   type?: string;
+  data: Array<object>;
 }
 
 export type MakeOffer = {
