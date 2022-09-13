@@ -1,16 +1,17 @@
 const getFormattedDate = (originDate: Date, isCollapsible: boolean) => {
   try {
+    console.log(originDate);
     const fullYear = originDate.getFullYear();
     const month = originDate.getMonth() + 1;
     const date = originDate.getDate();
     if (!isCollapsible) return `${fullYear}.${month}.${date}`;
     return `${fullYear}년 ${month}월 ${date}일`;
   } catch (error) {
-    return null;
+    return originDate;
   }
 };
 
-const getFormattedTime = (originDate: Date, isMeridians: boolean) => {
+const getFormattedTime = (originDate: any, isMeridians: boolean) => {
   try {
     let hours: number = originDate.getHours();
     let mins: string | number = originDate.getMinutes();
@@ -27,7 +28,7 @@ const getFormattedTime = (originDate: Date, isMeridians: boolean) => {
     }
     return `${meridians} ${hours}:${mins}`;
   } catch (error) {
-    return null;
+    return originDate;
   }
 };
 

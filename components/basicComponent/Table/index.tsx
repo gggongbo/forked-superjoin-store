@@ -72,6 +72,7 @@ const FilterBlock = styled.div`
 `;
 const sortIconStyle = css`
   margin-left: 10px;
+
   :hover {
     background-color: ${({ theme }) => theme.colors.singletons.green};
   }
@@ -165,19 +166,12 @@ const Table: FC<TableProps> = function Table(props) {
     }),
     [],
   );
-
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
     page,
-    // canPreviousPage,
-    // canNextPage,
-    // pageCount,
-    // gotoPage,
-    // nextPage,
-    // previousPage,
     pageOptions,
     setPageSize,
     state: { pageIndex, pageSize },
@@ -185,9 +179,7 @@ const Table: FC<TableProps> = function Table(props) {
     {
       columns,
       data,
-      // filter setting
       defaultColumn,
-      // pagination setting
       initialState: {
         pageIndex: 0,
         pageSize: pageSizeList[0],
@@ -264,7 +256,7 @@ const Table: FC<TableProps> = function Table(props) {
                             {...cell.getCellProps()}
                             width={cell.column.width}
                             flex={index === 0}
-                            // eslint-disable-next-line react/no-array-index-key
+                            /* eslint-disable-next-line react/no-array-index-key */
                             key={index}
                           >
                             {index === 0 && expandEnable && (

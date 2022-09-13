@@ -110,9 +110,11 @@ const ButtonBackgroundBlock = styled.div<{ disabled?: boolean }>`
   border-radius: 6px;
   position: absolute;
   background-color: ${({ theme }) => `${theme.colors.singletons.white}00`};
+
   :hover {
     background-color: ${({ theme }) => `${theme.colors.singletons.white}30`};
   }
+
   :active,
   :visited {
     background-color: ${({ theme }) => `${theme.colors.singletons.black}10`};
@@ -138,16 +140,15 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
   const {
     address,
     description,
-    maxNumofUser,
+    maxNumOfUser,
     deadline,
     status,
     reward,
-    requestMemberList,
+    requestList,
     callMemberList,
     appealContent: originalAppealContent,
     appealAt,
   } = row.original;
-
   const [appealContent, setAppealContent] = useState<string>(
     originalAppealContent || '',
   );
@@ -176,10 +177,10 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
         />
         <RequestMemberListBlock>
           <RequestTextBlock disabled={disabled}>
-            {`참여 신청 인원 (${requestMemberList?.length})`}
+            {`참여 신청 인원 (${requestList?.length})`}
           </RequestTextBlock>
           <RequestMemberBlock>
-            {requestMemberList?.map((requestMember: any) => (
+            {requestList?.map((requestMember: any) => (
               <RequestMemberItemBlock
                 key={requestMember.userId}
                 disabled={disabled}
@@ -197,12 +198,12 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
         </RequestMemberListBlock>
       </RewardRequestMemberBlock>
     ),
-    [disabled, requestMemberList, reward],
+    [disabled, requestList, reward],
   );
 
   const appealBoxComponent = useCallback(
     (editable: boolean) => {
-      const confirmed = status === 'confired';
+      const confirmed = status === 'confirmed';
 
       return editable ? (
         <AppealBoxBlock>
@@ -284,7 +285,7 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
       <SubText
         title={
           type === 'send'
-            ? `${maxNumofUser}명 모집`
+            ? `${maxNumOfUser}명 모집`
             : `${callMemberList?.length}명 방문`
         }
         icon={{

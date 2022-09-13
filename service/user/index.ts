@@ -1,5 +1,6 @@
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '@service/app';
+import { offerService } from '../offer/index';
 
 async function updatePassword(email: string) {
   const ok = window.confirm('비밀번호를 초기화 하시겠습니까?');
@@ -11,6 +12,13 @@ async function updatePassword(email: string) {
   }
 }
 
+const findStoreInfo = async (email: string) => {
+  // @ts-ignore
+  const { user, location } = await offerService.findStoreInfo(email);
+  return { uid: user.uid, location };
+};
+
 export const userService = {
   updatePassword,
+  findStoreInfo,
 };

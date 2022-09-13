@@ -9,6 +9,7 @@ import {
   text as TextColors,
 } from '@styles/theme/colors';
 import { SubRow } from '@components/basicComponent/Table/SubRow';
+import axios from 'axios';
 
 const CatetgoryBlock = styled.div`
   display: flex;
@@ -74,6 +75,7 @@ const deleteButtonIconStyle = css`
   :hover {
     background-color: ${({ theme }) => theme.colors.singletons.green};
   }
+
   :active,
   :visited {
     background-color: ${({ theme }) => theme.colors.singletons.textGreen};
@@ -105,7 +107,6 @@ const useTableComponent = () => {
       // eslint-disable-next-line no-plusplus
       const fetchId = ++fetchIdRef.current;
       const fetchResult: any = [];
-      // setTimeout(() => {
       if (fetchId === fetchIdRef.current) {
         const startRow = pageSize * pageIndex;
         const endRow = startRow + pageSize;
@@ -113,7 +114,6 @@ const useTableComponent = () => {
         fetchResult.push(Math.ceil(data.length / pageSize));
       }
       return fetchResult;
-      // }, 100);
     },
     [],
   );
@@ -176,50 +176,74 @@ const useTableComponent = () => {
   }, []);
 
   const callEndTimeComponent = useCallback(
-    (callEndTime: Date, callStatus: string) => {
+    (callEndTime: number, callStatus: string) => {
       const disabled = callStatus !== 'proceeding';
+      if (typeof callEndTime === 'number') {
+        const postFix = callEndTime > 0 ? '후' : '전';
+        return (
+          <CallEndTimeBlock disabled={disabled}>
+            {`${callEndTime} 분 ${postFix}`}
+          </CallEndTimeBlock>
+        );
+      }
+      return callEndTime;
+    },
+    [],
+  );
+
+  // TODO 다시 제안 정책 확인 후 추가 작성
+  const callButtonComponent = useCallback(
+    (callStatus: string, callId: string) => {
+      const backgroundColor =
+        callStatus === 'proceeding' ? GrayColors[3] : singletons.black;
+      const color =
+        callStatus === 'proceeding' ? singletons.black : singletons.white;
+      const text = callStatus === 'proceeding' ? '다시 제안' : '제안 취소';
       return (
-        <CallEndTimeBlock disabled={disabled}>
-          {`${callEndTime}분 후`}
-        </CallEndTimeBlock>
+        <CallButtonBlock
+          backgroundColor={backgroundColor}
+          color={color}
+          onClick={() => {
+            axios
+              .delete('http://localhost:3002/store', { data: { callId } })
+              .then(() => alert('제안이 취소 되었습니다.'));
+          }}
+        >
+          {text}
+        </CallButtonBlock>
       );
     },
     [],
   );
 
-  const callButtonComponent = useCallback((callStatus: string) => {
-    const backgroundColor =
-      callStatus === 'proceeding' ? GrayColors[3] : singletons.black;
-    const color =
-      callStatus === 'proceeding' ? singletons.black : singletons.white;
-    const text = callStatus === 'proceeding' ? '다시 제안' : '제안 취소';
-    return (
-      <CallButtonBlock
-        backgroundColor={backgroundColor}
-        color={color}
-        onClick={e => alert('call')}
-      >
-        {text}
-      </CallButtonBlock>
-    );
-  }, []);
-
-  const callDeleteButtonComponent = useCallback((callStatus: string) => {
-    const color = callStatus === 'proceeding' ? GrayColors[3] : GrayColors[5];
-    const disabled = callStatus === 'proceeding';
-    return (
-      <DeleteButtonBlock disabled={disabled} onClick={e => alert('delete')}>
-        <Icon
-          name="Trash"
-          width={18}
-          height={18}
-          color={color}
+  const callDeleteButtonComponent = useCallback(
+    (callStatus: string, callId: string) => {
+      const color = callStatus === 'proceeding' ? GrayColors[3] : GrayColors[5];
+      const disabled = callStatus === 'proceeding';
+      return (
+        <DeleteButtonBlock
           disabled={disabled}
-          customStyle={deleteButtonIconStyle}
-        />
-      </DeleteButtonBlock>
-    );
-  }, []);
+          onClick={() => {
+            axios
+              .delete('http://localhost:3002/store/delete', {
+                data: { callId },
+              })
+              .then(() => alert('제안이 취소 되었습니다.'));
+          }}
+        >
+          <Icon
+            name="Trash"
+            width={18}
+            height={18}
+            color={color}
+            disabled={disabled}
+            customStyle={deleteButtonIconStyle}
+          />
+        </DeleteButtonBlock>
+      );
+    },
+    [],
+  );
 
   const rewardStatusComponent = useCallback((rewardStatus: boolean) => {
     const option = {
@@ -240,8 +264,8 @@ const useTableComponent = () => {
 
   const appealStatusComponent = useCallback(
     (appealContent: string, status: string) => {
-      let appealStatus = 'empty';
-      let appealStatusName = '미작성';
+      let appealStatus: string;
+      let appealStatusName: string;
       switch (status) {
         case 'proceeding':
           appealStatus = appealContent?.length > 0 ? 'proceeding' : 'empty';
