@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  trailingSlash: true,
   async redirects() {
     return [
       {
@@ -8,11 +9,16 @@ const nextConfig = {
         destination: '/makeoffer',
         permanent: true,
       },
+      {
+        source: '/login',
+        destination: '/',
+        permanent: true,
+      },
     ];
   },
-  exportPathMap() {
+  async exportPathMap() {
     return {
-      '/': { page: '/makeoffer' },
+      '/': { page: '/' },
       '/login': { page: '/login' },
       '/makeoffer': { page: '/makeoffer' },
       '/offer': { page: '/offer' },

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-edit</title>
+    <defs>
+        <path d="M3 12.31V15h2.69l9-9L12 3.31l-9 9zm9.53-10.59 3.75 3.75a.75.75 0 0 1 0 1.06l-9.75 9.75a.75.75 0 0 1-.53.22H2.25a.75.75 0 0 1-.75-.75V12a.75.75 0 0 1 .22-.53l9.75-9.75a.75.75 0 0 1 1.06 0z" id="zpl9krscga"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="6lx8zv5i9b" fill="#000000">
+            <use xlink:href="#zpl9krscga"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#zpl9krscga"/>
+        <g mask="url(#6lx8zv5i9b)" fill="#000000">
+            <path d="M0 0h18v18H0z"/>
+        </g>
+    </g>
+</svg>
