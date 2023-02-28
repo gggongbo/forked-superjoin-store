@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import styled, { CSSProp } from 'styled-components';
-import Icon from '../Icon';
-import Oval from './Oval';
+
+import Oval from '@components/basicComponent/Oval';
+import Icon from '@components/Icon';
 
 const CheckboxTextBlock = styled.div<{ customStyle?: CSSProp }>`
   display: flex;

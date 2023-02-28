@@ -12,19 +12,6 @@ export const singletons = {
   cancelRed: '#ffe7e8',
   red: '#f17274',
   pink: '#f16ca2',
-  conversationBlue: '#27AFCF',
-  foodRed: '#E96A56',
-  babyYellow: '#FED800',
-  shoppingPurple: '#FF69B4',
-  travelBlue: '#4169E1',
-  sportsGreen: '#3CB371',
-  studyGreen: '#9ACD32',
-  culturePurPle: '#BA55D3',
-  gameOrange: '#FF8C00',
-  etcBlack: '#778899',
-  lifeBlue: '#6495ED',
-  religionGreen: '#008080',
-  animalPurple: '#6A5ACD',
   enabledGray: '#d9d9d9',
   backgroundGray: '#f9f8f8',
 };
@@ -54,6 +41,17 @@ export const deepDarkGray = {
   4: '#3a3c40',
   5: '#5b5f66',
   6: '#7c7f84',
+};
+
+export const category = {
+  sports: '#3CB371',
+  art: '#BA55D3',
+  hobby: '#FF69B4',
+  food: '#E96A56',
+  creative: '#FF8C00',
+  trip: '#4169E1',
+  improvement: '#27AFCF',
+  etc: '#778899',
 };
 
 // export const primary = {

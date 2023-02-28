@@ -1,8 +1,9 @@
 import type { NextPage } from 'next';
-import styled from 'styled-components';
-import Table from '@components/basicComponent/Table';
 import { useEffect, useMemo, useCallback, useState } from 'react';
-import { OfferProps } from '~/types/offer';
+import styled from 'styled-components';
+
+import Table from '@components/basicComponent/Table';
+import { OfferProps } from '@constants/types/offer';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
 

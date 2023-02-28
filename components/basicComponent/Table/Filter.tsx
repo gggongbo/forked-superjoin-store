@@ -1,7 +1,8 @@
-import { Row, FilterValue, Column, IdType } from 'react-table';
 import { FC, useMemo } from 'react';
-import { Option } from '~/types/basicComponent';
-import Checkbox from '../Checkbox';
+import { Row, FilterValue, Column, IdType } from 'react-table';
+
+import Checkbox from '@components/basicComponent/Checkbox';
+import { OptionType } from '@constants/types/components';
 
 interface SelectColumnFilterProps {
   column: Column<any> & {
@@ -30,7 +31,7 @@ const FilterIncludes = (
 const SelectColumnFilter: FC<SelectColumnFilterProps> =
   function SelectColumnFilter({ column: { setFilter, preFilteredRows, id } }) {
     const options: FilterValue[] = useMemo(() => {
-      const optionArray: Option[] = [];
+      const optionArray: OptionType[] = [];
       preFilteredRows?.forEach((row: Row) => {
         const rowValue = row.values[id];
         const option =
@@ -38,7 +39,7 @@ const SelectColumnFilter: FC<SelectColumnFilterProps> =
             ? rowValue.props.option
             : { name: rowValue, value: rowValue };
         const optionFindIndex = optionArray.findIndex(
-          (optionItem: Option) =>
+          (optionItem: OptionType) =>
             JSON.stringify(optionItem) === JSON.stringify(option),
         );
         if (optionFindIndex < 0) optionArray.push(option);

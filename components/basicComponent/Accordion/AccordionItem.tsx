@@ -1,6 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
-import Icon from '../../Icon';
+
+import Icon from '@components/Icon';
 
 const AccordionItemBlock = styled.div<{ contentVisible: boolean }>`
   display: flex;

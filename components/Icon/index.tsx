@@ -1,5 +1,6 @@
-import styled, { css, CSSProp } from 'styled-components';
 import { FC } from 'react';
+import styled, { css, CSSProp } from 'styled-components';
+
 import * as IconList from './basic';
 
 interface IconPropType {

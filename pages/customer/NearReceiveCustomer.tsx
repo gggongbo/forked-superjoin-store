@@ -1,9 +1,10 @@
 import type { NextPage } from 'next';
-import styled from 'styled-components';
-import Table from '@components/basicComponent/Table';
 import { useEffect, useMemo, useCallback, useState } from 'react';
+import styled from 'styled-components';
+
+import Table from '@components/basicComponent/Table';
+import { NearCustomerProps } from '@constants/types/customer';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { NearCustomerProps } from '~/types/customer';
 
 const NearReceiveCustomerBlock = styled.main`
   display: flex;
@@ -112,7 +113,7 @@ const NearReceiveCustomer: NextPage<NearCustomerProps> =
               columns={columns}
               data={tableData}
               loading={loading}
-              expandEnable={false}
+              expandEnable
               fetchData={fetchData}
               pageSizeList={pageSizeList}
               pageCount={pageCount}

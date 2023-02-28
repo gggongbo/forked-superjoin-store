@@ -1,17 +1,18 @@
-import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'styled-components';
-import '@styles/globals.css';
-import { theme } from '@styles/theme';
-import Layout from '@components/Layout';
 import { withAuthUser, AuthAction } from 'next-firebase-auth';
-import initAuth from '@service/login/initAuth';
+import type { AppProps } from 'next/app';
+import { QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { QueryClientProvider } from 'react-query';
-import queryClient from '@utils/queryUtils';
-import store, { persistor } from '../store';
+import { ThemeProvider } from 'styled-components';
 
-initAuth();
+import '@styles/globals.css';
+import Layout from '@components/Layout';
+import { authService } from '@service/auth';
+import store, { persistor } from '@store/rootStore';
+import { theme } from '@styles/theme';
+import queryClient from '@utils/queryUtils';
+
+authService.initAuth();
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -32,6 +33,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 export default withAuthUser({
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-  authPageURL: '/login',
+  whenAuthed: AuthAction.RENDER,
   // @ts-ignore
 })(MyApp);

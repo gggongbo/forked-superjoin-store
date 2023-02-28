@@ -1,15 +1,16 @@
 import { useCallback, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { Option, SubRowProps } from '~/types/basicComponent';
-import Icon from '@components/Icon';
+
 import { CategoryTag } from '@components/basicComponent/CategoryTag';
+import { SubRow } from '@components/basicComponent/Table/SubRow';
+import Icon from '@components/Icon';
+import { OptionType, SubRowProps } from '@constants/types/components';
+import { offerService } from '@service/offer';
 import {
   singletons,
   gray as GrayColors,
   text as TextColors,
 } from '@styles/theme/colors';
-import { SubRow } from '@components/basicComponent/Table/SubRow';
-import axios from 'axios';
 
 const CatetgoryBlock = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ const CategoryTextBlock = styled.div`
 `;
 
 const CallStatusBlock = styled.div<{
-  option: Option;
+  option: OptionType;
   backgroundColor?: string;
 }>`
   background-color: ${({ backgroundColor }) => backgroundColor};
@@ -82,7 +83,7 @@ const deleteButtonIconStyle = css`
   }
 `;
 
-const RewardBlock = styled.div<{ option: Option }>`
+const RewardBlock = styled.div<{ option: OptionType }>`
   display: flex;
   flex-direction: row;
 `;
@@ -91,7 +92,10 @@ const RewardTextBlock = styled.div`
   margin-left: 8px;
 `;
 
-const AppealStatusBlock = styled.div<{ option: Option; disabled?: boolean }>`
+const AppealStatusBlock = styled.div<{
+  option: OptionType;
+  disabled?: boolean;
+}>`
   display: flex;
   flex-direction: row;
   font-size: 14px;
@@ -203,10 +207,9 @@ const useTableComponent = () => {
         <CallButtonBlock
           backgroundColor={backgroundColor}
           color={color}
-          onClick={() => {
-            axios
-              .delete('http://localhost:3002/store', { data: { callId } })
-              .then(() => alert('제안이 취소 되었습니다.'));
+          onClick={async () => {
+            await offerService.deleteOffer({ callId });
+            alert('제안이 취소 되었습니다.');
           }}
         >
           {text}
@@ -223,12 +226,9 @@ const useTableComponent = () => {
       return (
         <DeleteButtonBlock
           disabled={disabled}
-          onClick={() => {
-            axios
-              .delete('http://localhost:3002/store/delete', {
-                data: { callId },
-              })
-              .then(() => alert('제안이 취소 되었습니다.'));
+          onClick={async () => {
+            await offerService.deleteOffer({ callId });
+            alert('제안이 취소 되었습니다.');
           }}
         >
           <Icon

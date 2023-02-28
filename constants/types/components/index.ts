@@ -1,6 +1,6 @@
 import { Row } from 'react-table';
 
-export type Option = {
+export type OptionType = {
   name: string | number;
   value: string | number;
 };
@@ -14,15 +14,15 @@ export type IconType = {
   opacity?: number | undefined;
 };
 
-export type Button = 'button' | 'submit' | 'reset' | undefined;
+export type ButtonType = 'button' | 'submit' | 'reset' | undefined;
 
-export type PlaceholderColor = {
+export type PlaceholderColorType = {
   color: string;
   index?: number;
   opacity?: number | string;
 };
 
-export type Search = {
+export type SearchType = {
   type: string;
   value: string;
 };

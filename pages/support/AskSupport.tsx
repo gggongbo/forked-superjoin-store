@@ -1,18 +1,21 @@
 import type { NextPage } from 'next';
-import styled, { css } from 'styled-components';
-import InputText from '@components/basicComponent/InputText';
-import InfoText from '@components/basicComponent/InfoText';
-import VerticalSubText from '@components/basicComponent/VerticalSubText';
-import Button from '@components/basicComponent/Button';
 import {
   ChangeEvent,
   Dispatch,
   SetStateAction,
-  useEffect,
+  useCallback,
   useState,
 } from 'react';
-import { useAuthUser } from 'next-firebase-auth';
-import axios from 'axios';
+import { useSelector } from 'react-redux';
+import styled, { css } from 'styled-components';
+
+import Button from '@components/basicComponent/Button';
+import InfoText from '@components/basicComponent/InfoText';
+import InputText from '@components/basicComponent/InputText';
+import VerticalSubText from '@components/basicComponent/VerticalSubText';
+import { ReduxStoreType } from '@constants/types/redux';
+import { useConfirm } from '@hooks/useConfirm';
+import { supportService } from '@service/support';
 
 const AskSupportBlock = styled.form`
   display: flex;
@@ -45,28 +48,22 @@ interface AskSupportProps {
 const AskSupport: NextPage<AskSupportProps> = function AskSupport({
   supportType,
 }) {
-  const [title, setTitle] = useState('');
-  const [text, setText] = useState('');
-  const [validation, setValidation] = useState(false);
-  const { email } = useAuthUser();
+  const email = useSelector<ReduxStoreType, string | null>(
+    ({ auth }) => auth?.currentUser?.email,
+  );
+  const [title, setTitle] = useState<string>();
+  const [text, setText] = useState<string>();
+  const confirm = useConfirm();
 
-  useEffect(() => {
-    setValidation(title.length !== 0 && text.length !== 0);
-  }, [text, title]);
-
-  // TODO 도메인 설정 후 url 변경
-  const send = async () => {
-    const ok = window.confirm('문의하기 전송');
-    if (ok) {
-      const param = { email, title, text };
-      await axios
-        .post(`http://localhost:3000/api/email/askSupport`, param)
-        .then(() => {
-          alert('문의가 완료되었습니다.');
-          supportType('qa');
-        });
-    }
-  };
+  const askSubmit = useCallback(() => {
+    if (!email || !title?.length || !text?.length) return;
+    confirm('문의하기 전송', () => {
+      supportService.sendMail(email, title, text).then(() => {
+        alert('문의가 완료되었습니다.');
+        supportType('qa');
+      });
+    });
+  }, [confirm, email, supportType, text, title]);
 
   return (
     <AskSupportBlock>
@@ -103,10 +100,10 @@ const AskSupport: NextPage<AskSupportProps> = function AskSupport({
           text="문의하기"
           type="button"
           onClick={() => {
-            send();
+            askSubmit();
           }}
           customStyle={buttonStyle}
-          disabled={!validation}
+          disabled={!title?.length || !text?.length}
         />
       </ContentBlock>
     </AskSupportBlock>

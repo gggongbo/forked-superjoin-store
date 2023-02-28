@@ -1,7 +1,8 @@
+import Link from 'next/link';
 import { FC } from 'react';
 import styled, { css } from 'styled-components';
-import Link from 'next/link';
-import Icon from '../Icon';
+
+import Icon from '@components/Icon';
 
 const buttonPalette = css<{ isSelected?: boolean }>`
   display: flex;

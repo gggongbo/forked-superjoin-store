@@ -1,21 +1,23 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+
+import Divider from '@components/basicComponent/Divider';
+import Oval from '@components/basicComponent/Oval';
+import UserInfo from '@components/UserInfo';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';
 import logoTitle from '@resources/svg/logo/logo-title.svg';
-import Divider from './basicComponent/Divider';
-import Oval from './basicComponent/Oval';
-import UserInfo from './UserInfo';
 
 const NavbarBlock = styled.div`
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   width: 100vw;
-  aspect-ratio: 26;
+  aspect-ratio: 20;
   min-height: 50px;
   top: 0px;
   padding: 0px 32px;
-  background: ${props => props.theme.colors.singletons.defaultBackground};
+  background-color: ${props => props.theme.colors.singletons.defaultBackground};
   -webkit-box-shadow: 0px 1px 3px 0px
     ${props => `${props.theme.colors.singletons.realBlack}20`};
   box-shadow: 0px 1px 3px 0px

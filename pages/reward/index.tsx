@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import styled from 'styled-components';
+
 import Header from '@components/basicComponent/Header';
 import rewardImage from '@resources/svg/img/illust-reward.svg';
 

@@ -9,6 +9,11 @@ const nextConfig = {
         destination: '/makeoffer',
         permanent: true,
       },
+      {
+        source: '/login',
+        destination: '/',
+        permanent: true,
+      },
     ];
   },
   async exportPathMap() {

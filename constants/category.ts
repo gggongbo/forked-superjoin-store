@@ -1,112 +1,52 @@
-import { singletons } from '@styles/theme/colors';
+import { category } from '@styles/theme/colors';
 
-const {
-  babyYellow,
-  conversationBlue,
-  culturePurPle,
-  etcBlack,
-  foodRed,
-  gameOrange,
-  shoppingPurple,
-  sportsGreen,
-  studyGreen,
-  travelBlue,
-  lifeBlue,
-  religionGreen,
-  animalPurple,
-} = singletons;
-
-const TALK = {
-  name: '대화',
-  color: conversationBlue,
-  icon: 'Talk',
-  value: 'talk',
-};
-const LIFE = {
-  name: '생활',
-  color: lifeBlue,
-  icon: 'Life',
-  value: 'life',
-};
-const TRAVEL = {
-  name: '여행',
-  color: travelBlue,
-  icon: 'Travel',
-  value: 'travel',
-};
 const SPORTS = {
-  name: '운동',
-  color: sportsGreen,
+  name: '운동/액티비티',
+  color: category.sports,
   icon: 'Sports',
   value: 'sports',
 };
-const STUDY = {
-  name: '공부',
-  color: studyGreen,
-  icon: 'Study',
-  value: 'study',
+const ART = {
+  name: '문화/예술',
+  color: category.art,
+  icon: 'Art',
+  value: 'art',
 };
-const BABY = {
-  name: '육아',
-  color: babyYellow,
-  icon: 'Baby',
-  value: 'baby',
-};
-const RELIGION = {
-  name: '종교',
-  color: religionGreen,
-  icon: 'Religion',
-  value: 'religion',
-};
-const GAME = {
-  name: '오락',
-  color: gameOrange,
-  icon: 'Game',
-  value: 'game',
+const HOBBY = {
+  name: '취미',
+  color: category.hobby,
+  icon: 'Hobby',
+  value: 'hobby',
 };
 const FOOD = {
-  name: '음식',
-  color: foodRed,
+  name: '음식/음료',
+  color: category.food,
   icon: 'Food',
   value: 'food',
 };
-const ANIMAL = {
-  name: '동물',
-  color: animalPurple,
-  icon: 'Animal',
-  value: 'animal',
+const CREATIVE = {
+  name: '창작',
+  color: category.creative,
+  icon: 'Creative',
+  value: 'creative',
 };
-const CULTURE = {
-  name: '문화',
-  color: culturePurPle,
-  icon: 'Culture',
-  value: 'culture',
+const TRIP = {
+  name: '여행/나들이',
+  color: category.trip,
+  icon: 'Trip',
+  value: 'trip',
 };
-const SHOPPING = {
-  name: '쇼핑',
-  color: shoppingPurple,
-  icon: 'Shopping',
-  value: 'shopping',
+const IMPROVEMENT = {
+  name: '성장/자기계발',
+  color: category.improvement,
+  icon: 'Improvement',
+  value: 'improvement',
 };
 const ETC = {
   name: '기타',
-  color: etcBlack,
+  color: category.etc,
   icon: '',
   value: 'etc',
 };
 
-export {
-  TALK,
-  CULTURE,
-  SHOPPING,
-  STUDY,
-  GAME,
-  BABY,
-  SPORTS,
-  TRAVEL,
-  FOOD,
-  LIFE,
-  ANIMAL,
-  RELIGION,
-  ETC,
-};
+export { SPORTS, ART, HOBBY, FOOD, CREATIVE, TRIP, IMPROVEMENT, ETC };

@@ -1,8 +1,10 @@
 import type { NextPage } from 'next';
-import styled from 'styled-components';
-import Accordion from '@components/basicComponent/Accordion';
 import { useEffect, useState } from 'react';
-import { qaService } from '@service/support/qa';
+import styled from 'styled-components';
+
+import Accordion from '@components/basicComponent/Accordion';
+import { QaType } from '@constants/types/support';
+import { supportService } from '@service/support';
 
 const AccordionBlock = styled.div`
   width: 70%;
@@ -11,11 +13,10 @@ const AccordionBlock = styled.div`
 `;
 
 const QaSupport: NextPage = function QaSupport() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<QaType[]>([]);
 
   useEffect(() => {
-    // @ts-ignore
-    qaService.getAll().then(qaList => setData(qaList));
+    supportService.getAllQa().then(qaList => setData(qaList));
   }, []);
 
   return (

@@ -1,7 +1,8 @@
+import { debounce } from 'lodash';
 import { FC, ReactNode, useState, useCallback, useMemo } from 'react';
 import styled, { css, CSSProp } from 'styled-components';
-import { PlaceholderColor } from '~/types/basicComponent';
-import { debounce } from 'lodash';
+
+import { PlaceholderColorType } from '@constants/types/components';
 
 const InputTextBlock = styled.div<{
   width: number;
@@ -38,7 +39,7 @@ const InputTextBlock = styled.div<{
 `;
 
 const placeholderCommonStyle = css<{
-  placeholderColor: PlaceholderColor;
+  placeholderColor: PlaceholderColorType;
   disabled?: boolean;
 }>`
   color: ${({ placeholderColor, theme }) =>
@@ -74,7 +75,7 @@ const placeholderStyle = css`
 `;
 
 const InputTextField = styled.input<{
-  placeholderColor: PlaceholderColor;
+  placeholderColor: PlaceholderColorType;
   disabled?: boolean;
 }>`
   width: 100%;
@@ -103,7 +104,7 @@ const InputTextAreaBlock = styled.div`
 `;
 
 const InputTextArea = styled.textarea<{
-  placeholderColor: PlaceholderColor;
+  placeholderColor: PlaceholderColorType;
   disabled?: boolean;
 }>`
   width: 100%;
@@ -128,7 +129,7 @@ interface InputTextProps {
   isError?: boolean;
   disabled?: boolean;
   placeholder?: string;
-  placeholderColor?: PlaceholderColor;
+  placeholderColor?: PlaceholderColorType;
   rightComponent?: ReactNode;
   customStyle?: CSSProp;
   // eslint-disable-next-line no-unused-vars

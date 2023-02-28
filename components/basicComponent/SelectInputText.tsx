@@ -1,9 +1,10 @@
+import { debounce } from 'lodash';
 import { FC, useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
-import { Option } from '~/types/basicComponent';
-import { debounce } from 'lodash';
-import Icon from '../Icon';
-import SelectBox from './Selectbox';
+
+import SelectBox from '@components/basicComponent/Selectbox';
+import Icon from '@components/Icon';
+import { OptionType } from '@constants/types/components';
 
 // todo: border entire wrap
 const SelectInputBlock = styled.div`
@@ -41,7 +42,7 @@ const InputTextfield = styled.input`
 `;
 
 interface SelectInputTextProps {
-  optionList: Option[];
+  optionList: OptionType[];
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
   // eslint-disable-next-line no-unused-vars
