@@ -1,7 +1,16 @@
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  User,
+} from 'firebase/auth';
 import { init } from 'next-firebase-auth';
+
+import { CurrentUserType } from '@constants/types/redux';
+import { auth } from '@service/app';
 
 const initAuth = () => {
   init({
+    authPageURL: '/login',
     appPageURL: '/makeoffer',
     loginAPIEndpoint: '/api/auth/login', // required
     logoutAPIEndpoint: '/api/auth/logout', // required
@@ -56,4 +65,57 @@ const initAuth = () => {
   });
 };
 
-export default initAuth;
+const login = async (
+  email: string,
+  password: string,
+): Promise<CurrentUserType | null> => {
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    email,
+    password,
+  );
+
+  if (userCredential) {
+    const {
+      uid,
+      photoURL,
+      displayName,
+      email: userEmail,
+      emailVerified,
+    } = userCredential.user;
+    return {
+      id: uid,
+      avatar: photoURL,
+      displayName,
+      email: userEmail,
+      emailVerified,
+    };
+  }
+  return null;
+};
+
+const logOut = (): void => {
+  auth.signOut();
+};
+
+const getCurrentUser = (): User | null => {
+  return auth.currentUser;
+};
+
+const updatePassword = async (email: string) => {
+  const ok = window.confirm('비밀번호를 초기화 하시겠습니까?');
+  if (ok) {
+    auth.languageCode = 'ko';
+    sendPasswordResetEmail(auth, email)
+      .then(() => alert(`${email} 으로 재설정 메일을 보냈습니다.`))
+      .catch(e => console.log(e));
+  }
+};
+
+export const authService = {
+  initAuth,
+  login,
+  logOut,
+  getCurrentUser,
+  updatePassword,
+};

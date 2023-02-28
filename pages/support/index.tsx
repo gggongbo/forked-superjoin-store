@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
 import { useState, useMemo } from 'react';
 import styled from 'styled-components';
-import Header from '@components/basicComponent/Header';
-import Divider from '@components/basicComponent/Divider';
-import QaSupport from './QaSupport';
+
 import AskSupport from './AskSupport';
+import QaSupport from './QaSupport';
+
+import Divider from '@components/basicComponent/Divider';
+import Header from '@components/basicComponent/Header';
 
 const SupportBlock = styled.main`
   display: flex;

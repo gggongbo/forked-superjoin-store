@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { IconType } from '~/types/basicComponent';
-import Icon from '../Icon';
+
+import Icon from '@components/Icon';
+import { IconType } from '@constants/types/components';
 
 const SubTextButtonBlock = styled.div`
   display: flex;

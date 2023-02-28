@@ -1,10 +1,16 @@
 import type { NextPage } from 'next';
-import styled from 'styled-components';
-import Table from '@components/basicComponent/Table';
 import { useMemo, useCallback, useState, useEffect } from 'react';
-import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
+
+import Table from '@components/basicComponent/Table';
+import { OfferProps } from '@constants/types/offer';
+import { ReduxStoreType } from '@constants/types/redux';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { OfferProps } from '~/types/offer';
+import { offerService } from '@service/offer';
+import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
+import { firebaseDataToOfferData } from '@utils/offerUtils';
+import { ArrayToString } from '@utils/stringUtils';
 
 const SendOfferBlock = styled.main`
   display: flex;
@@ -17,17 +23,15 @@ const TableBlock = styled.div`
 `;
 
 const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
-  const { columns, search, type, data } = props;
+  const { columns, search, type } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-  const [initData, setInitData] = useState(data);
+  const [initData, setInitData] = useState([]);
   const pageSizeList = [10, 25, 50, 75, 100];
-
-  useEffect(() => {
-    setInitData(data);
-  }, [data, initData]);
+  const userId = useSelector<ReduxStoreType, string>(
+    ({ storeUser }) => storeUser?.currentStoreUser?.user?.id,
+  );
 
   const {
     getFetchedData,
@@ -39,12 +43,20 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
     renderRowSubComponent,
   } = useTableComponent();
 
+  const getSedndOffer = useCallback(async () => {
+    const sendOfferData = await offerService.getSendOffer(userId);
+    if (!sendOfferData) return;
+    setInitData((prev: any) => {
+      if (ArrayToString(prev) !== ArrayToString(sendOfferData.data)) {
+        return firebaseDataToOfferData(sendOfferData.data);
+      }
+      return prev;
+    });
+  }, [userId]);
+
   useEffect(() => {
-    if (tableData) setIsMounted(true);
-    return () => {
-      setIsMounted(false);
-    };
-  }, [tableData]);
+    getSedndOffer();
+  }, [getSedndOffer]);
 
   // const initData = useMemo(
   //   () => [
@@ -155,7 +167,7 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
 
   return (
     <SendOfferBlock>
-      {isMounted && (
+      {!initData ? null : (
         <TableBlock>
           <Table
             columns={columns}

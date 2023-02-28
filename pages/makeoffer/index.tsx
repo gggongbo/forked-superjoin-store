@@ -1,16 +1,18 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
-import InputText from '@components/basicComponent/InputText';
-import VerticalSubText from '@components/basicComponent/VerticalSubText';
+
 import Button from '@components/basicComponent/Button';
 import Header from '@components/basicComponent/Header';
+import InputText from '@components/basicComponent/InputText';
 import SelectBox from '@components/basicComponent/Selectbox';
+import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import { categoryList } from '@constants/categoryList';
-import { useEffect, useState } from 'react';
-import { useAuthUser } from 'next-firebase-auth';
+import type { MakeOfferType } from '@constants/types/offer';
+import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { offerService } from '@service/offer';
-import type { MakeOffer as makeOffer } from '~/types/offer';
-import { useRouter } from 'next/router';
 
 const MakeOfferBlock = styled.main`
   display: flex;
@@ -21,58 +23,77 @@ const MakeOfferBlock = styled.main`
 const ContentBlock = styled.form`
   display: flex;
   flex-direction: column;
-  padding: 16px 8px;
-  width: 576px;
+  margin-top: 24px;
+  margin-left: 8px;
 `;
 
-const mediumContentStyle = css`
-  margin-top: 16px;
-`;
-
-const smallContentStyle = css`
-  margin-top: 16px;
-  width: 272px;
-`;
-
-const buttonStyle = css`
+const ButtonBlock = styled.div`
+  margin-left: 8px;
   margin-top: 32px;
 `;
 
-const MakeOffer: NextPage = function MakeOffer() {
-  const route = useRouter();
-  const { email } = useAuthUser();
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [content, setContent] = useState('');
-  const [userNum, setUserNum] = useState(0);
-  const [deadline, setDeadline] = useState(0);
-  const [reward, setReward] = useState(0);
-  const [validation, setValidation] = useState(false);
+const inputTextStyle = css`
+  width: 50%;
+`;
 
-  useEffect(() => {
-    const confirm =
-      title.length !== 0 &&
-      category.length !== 0 &&
-      content.length !== 0 &&
-      userNum !== 0 &&
-      userNum <= 10 &&
-      deadline !== 0 &&
-      deadline <= 60 &&
-      reward !== 0;
-    setValidation(confirm);
-  }, [title, category, content, userNum, deadline, reward]);
+const selectBoxStyle = css`
+  margin-top: 16px;
+  width: 30%;
+`;
+
+const areaStyle = css`
+  margin-top: 16px;
+  width: 50%;
+`;
+
+const inputTextNumberStyle = css`
+  margin-top: 16px;
+  width: 60%;
+`;
+
+const buttonStyle = css`
+  width: 50%;
+`;
+
+const MakeOffer: NextPage = function MakeOffer() {
+  const router = useRouter();
+  const email = useSelector<ReduxStoreType, string | null>(
+    ({ auth }) => auth?.currentUser?.email,
+  );
+  const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
+    ({ storeUser }) => storeUser.currentStoreUser,
+  );
+  const [title, setTitle] = useState<string>();
+  const [category, setCategory] = useState<string>();
+  const [description, setDescription] = useState<string>();
+  const [userNum, setUserNum] = useState<number>(0);
+  const [deadline, setDeadline] = useState<number>(0);
+  const [reward, setReward] = useState<number>(0);
 
   const submit = () => {
-    const data: makeOffer = {
+    if (
+      !title?.length ||
+      !category?.length ||
+      !description?.length ||
+      userNum < 1 ||
+      userNum > 10 ||
+      deadline < 1 ||
+      deadline > 60 ||
+      reward < 1
+    )
+      return;
+    const data: MakeOfferType = {
       title,
       category,
-      content,
+      description,
       userNum,
       deadline,
       reward,
       email,
     };
-    offerService.creatOffer(data).then(() => route.push('/offer'));
+    offerService
+      .createOffer(data, currentStoreUser)
+      .then(() => router.replace('/offer', '/offer', { shallow: true }));
   };
 
   return (
@@ -81,6 +102,7 @@ const MakeOffer: NextPage = function MakeOffer() {
       <ContentBlock>
         <VerticalSubText
           title="제목"
+          customStyle={inputTextStyle}
           content={
             <InputText
               placeholder="제목을 입력해주세요."
@@ -90,6 +112,7 @@ const MakeOffer: NextPage = function MakeOffer() {
         />
         <VerticalSubText
           title="카테고리"
+          customStyle={selectBoxStyle}
           content={
             <SelectBox
               optionList={categoryList}
@@ -99,67 +122,74 @@ const MakeOffer: NextPage = function MakeOffer() {
               placeholder="카테고리 선택"
             />
           }
-          customStyle={smallContentStyle}
         />
         <VerticalSubText
           title="설명"
+          customStyle={areaStyle}
           content={
             <InputText
               height={116}
               isArea
-              onChange={e => setContent(e.target.value)}
+              onChange={e => setDescription(e.target.value)}
               placeholder={`설명을 입력해주세요.\n(구체적인 약속 시간, 약속 장소, 활동 내용을 입력하면 멤버를 모집하는데 도움이 됩니다!)`}
             />
           }
-          customStyle={mediumContentStyle}
         />
         <VerticalSubText
           title="모집 인원"
+          customStyle={inputTextNumberStyle}
           content={
             <InputText
               type="number"
               onChange={e => setUserNum(e.target.value)}
-              width={272}
               placeholder="최대 10명"
             />
           }
           rightText="명"
-          customStyle={mediumContentStyle}
         />
         <VerticalSubText
           title="제안 마감 시간"
+          customStyle={inputTextNumberStyle}
           content={
             <InputText
               type="number"
               onChange={e => setDeadline(e.target.value)}
-              width={272}
               placeholder="1 ~ 60분"
             />
           }
           rightText="분 후"
-          customStyle={mediumContentStyle}
         />
         <VerticalSubText
           title="제공할 보상"
+          customStyle={inputTextNumberStyle}
           content={
             <InputText
               type="number"
               onChange={e => setReward(e.target.value)}
-              width={272}
               placeholder="최소 1포인트"
             />
           }
           rightText="포인트"
-          customStyle={mediumContentStyle}
-        />
-        <Button
-          text="제안 보내기"
-          type="button"
-          onClick={submit}
-          disabled={!validation}
-          customStyle={buttonStyle}
         />
       </ContentBlock>
+      <ButtonBlock>
+        <Button
+          text="제안 보내기"
+          type="submit"
+          onClick={submit}
+          disabled={
+            !title?.length ||
+            !category?.length ||
+            !description?.length ||
+            userNum < 1 ||
+            userNum > 10 ||
+            deadline < 1 ||
+            deadline > 60 ||
+            reward < 1
+          }
+          customStyle={buttonStyle}
+        />
+      </ButtonBlock>
     </MakeOfferBlock>
   );
 };

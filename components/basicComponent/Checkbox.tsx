@@ -3,15 +3,16 @@ import {
   useState,
   useCallback,
   useRef,
-  useEffect,
   KeyboardEvent,
   MouseEvent,
+  useLayoutEffect,
 } from 'react';
 import styled, { css } from 'styled-components';
-import { Option } from '~/types/basicComponent';
+
+import Oval from '@components/basicComponent/Oval';
+import Icon from '@components/Icon';
+import { OptionType } from '@constants/types/components';
 import { useInClick } from '@hooks/useInClick';
-import Icon from '../Icon';
-import Oval from './Oval';
 
 const CheckboxBlock = styled.label<{
   inClicked: boolean;
@@ -81,7 +82,7 @@ const CheckboxText = styled.div`
 `;
 
 interface CheckboxProps {
-  optionList: Option[];
+  optionList: OptionType[];
   setFilter?: Function;
 }
 
@@ -97,7 +98,7 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
     height: 0,
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (checkboxRef.current) {
       const { clientHeight, clientWidth } = checkboxRef.current;
       setCheckboxPosition({ width: clientWidth, height: clientHeight });
@@ -117,7 +118,7 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
   }, []);
 
   const handleCheckBox = useCallback(
-    (e: any, option?: Option) => {
+    (e: any, option?: OptionType) => {
       const optionValue = option?.value || e.target.value;
       const findIndex = checkedOptionList.findIndex(
         checkedOption => checkedOption === optionValue,
@@ -170,7 +171,7 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
           aria-label="dropdown-list"
           checkboxPosition={checkboxPosition}
         >
-          {optionList.map((option: Option) => {
+          {optionList.map((option: OptionType) => {
             return (
               <CheckboxItem
                 value={option?.value}

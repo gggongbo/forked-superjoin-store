@@ -37,6 +37,17 @@
         "tsx": "never"
       }
     ],
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", ["parent", "sibling"], "index"],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
     "import/prefer-default-export": "off",
     "react/prop-types": 0,
     "import/no-unresolved": 0,

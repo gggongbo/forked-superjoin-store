@@ -1,19 +1,15 @@
-import { Category } from '~/types/category';
 import * as CategoryList from './category';
 
-const categoryList: Category[] = [];
-categoryList.push(CategoryList.TALK);
-categoryList.push(CategoryList.LIFE);
-categoryList.push(CategoryList.TRAVEL);
+import { CategoryType } from '@constants/types/category';
+
+const categoryList: CategoryType[] = [];
 categoryList.push(CategoryList.SPORTS);
-categoryList.push(CategoryList.STUDY);
-categoryList.push(CategoryList.BABY);
-categoryList.push(CategoryList.RELIGION);
-categoryList.push(CategoryList.GAME);
+categoryList.push(CategoryList.ART);
+categoryList.push(CategoryList.HOBBY);
 categoryList.push(CategoryList.FOOD);
-categoryList.push(CategoryList.ANIMAL);
-categoryList.push(CategoryList.CULTURE);
-categoryList.push(CategoryList.SHOPPING);
+categoryList.push(CategoryList.CREATIVE);
+categoryList.push(CategoryList.TRIP);
+categoryList.push(CategoryList.IMPROVEMENT);
 categoryList.push(CategoryList.ETC);
 
 export { categoryList };

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import styled, { CSSProp } from 'styled-components';
-import { Button as ButtonType } from '~/types/basicComponent';
+
+import { ButtonType } from '@constants/types/components';
 
 const ButtonBlock = styled.button<{
   width: number;

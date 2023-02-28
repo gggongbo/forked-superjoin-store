@@ -1,13 +1,15 @@
 import type { NextPage } from 'next';
-import styled from 'styled-components';
-import Header from '@components/basicComponent/Header';
 import { useMemo, useEffect, useState, useCallback } from 'react';
-import { Search } from '~/types/basicComponent';
+import styled from 'styled-components';
+
+import NearReceiveCustomer from './NearReceiveCustomer';
+import NearSendCustomer from './NearSendCustomer';
+
+import Divider from '@components/basicComponent/Divider';
+import Header from '@components/basicComponent/Header';
 import SelectInputText from '@components/basicComponent/SelectInputText';
 import * as Columns from '@constants/tableColumns';
-import Divider from '@components/basicComponent/Divider';
-import NearSendCustomer from './NearSendCustomer';
-import NearReceiveCustomer from './NearReceiveCustomer';
+import { SearchType } from '@constants/types/components';
 
 const optionList = [
   { name: 'ID', value: 'id' },
@@ -51,8 +53,8 @@ const HeaderRightBlock = styled.div`
 
 const Customer: NextPage = function Customer() {
   const [customerType, setCustomerType] = useState<string>('send');
-  const [input, setInput] = useState<Search>();
-  const [search, setSearch] = useState<Search>();
+  const [input, setInput] = useState<SearchType>();
+  const [search, setSearch] = useState<SearchType>();
 
   useEffect(() => {
     setSearch(undefined);

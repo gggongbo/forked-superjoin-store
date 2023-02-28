@@ -1,5 +1,6 @@
 import { FC, memo } from 'react';
 import styled from 'styled-components';
+
 import { AccordionItem, AccordionItemProps } from './AccordionItem';
 
 const AccordionBlock = styled.div`

@@ -3,15 +3,16 @@ import {
   useRef,
   useCallback,
   useState,
-  useEffect,
   KeyboardEvent,
   MouseEvent,
   useMemo,
+  useLayoutEffect,
 } from 'react';
 import styled, { css } from 'styled-components';
+
+import Icon from '@components/Icon';
+import { OptionType, PlaceholderColorType } from '@constants/types/components';
 import { useInClick } from '@hooks/useInClick';
-import { Option, PlaceholderColor } from '~/types/basicComponent';
-import Icon from '../Icon';
 
 const SelectBoxBlock = styled.div<{ width: number }>`
   display: flex;
@@ -55,7 +56,7 @@ const SelectBlock = styled.label<{
   }
 `;
 
-const placeholderTextColor = css<{ placeholderColor: PlaceholderColor }>`
+const placeholderTextColor = css<{ placeholderColor: PlaceholderColorType }>`
   ${({ placeholderColor, theme }) =>
     placeholderColor.index
       ? theme.colors[placeholderColor.color][placeholderColor.index] +
@@ -65,7 +66,7 @@ const placeholderTextColor = css<{ placeholderColor: PlaceholderColor }>`
 `;
 
 const Select = styled.select<{
-  placeholderColor: PlaceholderColor;
+  placeholderColor: PlaceholderColorType;
   placeholderValue: number | string | undefined;
   customSize?: string;
 }>`
@@ -143,10 +144,10 @@ const SelectItem = styled.li<{ isSelected: boolean; customSize?: string }>`
 `;
 
 interface SelectboxProps {
-  optionList: Option[];
-  defaultOption?: Option;
+  optionList: OptionType[];
+  defaultOption?: OptionType;
   placeholder?: number | string;
-  placeholderColor?: PlaceholderColor;
+  placeholderColor?: PlaceholderColorType;
   width?: number;
   borderRadius?: string;
   customSize?: string;
@@ -172,7 +173,7 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
   );
   const [selectHeight, setSelectHeight] = useState<number>(0);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (selectRef.current) {
       const { clientHeight } = selectRef.current;
       setSelectHeight(clientHeight);
@@ -196,7 +197,7 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
   }, []);
 
   const handleSelectBox = useCallback(
-    (e: any, option?: Option) => {
+    (e: any, option?: OptionType) => {
       const optionValue = option?.value || e.target.value;
       setSelectOption(optionValue);
       setInClikced(false);
@@ -243,7 +244,7 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
               {placeholder}
             </option>
           )}
-          {optionList?.map((option: Option) => (
+          {optionList?.map((option: OptionType) => (
             <option key={option?.value} value={option?.value}>
               {option?.name}
             </option>
@@ -262,7 +263,7 @@ const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
           aria-label="dropdown-list"
           selectHeight={selectHeight}
         >
-          {optionList?.map((option: Option) => (
+          {optionList?.map((option: OptionType) => (
             <SelectItem
               key={option?.value}
               onClick={e => handleSelectBox(e, option)}

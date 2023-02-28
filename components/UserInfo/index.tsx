@@ -1,9 +1,14 @@
-import { FC, useState, useCallback, useRef, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { FC, useState, useCallback, useRef, useLayoutEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useAuthUser } from 'next-firebase-auth';
-import { userService } from '@service/user';
-import Icon from '../Icon';
-import SubTextButton from '../basicComponent/SubTextButton';
+
+import SubTextButton from '@components/basicComponent/SubTextButton';
+import Icon from '@components/Icon';
+import { CurrentUserType, ReduxStoreType } from '@constants/types/redux';
+import { useInClick } from '@hooks/useInClick';
+import { authService } from '@service/auth';
+import { persistor } from '@store/rootStore';
 
 const UserInfoBlock = styled.div`
   display: flex;
@@ -27,7 +32,6 @@ const UserImage = styled.div<{ userImage?: string | null }>`
 
 const UserId = styled.div`
   margin: 0 16px;
-  /* opacity: 0.84; */
   font-size: 14px;
   color: ${props => `${props.theme.colors.singletons.realBlack}84`};
   word-break: keep-all;
@@ -40,13 +44,13 @@ const UserId = styled.div`
   }
 `;
 
-const IconBlock = styled.div<{ logoutVisible: boolean }>`
+const IconBlock = styled.div<{ inClicked: boolean }>`
   border-radius: 100px;
   border-style: solid;
   border-width: 0px;
   padding: 8px;
   background-color: ${props =>
-    props.logoutVisible
+    props.inClicked
       ? `${props.theme.colors.singletons.pressGreen}60`
       : props.theme.colors.singletons.defaultBackground};
 
@@ -65,6 +69,7 @@ const IconBlock = styled.div<{ logoutVisible: boolean }>`
 const UserBlock = styled.div<{ contentHeight?: number }>`
   position: absolute;
   display: flex;
+  flex-direction: column;
   right: 0px;
   top: ${props => (props.contentHeight || 0) + 2}px;
   width: 155px;
@@ -72,63 +77,51 @@ const UserBlock = styled.div<{ contentHeight?: number }>`
 `;
 
 const UserInfo: FC = function UserInfo() {
-  const AuthUser = useAuthUser();
-  const userId = AuthUser?.email || 'unknown';
-  const userImage = AuthUser?.photoURL || null;
-  const [logoutVisible, setLogoutVisible] = useState(false);
-  const [contentHeight, setContentHeight] = useState(0);
-  const contentRef = useRef(null);
-  const onUserInfoPress = useCallback(
-    () => setLogoutVisible(prev => !prev),
-    [],
+  const router = useRouter();
+  const currentUser = useSelector<ReduxStoreType, CurrentUserType>(
+    ({ auth }) => auth.currentUser,
   );
-  useEffect(() => {
+  const userId = currentUser?.email || 'unknown';
+  const userImage = currentUser?.avatar || null;
+  const [contentHeight, setContentHeight] = useState<number>(0);
+  const contentRef = useRef(null);
+  const { inClicked, setInClikced } = useInClick(contentRef);
+
+  useLayoutEffect(() => {
     if (contentRef.current) {
       const { clientHeight } = contentRef.current;
       setContentHeight(clientHeight);
     }
+  }, []);
 
-    const preventClose = () => {
-      // TODO reload 시에도 동작을 함
-      const auto = localStorage.getItem('autoLogin');
-      if (auto === 'false') {
-        AuthUser.signOut();
-      }
-    };
+  const onLogout = useCallback(() => {
+    persistor.purge().then(() => {
+      localStorage.clear();
+      authService.logOut();
+      router.reload();
+    });
+  }, [router]);
 
-    (() => {
-      window.addEventListener('beforeunload', preventClose);
-    })();
-    return () => {
-      window.removeEventListener('beforeunload', preventClose);
-    };
-  }, [AuthUser, userId]);
-
-  // TODO: outside click event
   return (
-    <UserInfoBlock onClick={onUserInfoPress} ref={contentRef}>
+    <UserInfoBlock onClick={() => setInClikced(prev => !prev)} ref={contentRef}>
       <UserImage userImage={userImage} />
       <UserId>{userId}</UserId>
-      <IconBlock logoutVisible={logoutVisible}>
+      <IconBlock inClicked={inClicked}>
         <Icon name="ChevronDown" width={18} height={18} color="black" />
       </IconBlock>
-      {logoutVisible && (
-        <>
-          <UserBlock contentHeight={contentHeight}>
-            <SubTextButton
-              title="로그아웃"
-              icon={{ name: 'Out', width: 18, height: 18 }}
-              onClick={() => AuthUser.signOut()}
-            />
-          </UserBlock>
-          <UserBlock contentHeight={contentHeight + 58}>
-            <SubTextButton
-              title="비밀번호 초기화"
-              icon={{ name: 'Out', width: 18, height: 18 }}
-              onClick={() => userService.updatePassword(userId)}
-            />
-          </UserBlock>
-        </>
+      {inClicked && (
+        <UserBlock contentHeight={contentHeight}>
+          <SubTextButton
+            title="로그아웃"
+            icon={{ name: 'Out', width: 18, height: 18 }}
+            onClick={onLogout}
+          />
+          <SubTextButton
+            title="비밀번호 초기화"
+            icon={{ name: 'Out', width: 18, height: 18 }}
+            onClick={() => authService.updatePassword(userId)}
+          />
+        </UserBlock>
       )}
     </UserInfoBlock>
   );

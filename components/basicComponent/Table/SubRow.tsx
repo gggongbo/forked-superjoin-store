@@ -1,12 +1,13 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { SubRowProps } from '~/types/basicComponent';
-import { singletons } from '@styles/theme/colors';
+
+import Button from '@components/basicComponent/Button';
+import IconButton from '@components/basicComponent/IconButton';
+import InputText from '@components/basicComponent/InputText';
 import SubText from '@components/basicComponent/SubText';
+import { SubRowProps } from '@constants/types/components';
+import { singletons } from '@styles/theme/colors';
 import { getFormattedTime } from '@utils/dateUtils';
-import InputText from '~/components/basicComponent/InputText';
-import Button from '~/components/basicComponent/Button';
-import IconButton from '~/components/basicComponent/IconButton';
 
 const SubRowBlock = styled.div`
   display: flex;

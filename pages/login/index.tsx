@@ -1,21 +1,23 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState, useRef, useCallback } from 'react';
-import logoIcon from '@resources/svg/logo/logo-icon.svg';
-import logoTitle from '@resources/svg/logo/logo-title.svg';
-import loginBg from '@resources/svg/img/img-login-bg.svg';
 import styled, { css } from 'styled-components';
-import Oval from '@components/basicComponent/Oval';
-import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
-import InputText from '@components/basicComponent/InputText';
+
 import Button from '@components/basicComponent/Button';
+import CheckboxText from '@components/basicComponent/CheckboxText';
 import Divider from '@components/basicComponent/Divider';
+import InputText from '@components/basicComponent/InputText';
+import Oval from '@components/basicComponent/Oval';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Icon from '@components/Icon';
-import CheckboxText from '@components/basicComponent/CheckboxText';
-import { useAppDispatch } from '~/store';
-import { userActions } from '~/slice/user';
-import { userService } from '@service/user';
+import loginBg from '@resources/svg/img/img-login-bg.svg';
+import logoIcon from '@resources/svg/logo/logo-icon.svg';
+import logoTitle from '@resources/svg/logo/logo-title.svg';
+import { authService } from '@service/auth';
+import { storeService } from '@service/store';
+import { authActions } from '@slices/auth';
+import { storeUserActions } from '@slices/storeUser';
+import { useAppDispatch } from '@store/rootStore';
 
 const LoginBlock = styled.main`
   display: flex;
@@ -165,13 +167,21 @@ const Login: NextPage = function Login() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  // const login = useCallback(async () => {
+  //   const auto = localStorage.getItem('autoLogin');
+  //   console.log('t', auto, router, currentUserId);
+  //   if (auto === 'true') {
+  //     setAutoLogin(true);
+  //     router.replace('/makeoffer', '/makeoffer', { shallow: true });
+  //   } else {
+  //     setAutoLogin(false);
+  //     localStorage.clear();
+  //     authService.logOut();
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [currentUserId]);
+
   useEffect(() => {
-    const auto = localStorage.getItem('autoLogin');
-    if (auto === 'true') {
-      setAutoLogin(true);
-    } else {
-      setAutoLogin(false);
-    }
     if (passwordBoxRef.current) {
       const { clientHeight } = passwordBoxRef.current;
       setPasswordBoxHeight(clientHeight);
@@ -179,26 +189,21 @@ const Login: NextPage = function Login() {
   }, []);
 
   const onSubmit = useCallback(
-    (e: Event) => {
+    async (e: Event) => {
       e.preventDefault();
       if (!loginError) {
-        const auth = getAuth();
-        signInWithEmailAndPassword(auth, email, password)
-          .then(async () => {
-            if (auth?.currentUser?.uid) {
-              if (auth?.currentUser?.email != null) {
-                dispatch(
-                  userActions.setCurrentUser(
-                    await userService.findStoreInfo(auth?.currentUser?.email),
-                  ),
-                );
-              }
-            }
-            router.push('/makeoffer');
-          })
-          .catch(() => {
-            setLoginError(true);
-          });
+        try {
+          const currentUser = await authService.login(email, password);
+          const storeUserInfo = await storeService.findStoreInfo(
+            currentUser?.email ?? null,
+          );
+          if (currentUser) dispatch(authActions.setCurrentUser(currentUser));
+          if (storeUserInfo)
+            dispatch(storeUserActions.setCurrentStoreUser(storeUserInfo));
+          router.push('/makeoffer', '/makeoffer', { shallow: true });
+        } catch (error) {
+          setLoginError(true);
+        }
       }
     },
     [dispatch, email, loginError, password, router],
@@ -296,9 +301,6 @@ const Login: NextPage = function Login() {
     </LoginBlock>
   );
 };
-export default Login;
 
-Login.getInitialProps = async (ctx: { pathname: string }) => {
-  const { pathname } = ctx;
-  return { pathname };
-};
+Login.displayName = 'Login';
+export default Login;

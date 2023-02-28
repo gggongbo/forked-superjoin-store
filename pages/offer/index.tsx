@@ -1,19 +1,17 @@
 import type { NextPage } from 'next';
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import Divider from '@components/basicComponent/Divider';
-import Header from '@components/basicComponent/Header';
-import SelectInputText from '@components/basicComponent/SelectInputText';
-import InputText from '@components/basicComponent/InputText';
-import Icon from '@components/Icon';
-import * as Columns from '@constants/tableColumns';
-import { Search } from '~/types/basicComponent';
-import IconButton from '@components/basicComponent/IconButton';
-import { useSelector } from 'react-redux';
-import { offerService } from '@service/offer';
-import { Store } from '../../types/offer';
+
 import ReceiveOffer from './ReceiveOffer';
 import SendOffer from './SendOffer';
+
+import Divider from '@components/basicComponent/Divider';
+import Header from '@components/basicComponent/Header';
+import InputText from '@components/basicComponent/InputText';
+import SelectInputText from '@components/basicComponent/SelectInputText';
+import Icon from '@components/Icon';
+import * as Columns from '@constants/tableColumns';
+import { SearchType } from '@constants/types/components';
 
 const optionList = [
   { name: '제목', value: 'title' },
@@ -58,11 +56,8 @@ const HeaderRightBlock = styled.div`
 
 const Offer: NextPage = function Offer() {
   const [offerType, setOfferType] = useState<string>('send');
-  const [input, setInput] = useState<Search>();
-  const [search, setSearch] = useState<Search>();
-  const [data, setData] = useState([]);
-
-  const uid = useSelector<Store>(storeInfo => storeInfo.user.currentUser.uid);
+  const [input, setInput] = useState<SearchType>();
+  const [search, setSearch] = useState<SearchType>();
 
   useEffect(() => {
     setSearch(undefined);
@@ -91,33 +86,23 @@ const Offer: NextPage = function Offer() {
     return (
       <HeaderRightBlock>
         {offerType === 'send' ? (
-          <>
-            <IconButton
-              icon={{ name: 'Refresh', width: 32, height: 32 }}
-              onClick={() => {
-                offerService
-                  .getSendOffer(uid as string)
-                  .then(callList => setData(callList.data));
-              }}
-            />
-            <InputText
-              width={280}
-              placeholder="제목 검색"
-              valueType={optionList[0].value}
-              onChange={handleInputChange}
-              rightComponent={
-                <Icon
-                  width={20}
-                  height={20}
-                  name="Search"
-                  color="realBlack"
-                  onClick={() => {
-                    setSearch(input);
-                  }}
-                />
-              }
-            />
-          </>
+          <InputText
+            width={280}
+            placeholder="제목 검색"
+            valueType={optionList[0].value}
+            onChange={handleInputChange}
+            rightComponent={
+              <Icon
+                width={20}
+                height={20}
+                name="Search"
+                color="realBlack"
+                onClick={() => {
+                  setSearch(input);
+                }}
+              />
+            }
+          />
         ) : (
           <SelectInputText
             optionList={optionList}
@@ -129,7 +114,7 @@ const Offer: NextPage = function Offer() {
         )}
       </HeaderRightBlock>
     );
-  }, [offerType, handleInputChange, uid, input]);
+  }, [offerType, handleInputChange, input]);
 
   const headerTitleComponent = useMemo(() => {
     return (
@@ -157,14 +142,12 @@ const Offer: NextPage = function Offer() {
           columns={Columns.SendOffer}
           search={search}
           type={offerType}
-          data={data}
         />
       ) : (
         <ReceiveOffer
           columns={Columns.ReceiveOffer}
           search={search}
           type={offerType}
-          data={[]}
         />
       )}
     </OfferBlock>

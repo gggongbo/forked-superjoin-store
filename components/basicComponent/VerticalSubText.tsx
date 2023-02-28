@@ -15,7 +15,6 @@ const SubTextTitle = styled.div<{ customStyle?: CSSProp }>`
   font-size: 14px;
   font-weight: 500px;
   margin-bottom: 8px;
-  ${({ customStyle }) => customStyle};
 `;
 
 const SubTextContentBlock = styled.div`
@@ -34,7 +33,6 @@ const RightText = styled.div<{ customStyle?: CSSProp }>`
   flex: 1;
   font-size: 14px;
   margin-left: 12px;
-  ${({ customStyle }) => customStyle};
 `;
 
 interface SubTextPropTypes {

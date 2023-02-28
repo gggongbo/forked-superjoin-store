@@ -1,9 +1,10 @@
-import React from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import React from 'react';
 import styled from 'styled-components';
-import TopNavbar from './TopNavbar';
+
 import SideNavbar from './SideNavbar';
+import TopNavbar from './TopNavbar';
 
 interface LayoutProps {
   children: React.ReactElement;
@@ -12,21 +13,24 @@ interface LayoutProps {
 const LayoutBlock = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
-  position: relative;
   width: 100vw;
   height: 100vh;
   color: ${props => props.theme.colors.singletons.black}; //default color
 `;
+
+const MainBlock = styled.div``;
+
+const LoginBlock = styled.div``;
 
 const ContentBlock = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
   width: 100vw;
+  min-height: 89vh;
 `;
 
-const MainBlock = styled.div`
+const MainContentBlock = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -35,6 +39,8 @@ const MainBlock = styled.div`
 
 const Layout: NextPage<LayoutProps> = function Layout(props) {
   const { children } = props;
+  // eslint-disable-next-line no-undef
+  const { type } = children as JSX.Element;
   return (
     <LayoutBlock>
       <Head>
@@ -42,18 +48,20 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
         <meta name="description" content="Superjoin" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {children && children.props.pathname !== '/login' ? (
-        <>
+      {children && type?.displayName !== 'Login' ? (
+        <MainBlock>
           <TopNavbar />
           <ContentBlock>
             <SideNavbar />
+            <MainContentBlock>{children}</MainContentBlock>
+          </ContentBlock>
+        </MainBlock>
+      ) : (
+        <LoginBlock>
+          <ContentBlock>
             <MainBlock>{children}</MainBlock>
           </ContentBlock>
-        </>
-      ) : (
-        <ContentBlock>
-          <MainBlock>{children}</MainBlock>
-        </ContentBlock>
+        </LoginBlock>
       )}
     </LayoutBlock>
   );

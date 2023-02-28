@@ -1,8 +1,9 @@
+import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
+
+import SubTextLink from '@components/basicComponent/SubTextLink';
 import routerName from '@constants/router';
-import SubTextLink from './basicComponent/SubTextLink';
 
 const NavbarBlock = styled.div<{ selectedMenu?: string }>`
   display: flex;

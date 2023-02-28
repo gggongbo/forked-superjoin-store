@@ -1,7 +1,8 @@
 import { FC } from 'react';
 import styled, { CSSProp } from 'styled-components';
-import * as CategoryList from 'constants/category';
-import { Category } from '~/types/category';
+
+import * as CategoryList from '@constants/category';
+import { CategoryType } from '@constants/types/category';
 
 const CategoryTagBlock = styled.div<{
   backgroundColor: string;
@@ -27,7 +28,7 @@ const CategoryTextBlock = styled.div<{
 `;
 
 interface CategoryListType {
-  [key: string]: Category;
+  [key: string]: CategoryType;
 }
 
 const categoryList: CategoryListType = {

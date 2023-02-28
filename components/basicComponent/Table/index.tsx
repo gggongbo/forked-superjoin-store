@@ -1,3 +1,4 @@
+import { FC, Fragment, useEffect, useMemo, useState } from 'react';
 import {
   useTable,
   useExpanded,
@@ -6,11 +7,11 @@ import {
   usePagination,
 } from 'react-table';
 import styled, { css } from 'styled-components';
-import { FC, Fragment, useEffect, useMemo, useState } from 'react';
-import Icon from '../../Icon';
-import SelectBox from '../Selectbox';
-import Divider from '../Divider';
-import IconButton from '../IconButton';
+
+import Divider from '@components/basicComponent/Divider';
+import IconButton from '@components/basicComponent/IconButton';
+import SelectBox from '@components/basicComponent/Selectbox';
+import Icon from '@components/Icon';
 
 interface TableProps {
   columns: any;

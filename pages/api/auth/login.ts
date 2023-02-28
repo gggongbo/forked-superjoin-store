@@ -1,9 +1,11 @@
-import { setAuthCookies } from 'next-firebase-auth';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import initAuth from '@service/login/initAuth';
+import { setAuthCookies } from 'next-firebase-auth';
 
-initAuth();
+import { authService } from '@service/auth';
 
+authService.initAuth();
+
+// TODO: cookie login
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await setAuthCookies(req, res);
