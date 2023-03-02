@@ -5,11 +5,10 @@ import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
 import { OfferProps } from '@constants/types/offer';
-import { ReduxStoreType } from '@constants/types/redux';
+import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { offerService } from '@service/offer';
 import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
-import { firebaseDataToOfferData } from '@utils/offerUtils';
 import { ArrayToString } from '@utils/stringUtils';
 
 const SendOfferBlock = styled.main`
@@ -29,8 +28,8 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
   const [pageCount, setPageCount] = useState<number>(0);
   const [initData, setInitData] = useState([]);
   const pageSizeList = [10, 25, 50, 75, 100];
-  const userId = useSelector<ReduxStoreType, string>(
-    ({ storeUser }) => storeUser?.currentStoreUser?.user?.id,
+  const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
+    ({ storeUser }) => storeUser?.currentStoreUser,
   );
 
   const {
@@ -44,15 +43,17 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
   } = useTableComponent();
 
   const getSedndOffer = useCallback(async () => {
-    const sendOfferData = await offerService.getSendOffer(userId);
+    const sendOfferData = await offerService.getSendOffer(
+      currentStoreUser.user.uid,
+    );
     if (!sendOfferData) return;
     setInitData((prev: any) => {
-      if (ArrayToString(prev) !== ArrayToString(sendOfferData.data)) {
-        return firebaseDataToOfferData(sendOfferData.data);
+      if (ArrayToString(prev) !== ArrayToString(sendOfferData)) {
+        return sendOfferData;
       }
       return prev;
     });
-  }, [userId]);
+  }, [currentStoreUser.user.uid]);
 
   useEffect(() => {
     getSedndOffer();
@@ -126,8 +127,16 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
               : callSendTime;
           filterData.callEndTime = callEndTimeComponent(callEndTime, status);
           filterData.callStatus = callStatusComponent(status);
-          filterData.callButton = callButtonComponent(status, callId);
-          filterData.deleteButton = callDeleteButtonComponent(status, callId);
+          filterData.callButton = callButtonComponent(
+            status,
+            callId,
+            currentStoreUser,
+          );
+          filterData.deleteButton = callDeleteButtonComponent(
+            status,
+            callId,
+            currentStoreUser.user.uid,
+          );
           return filterData;
         })
         .filter((filterData: any) => {
@@ -145,6 +154,7 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
       callEndTimeComponent,
       callStatusComponent,
       callButtonComponent,
+      currentStoreUser,
       callDeleteButtonComponent,
       search,
     ],

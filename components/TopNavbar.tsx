@@ -13,7 +13,7 @@ const NavbarBlock = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100vw;
-  aspect-ratio: 20;
+  aspect-ratio: 26;
   min-height: 50px;
   top: 0px;
   padding: 0px 32px;

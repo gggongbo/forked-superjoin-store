@@ -1,13 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { setAuthCookies } from 'next-firebase-auth';
+import nodemailer from 'nodemailer';
 
-import { authService } from '@service/auth';
-
-authService.initAuth();
+import { supportService } from '@service/support';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await setAuthCookies(req, res);
+    const reqbody = JSON.parse(req.body);
+    const { email, title, text } = reqbody;
+    if (!email || !title || !text) throw new Error('Argument error');
+    await supportService.sendMail(nodemailer, email, title, text);
   } catch (error) {
     return res.status(500).json({ error: `Unexpected error: ${error}` });
   }

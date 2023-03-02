@@ -1,3 +1,4 @@
+import { addMinutes } from 'date-fns';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
@@ -67,7 +68,7 @@ const MakeOffer: NextPage = function MakeOffer() {
   const [category, setCategory] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [userNum, setUserNum] = useState<number>(0);
-  const [deadline, setDeadline] = useState<number>(0);
+  const [deadline, setDeadline] = useState<Date>();
   const [reward, setReward] = useState<number>(0);
 
   const submit = () => {
@@ -77,8 +78,7 @@ const MakeOffer: NextPage = function MakeOffer() {
       !description?.length ||
       userNum < 1 ||
       userNum > 10 ||
-      deadline < 1 ||
-      deadline > 60 ||
+      !deadline ||
       reward < 1
     )
       return;
@@ -130,6 +130,7 @@ const MakeOffer: NextPage = function MakeOffer() {
             <InputText
               height={116}
               isArea
+              maxLength={500}
               onChange={e => setDescription(e.target.value)}
               placeholder={`설명을 입력해주세요.\n(구체적인 약속 시간, 약속 장소, 활동 내용을 입력하면 멤버를 모집하는데 도움이 됩니다!)`}
             />
@@ -143,6 +144,7 @@ const MakeOffer: NextPage = function MakeOffer() {
               type="number"
               onChange={e => setUserNum(e.target.value)}
               placeholder="최대 10명"
+              range={{ max: 10, min: 1 }}
             />
           }
           rightText="명"
@@ -153,8 +155,12 @@ const MakeOffer: NextPage = function MakeOffer() {
           content={
             <InputText
               type="number"
-              onChange={e => setDeadline(e.target.value)}
+              onChange={e => {
+                const now = new Date();
+                setDeadline(addMinutes(now, e.target.value));
+              }}
               placeholder="1 ~ 60분"
+              range={{ max: 60, min: 1 }}
             />
           }
           rightText="분 후"
@@ -167,6 +173,7 @@ const MakeOffer: NextPage = function MakeOffer() {
               type="number"
               onChange={e => setReward(e.target.value)}
               placeholder="최소 1포인트"
+              range={{ min: 1 }}
             />
           }
           rightText="포인트"
@@ -183,8 +190,7 @@ const MakeOffer: NextPage = function MakeOffer() {
             !description?.length ||
             userNum < 1 ||
             userNum > 10 ||
-            deadline < 1 ||
-            deadline > 60 ||
+            !deadline ||
             reward < 1
           }
           customStyle={buttonStyle}

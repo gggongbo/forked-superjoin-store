@@ -9,12 +9,13 @@ export type CurrentUserType = {
 export type AuthType = {
   auth: {
     currentUser: CurrentUserType;
+    autoLogin: boolean;
   };
 };
 
 export type CurrentStoreUserType = {
   user: {
-    id: string;
+    uid: string;
   };
   location: {
     longitude: number;
