@@ -23,7 +23,7 @@
       "@resources/*": ["./resources/*"],
       "@public/*": ["./public/*"],
       "@styles/*": ["./styles/*"],
-      "@service/*": ["./service/*"],
+      "@services/*": ["services/*"],
       "@contexts/*": ["./contexts/*"],
       "@store/*": ["./store/*"],
       "@slices/*": ["./slices/*"],

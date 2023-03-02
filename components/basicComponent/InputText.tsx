@@ -130,6 +130,11 @@ interface InputTextProps {
   disabled?: boolean;
   placeholder?: string;
   placeholderColor?: PlaceholderColorType;
+  maxLength?: number | undefined;
+  range?: {
+    max?: number | string | undefined;
+    min?: number | string | undefined;
+  };
   rightComponent?: ReactNode;
   customStyle?: CSSProp;
   // eslint-disable-next-line no-unused-vars
@@ -150,6 +155,8 @@ const InputText: FC<InputTextProps> = function InputText(props) {
     disabled,
     placeholder,
     placeholderColor = { color: 'text', index: 2, opacity: '' },
+    maxLength,
+    range,
     customStyle,
     rightComponent,
     onChange,
@@ -175,11 +182,30 @@ const InputText: FC<InputTextProps> = function InputText(props) {
     [onChangeInput],
   );
 
-  const handleInput = useCallback(
+  const handleChange = useCallback(
     (e: any) => {
       debounceSetInput(e);
     },
     [debounceSetInput],
+  );
+
+  const handleInput = useCallback(
+    (
+      e: any,
+      inputRange?: {
+        max?: number | string | undefined;
+        min?: number | string | undefined;
+      },
+    ) => {
+      const { value } = e.target;
+      if (inputRange?.min && value < inputRange.min) {
+        e.target.value = null;
+      }
+      if (inputRange?.max && value > inputRange.max) {
+        e.target.value = null;
+      }
+    },
+    [],
   );
 
   return (
@@ -197,9 +223,10 @@ const InputText: FC<InputTextProps> = function InputText(props) {
             defaultValue={defaultValue}
             disabled={disabled}
             onClick={onClick}
-            onChange={handleInput}
+            onChange={handleChange}
             placeholder={placeholder}
             placeholderColor={placeholderColor}
+            maxLength={maxLength}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
           />
@@ -210,11 +237,15 @@ const InputText: FC<InputTextProps> = function InputText(props) {
           defaultValue={defaultValue}
           disabled={disabled}
           onClick={onClick}
-          onChange={handleInput}
+          onChange={handleChange}
           placeholder={placeholder}
           placeholderColor={placeholderColor}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
+          maxLength={maxLength}
+          max={range?.max}
+          min={range?.min}
+          onInput={(e: any) => handleInput(e, range)}
         />
       )}
       {rightComponent && rightComponent}
@@ -233,6 +264,8 @@ InputText.defaultProps = {
   disabled: false,
   placeholder: '',
   placeholderColor: { color: 'text', index: 2, opacity: '' },
+  maxLength: undefined,
+  range: { max: undefined, min: undefined },
   rightComponent: null,
   customStyle: {},
   onChange: () => {},

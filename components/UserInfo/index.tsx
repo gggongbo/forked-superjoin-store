@@ -6,8 +6,9 @@ import styled from 'styled-components';
 import SubTextButton from '@components/basicComponent/SubTextButton';
 import Icon from '@components/Icon';
 import { CurrentUserType, ReduxStoreType } from '@constants/types/redux';
+import { useConfirm } from '@hooks/useConfirm';
 import { useInClick } from '@hooks/useInClick';
-import { authService } from '@service/auth';
+import { authService } from '@services/auth';
 import { persistor } from '@store/rootStore';
 
 const UserInfoBlock = styled.div`
@@ -30,7 +31,7 @@ const UserImage = styled.div<{ userImage?: string | null }>`
   }
 `;
 
-const UserId = styled.div`
+const UserEmail = styled.div`
   margin: 0 16px;
   font-size: 14px;
   color: ${props => `${props.theme.colors.singletons.realBlack}84`};
@@ -81,11 +82,12 @@ const UserInfo: FC = function UserInfo() {
   const currentUser = useSelector<ReduxStoreType, CurrentUserType>(
     ({ auth }) => auth.currentUser,
   );
-  const userId = currentUser?.email || 'unknown';
+  const userEmail = currentUser?.email || 'unknown';
   const userImage = currentUser?.avatar || null;
   const [contentHeight, setContentHeight] = useState<number>(0);
   const contentRef = useRef(null);
   const { inClicked, setInClikced } = useInClick(contentRef);
+  const confirm = useConfirm();
 
   useLayoutEffect(() => {
     if (contentRef.current) {
@@ -96,16 +98,28 @@ const UserInfo: FC = function UserInfo() {
 
   const onLogout = useCallback(() => {
     persistor.purge().then(() => {
-      localStorage.clear();
+      sessionStorage.clear();
       authService.logOut();
       router.reload();
     });
   }, [router]);
 
+  const onUpdatePassword = useCallback(() => {
+    if (!userEmail) return;
+    confirm('비밀번호를 초기화 하시겠습니까?', () => {
+      authService
+        .updatePassword(userEmail)
+        .then(() => {
+          alert(`${userEmail} 으로 재설정 메일을 보냈습니다.`);
+        })
+        .catch(e => console.log(e));
+    });
+  }, [confirm, userEmail]);
+
   return (
     <UserInfoBlock onClick={() => setInClikced(prev => !prev)} ref={contentRef}>
       <UserImage userImage={userImage} />
-      <UserId>{userId}</UserId>
+      <UserEmail>{userEmail}</UserEmail>
       <IconBlock inClicked={inClicked}>
         <Icon name="ChevronDown" width={18} height={18} color="black" />
       </IconBlock>
@@ -119,7 +133,7 @@ const UserInfo: FC = function UserInfo() {
           <SubTextButton
             title="비밀번호 초기화"
             icon={{ name: 'Out', width: 18, height: 18 }}
-            onClick={() => authService.updatePassword(userId)}
+            onClick={onUpdatePassword}
           />
         </UserBlock>
       )}

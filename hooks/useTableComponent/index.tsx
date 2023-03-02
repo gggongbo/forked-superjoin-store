@@ -5,12 +5,13 @@ import { CategoryTag } from '@components/basicComponent/CategoryTag';
 import { SubRow } from '@components/basicComponent/Table/SubRow';
 import Icon from '@components/Icon';
 import { OptionType, SubRowProps } from '@constants/types/components';
-import { offerService } from '@service/offer';
+import { offerService } from '@services/offer';
 import {
   singletons,
   gray as GrayColors,
   text as TextColors,
 } from '@styles/theme/colors';
+import { CurrentStoreUserType } from '~/constants/types/redux';
 
 const CatetgoryBlock = styled.div`
   display: flex;
@@ -197,7 +198,11 @@ const useTableComponent = () => {
 
   // TODO 다시 제안 정책 확인 후 추가 작성
   const callButtonComponent = useCallback(
-    (callStatus: string, callId: string) => {
+    (
+      callStatus: string,
+      callId: string,
+      currentStoreUser: CurrentStoreUserType,
+    ) => {
       const backgroundColor =
         callStatus === 'proceeding' ? GrayColors[3] : singletons.black;
       const color =
@@ -208,7 +213,7 @@ const useTableComponent = () => {
           backgroundColor={backgroundColor}
           color={color}
           onClick={async () => {
-            await offerService.deleteOffer({ callId });
+            await offerService.cancelOffer(callId, currentStoreUser);
             alert('제안이 취소 되었습니다.');
           }}
         >
@@ -220,15 +225,15 @@ const useTableComponent = () => {
   );
 
   const callDeleteButtonComponent = useCallback(
-    (callStatus: string, callId: string) => {
+    (callStatus: string, callId: string, userId: string) => {
       const color = callStatus === 'proceeding' ? GrayColors[3] : GrayColors[5];
       const disabled = callStatus === 'proceeding';
       return (
         <DeleteButtonBlock
           disabled={disabled}
           onClick={async () => {
-            await offerService.deleteOffer({ callId });
-            alert('제안이 취소 되었습니다.');
+            await offerService.deleteOffer(callId, userId);
+            alert('제안이 삭제 되었습니다.');
           }}
         >
           <Icon

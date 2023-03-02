@@ -13,8 +13,8 @@ import Icon from '@components/Icon';
 import loginBg from '@resources/svg/img/img-login-bg.svg';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';
 import logoTitle from '@resources/svg/logo/logo-title.svg';
-import { authService } from '@service/auth';
-import { storeService } from '@service/store';
+import { authService } from '@services/auth';
+import { storeUserService } from '@services/storeUser';
 import { authActions } from '@slices/auth';
 import { storeUserActions } from '@slices/storeUser';
 import { useAppDispatch } from '@store/rootStore';
@@ -167,20 +167,6 @@ const Login: NextPage = function Login() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  // const login = useCallback(async () => {
-  //   const auto = localStorage.getItem('autoLogin');
-  //   console.log('t', auto, router, currentUserId);
-  //   if (auto === 'true') {
-  //     setAutoLogin(true);
-  //     router.replace('/makeoffer', '/makeoffer', { shallow: true });
-  //   } else {
-  //     setAutoLogin(false);
-  //     localStorage.clear();
-  //     authService.logOut();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currentUserId]);
-
   useEffect(() => {
     if (passwordBoxRef.current) {
       const { clientHeight } = passwordBoxRef.current;
@@ -194,19 +180,22 @@ const Login: NextPage = function Login() {
       if (!loginError) {
         try {
           const currentUser = await authService.login(email, password);
-          const storeUserInfo = await storeService.findStoreInfo(
+          const storeUserInfo = await storeUserService.findStoreUserInfo(
             currentUser?.email ?? null,
           );
           if (currentUser) dispatch(authActions.setCurrentUser(currentUser));
           if (storeUserInfo)
             dispatch(storeUserActions.setCurrentStoreUser(storeUserInfo));
-          router.push('/makeoffer', '/makeoffer', { shallow: true });
+
+          dispatch(authActions.setAutoLogin(autoLogin));
+          sessionStorage.setItem('sessionStart', String(true));
+          await router.push('/makeoffer', '/makeoffer', { shallow: true });
         } catch (error) {
           setLoginError(true);
         }
       }
     },
-    [dispatch, email, loginError, password, router],
+    [autoLogin, dispatch, email, loginError, password, router],
   );
 
   return (
@@ -278,7 +267,7 @@ const Login: NextPage = function Login() {
                   isChecked={autoLogin}
                   onClick={() => {
                     setAutoLogin(!autoLogin);
-                    localStorage.setItem('autoLogin', String(!autoLogin));
+                    dispatch(authActions.setAutoLogin(!autoLogin));
                   }}
                 />
               </AutoLoginBox>
