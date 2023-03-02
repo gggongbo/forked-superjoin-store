@@ -1,34 +1,161 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# **Superjoin Busniess Client**
 
-## Getting Started
+[![React](https://img.shields.io/badge/react-18-F82F82)](https://ko.reactjs.org/blog/2022/03/29/react-v18.html)
+[![Nextjs](https://img.shields.io/badge/nextjs-12-F82F82)](https://nextjs.org)
+[![node](https://img.shields.io/badge/node-14-F82F82)](https://nodejs.org/docs/latest-v16.x/api)
+[![discussion](https://img.shields.io/badge/discussion-progressing-0ABFD1?logo=github)](https://github.com/superjoins/superjoin-business-client)
+[![Jira](https://img.shields.io/badge/jira-blue?logo=jira)](https://superjoin.atlassian.net/jira)
+[![Firebase](https://img.shields.io/badge/firebase-gray?logo=firebase)](https://console.firebase.google.com)
 
-First, run the development server:
+## **Contents**
+
+- [**Superjoin Busniess Client**](#superjoin-busniess-client)
+  - [**Contents**](#contents)
+  - [**Requirements**](#requirements)
+  - [**Tools**](#tools)
+  - [**Test**](#test)
+  - [**Build**](#build)
+  - [**Deploy**](#deploy)
+  - [**Code Managing**](#code-managing)
+    - [**코드 작성시 유의사항**](#코드-작성시-유의사항)
+    - [**코드 형상 관리**](#코드-형상-관리)
+  - [**Code Structure**](#code-structure)
+
+## **Requirements**
+
+1. React : 18.2.0
+2. Node : 14
+3. Typescript : 4.7.4
+4. Nextjs: 12.2.4
+5. Firebase : 9,9,2
+6. Firebase Admin: 11.0.1
+7. React-redux: 8.0.2
+8. Styled-Component : 5.3.5
+9. ESLint : 8.21.0
+10. Prettier : 2.7.1
+
+## **Tools**
+
+| Tool             | Name                                                                                                     |
+| ---------------- | -------------------------------------------------------------------------------------------------------- |
+| IDE              | Visual Studio Code                                                                                       |
+| Cooperation      | [Slack](https://slack.com/intl/ko-kr)(업무연락), [Jira](https://superjoin.atlassian.net/jira)(Todo 관리) |
+| Design           | [Zeplin](https://zeplin.io)                                                                              |
+| Product Managing | [Figma](https://www.figma.com/)                                                                          |
+| Code Managing    | [Github](https://github.com/superjoins/superjoin-business-client)                                        |
+
+## **Test**
+
+- `yan dev` 명령어로 로컬 빌드 후 테스트
+- localhost:3000에서 로컬 빌드된 소스 확인 가능
+
+## **Build**
+
+- 아래 순서로 빌드 진행
 
 ```bash
-npm run dev
-# or
-yarn dev
+yarn lint #코드 검사
+yarn build #개발 후 서버에 올릴 때 사용. Product 모드로 로컬에서 빌드
+yarn start #yarn build 후 로컬에서 nextjs 시작
+yarn export #nextjs로 빌드된 결과를 static html로 쪼개주어 웹서버 세팅이 어려운 Firebase에 배포할 수 있는 상태로 변환해주는 명령어
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## **Deploy**
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- TODO
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## **Code Managing**
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+### **코드 작성시 유의사항**
 
-## Learn More
+1. 파일 이름 명명은 auth(Authentication 관련 로직 저장), storeUser(로그인한 업체의 기본 정보 저장)과 같은 케이스를 제외하고, pages 하위 페이지이름(makeoffer, offer, reward, support, customer)에 따라 명명
+2. 타입정의는 constants/types 안에서 진행
+3. pages 하위 폴더에서 ui 관련 로직 작성
+4. services 하위 폴더에서 data + useCase 관련 로직 작성
+5. pages 하위 컴포넌트에서 SSR 로직 필요한 경우 pages/api/pages 하위 페이지이름 폴더 만들어서 service 폴더 안에 있는 로직 호출
+   - 참고 소스 : api/support/askSupport.ts
+6. BOM, DOM 객체 사용시 커스텀훅으로 만들어서 사용
+   - 참고 소스: hooks/useConfirm.ts, hooks/useInClick.ts
 
-To learn more about Next.js, take a look at the following resources:
+### **코드 형상 관리**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+[superjoin-v2 코드 형상 관리 참고](https://github.com/superjoins/superjoin-v2/tree/main/Superjoin#%EC%BD%94%EB%93%9C-%ED%98%95%EC%83%81-%EA%B4%80%EB%A6%AC)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## **Code Structure**
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **components**
+  - `basicComponent`
+    - Accordion
+    - Table
+    - Button.tsx
+    - CattegoryTag.tsx
+    - Checkbox.tsx
+    - CheckboxText.tsx
+    - Divider.tsx
+    - Header.tsx
+    - IconButton.tsx
+    - InfoText.tsx
+    - InputText.tsx
+    - Oval.tsx
+    - Selectbox.tsx
+    - SelectInputText.tsx
+    - SubText.tsx
+    - SubTextButton.tsx
+    - SubTextLink.tsx
+    - VerticalSubText.tsx
+  - `Icon`
+  - `UserInfo` : TopNavbar 오른쪽 업체 프로필 컴포넌트. 로그아웃/비밀번호 초기화 위치
+  - `Layout.tsx` : SideNavbar, TopNavbar, pages 폴더 안에 있는 메인 컴포넌트들을 감싸는 컴포넌트
+  - `SideNavbar`.tsx
+  - `TopNavbar`.tsx
+- **constants**
+  - `types`
+    - category
+    - components
+    - customer
+    - offer
+    - redux
+    - support
+  - category.ts
+  - categoryList.ts
+  - router.ts
+  - tableColumns.ts
+- **contexts**
+- **hooks**
+  - useTableComponent.ts
+  - useConfirm.ts
+  - useInClick.ts
+  - useTheme.ts
+- **pages**
+  - `api`
+    - auth
+    - support
+  - `customer`
+  - `login`
+  - `makeoffer`
+  - `offer`
+  - `reward`
+  - `support`
+  - `\_app.tsx`
+  - `\_document.tsx`
+  - `index.tsx`
+- **public**
+- **resources**
+- **services**
+  - `auth`
+  - `offer`
+  - `storeUser`
+  - `support`
+  - `app.ts`
+- **slices**
+  - `offer`
+  - `storeUser`
+- **store**
+  - `rootStore`
+- **styles**
+  - theme
+  - global.css
+- **utils**
+  - dateUtils.ts
+  - firebaseUtils.ts
+  - stringUtils.ts

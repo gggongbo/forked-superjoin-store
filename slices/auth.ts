@@ -4,6 +4,7 @@ import { CurrentUserType } from '@constants/types/redux';
 
 const initialState = {
   currentUser: {},
+  autoLogin: false,
 };
 
 /* eslint-disable no-param-reassign */
@@ -13,6 +14,9 @@ const authSlice = createSlice({
   reducers: {
     setCurrentUser: (state, action: PayloadAction<CurrentUserType>) => {
       state.currentUser = action.payload;
+    },
+    setAutoLogin: (state, action: PayloadAction<boolean>) => {
+      state.autoLogin = action.payload;
     },
   },
 });

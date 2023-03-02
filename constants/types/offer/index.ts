@@ -11,7 +11,7 @@ export type MakeOfferType = {
   category: string;
   description: string;
   userNum: number;
-  deadline: number;
+  deadline: Date;
   reward: number;
   email: string | null;
   storeInfo?: object;

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import Accordion from '@components/basicComponent/Accordion';
 import { QaType } from '@constants/types/support';
-import { supportService } from '@service/support';
+import { supportService } from '@services/support';
 
 const AccordionBlock = styled.div`
   width: 70%;

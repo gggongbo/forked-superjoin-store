@@ -15,7 +15,6 @@ import InputText from '@components/basicComponent/InputText';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import { ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';
-import { supportService } from '@service/support';
 
 const AskSupportBlock = styled.form`
   display: flex;
@@ -58,7 +57,10 @@ const AskSupport: NextPage<AskSupportProps> = function AskSupport({
   const askSubmit = useCallback(() => {
     if (!email || !title?.length || !text?.length) return;
     confirm('문의하기 전송', () => {
-      supportService.sendMail(email, title, text).then(() => {
+      fetch('/api/support/askSupport', {
+        method: 'POST',
+        body: JSON.stringify({ email, title, text }),
+      }).then(() => {
         alert('문의가 완료되었습니다.');
         supportType('qa');
       });

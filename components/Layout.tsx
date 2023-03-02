@@ -1,10 +1,15 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import SideNavbar from './SideNavbar';
 import TopNavbar from './TopNavbar';
+
+import { ReduxStoreType } from '@constants/types/redux';
+import { authService } from '@services/auth';
+import { persistor } from '@store/rootStore';
 
 interface LayoutProps {
   children: React.ReactElement;
@@ -41,6 +46,20 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
   const { children } = props;
   // eslint-disable-next-line no-undef
   const { type } = children as JSX.Element;
+  const autoLogin = useSelector<ReduxStoreType, boolean>(
+    ({ auth }) => auth.autoLogin,
+  );
+
+  useLayoutEffect(() => {
+    const sessionStart = Boolean(sessionStorage.getItem('sessionStart'));
+    if (!sessionStart && !autoLogin) {
+      persistor.purge().then(() => {
+        sessionStorage.clear();
+        authService.logOut();
+      });
+    }
+  }, [autoLogin]);
+
   return (
     <LayoutBlock>
       <Head>
