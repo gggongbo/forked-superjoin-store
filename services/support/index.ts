@@ -2,7 +2,7 @@ import { collection, DocumentData, getDocs, query } from 'firebase/firestore';
 import nodemailer from 'nodemailer';
 
 import { QaType } from '@constants/types/support';
-import { db } from '@service/app';
+import { db } from '@services/app';
 
 const getAllQa = async (): Promise<QaType[]> => {
   const qaQuery = query(collection(db, 'support'));

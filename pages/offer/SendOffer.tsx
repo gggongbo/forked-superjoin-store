@@ -7,7 +7,7 @@ import Table from '@components/basicComponent/Table';
 import { OfferProps } from '@constants/types/offer';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { offerService } from '@service/offer';
+import { offerService } from '@services/offer';
 import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
 import { ArrayToString } from '@utils/stringUtils';
 

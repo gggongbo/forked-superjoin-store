@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer';
 
-import { supportService } from '@service/support';
+import { supportService } from '@services/support';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

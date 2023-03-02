@@ -8,7 +8,7 @@ import SideNavbar from './SideNavbar';
 import TopNavbar from './TopNavbar';
 
 import { ReduxStoreType } from '@constants/types/redux';
-import { authService } from '@service/auth';
+import { authService } from '@services/auth';
 import { persistor } from '@store/rootStore';
 
 interface LayoutProps {

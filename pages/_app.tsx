@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components';
 
 import '@styles/globals.css';
 import Layout from '@components/Layout';
-import { authService } from '@service/auth';
+import { authService } from '@services/auth';
 import store, { persistor } from '@store/rootStore';
 import { theme } from '@styles/theme';
 

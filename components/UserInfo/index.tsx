@@ -8,7 +8,7 @@ import Icon from '@components/Icon';
 import { CurrentUserType, ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';
 import { useInClick } from '@hooks/useInClick';
-import { authService } from '@service/auth';
+import { authService } from '@services/auth';
 import { persistor } from '@store/rootStore';
 
 const UserInfoBlock = styled.div`

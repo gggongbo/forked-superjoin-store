@@ -13,7 +13,7 @@ import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import { categoryList } from '@constants/categoryList';
 import type { MakeOfferType } from '@constants/types/offer';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
-import { offerService } from '@service/offer';
+import { offerService } from '@services/offer';
 
 const MakeOfferBlock = styled.main`
   display: flex;

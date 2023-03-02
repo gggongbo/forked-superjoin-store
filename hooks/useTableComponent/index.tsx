@@ -5,7 +5,7 @@ import { CategoryTag } from '@components/basicComponent/CategoryTag';
 import { SubRow } from '@components/basicComponent/Table/SubRow';
 import Icon from '@components/Icon';
 import { OptionType, SubRowProps } from '@constants/types/components';
-import { offerService } from '@service/offer';
+import { offerService } from '@services/offer';
 import {
   singletons,
   gray as GrayColors,

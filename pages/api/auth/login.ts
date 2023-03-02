@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { setAuthCookies } from 'next-firebase-auth';
 
-import { authService } from '@service/auth';
+import { authService } from '@services/auth';
 
 authService.initAuth();
 

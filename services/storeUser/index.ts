@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
-import { db } from '@service/app';
+import { db } from '@services/app';
 
 // TODO : object 타입 store user 타입으로 변경
 const findStoreUserInfo = async (

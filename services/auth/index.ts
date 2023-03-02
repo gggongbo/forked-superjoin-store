@@ -6,7 +6,7 @@ import {
 import { init } from 'next-firebase-auth';
 
 import { CurrentUserType } from '@constants/types/redux';
-import { auth } from '@service/app';
+import { auth } from '@services/app';
 
 const initAuth = () => {
   init({

@@ -11,7 +11,7 @@ import {
   Transaction,
 } from 'firebase/firestore';
 
-import { db } from '@service/app';
+import { db } from '@services/app';
 import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
 // TODO : return Promise<DocumentData>, any 타입 => type 선언해서 변경
