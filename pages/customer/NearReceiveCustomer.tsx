@@ -113,7 +113,6 @@ const NearReceiveCustomer: NextPage<NearCustomerProps> =
               columns={columns}
               data={tableData}
               loading={loading}
-              expandEnable
               fetchData={fetchData}
               pageSizeList={pageSizeList}
               pageCount={pageCount}

@@ -114,7 +114,6 @@ const NearSendCustomer: NextPage<NearCustomerProps> =
               columns={columns}
               data={tableData}
               loading={loading}
-              expandEnable={false}
               fetchData={fetchData}
               pageSizeList={pageSizeList}
               pageCount={pageCount}
