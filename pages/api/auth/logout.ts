@@ -5,7 +5,7 @@ import { authService } from '@services/auth';
 
 authService.initAuth();
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const logoutHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     await unsetAuthCookies(req, res);
   } catch (error) {
@@ -14,4 +14,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   return res.status(200).json({ success: true });
 };
 
-export default handler;
+export default logoutHandler;

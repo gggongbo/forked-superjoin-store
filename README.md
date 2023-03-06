@@ -2,7 +2,7 @@
 
 [![React](https://img.shields.io/badge/react-18-F82F82)](https://ko.reactjs.org/blog/2022/03/29/react-v18.html)
 [![Nextjs](https://img.shields.io/badge/nextjs-12-F82F82)](https://nextjs.org)
-[![node](https://img.shields.io/badge/node-14-F82F82)](https://nodejs.org/docs/latest-v16.x/api)
+[![node](https://img.shields.io/badge/node-18-F82F82)](https://nodejs.org/docs/latest-v18.x/api)
 [![discussion](https://img.shields.io/badge/discussion-progressing-0ABFD1?logo=github)](https://github.com/superjoins/superjoin-business-client)
 [![Jira](https://img.shields.io/badge/jira-blue?logo=jira)](https://superjoin.atlassian.net/jira)
 [![Firebase](https://img.shields.io/badge/firebase-gray?logo=firebase)](https://console.firebase.google.com)
@@ -24,10 +24,10 @@
 ## **Requirements**
 
 1. React : 18.2.0
-2. Node : 14
+2. Node : 18
 3. Typescript : 4.7.4
 4. Nextjs: 12.2.4
-5. Firebase : 9,9,2
+5. Firebase : 9.9.2
 6. Firebase Admin: 11.0.1
 7. React-redux: 8.0.2
 8. Styled-Component : 5.3.5

@@ -1,6 +1,5 @@
 const getFormattedDate = (originDate: Date, isCollapsible: boolean) => {
   try {
-    console.log(originDate);
     const fullYear = originDate.getFullYear();
     const month = originDate.getMonth() + 1;
     const date = originDate.getDate();

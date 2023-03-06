@@ -1,18 +1,12 @@
-import { collection, DocumentData, getDocs, query } from 'firebase/firestore';
+import { collection, getDocs, query } from 'firebase/firestore';
 import nodemailer from 'nodemailer';
 
 import { QaType } from '@constants/types/support';
-import { db } from '@services/app';
+import { businessDb } from '@services/app';
 
 const getAllQa = async (): Promise<QaType[]> => {
-  const qaQuery = query(collection(db, 'support'));
-  const querySnapshot = await getDocs(qaQuery);
-  return Promise.all(
-    querySnapshot.docs.map(async (qaDoc: DocumentData) => {
-      const qaData = await qaDoc.data();
-      return qaData;
-    }),
-  );
+  const querySnapshot = await getDocs(query(collection(businessDb, 'support')));
+  return querySnapshot.docs.map(qaDoc => qaDoc.data() as QaType);
 };
 
 const sendMail = async (

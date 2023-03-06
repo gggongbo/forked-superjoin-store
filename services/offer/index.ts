@@ -47,7 +47,7 @@ const createOffer = async (data: any, storeUserInfo: any) => {
     location,
     geohash,
     category,
-    maxNumofUser: parseInt(userNum, 10),
+    maxNumOfUser: parseInt(userNum, 10),
     status: 'proceeding', // ENUM으로 변경
     updatedAt: now,
     createdAt: now,

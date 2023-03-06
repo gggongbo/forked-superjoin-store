@@ -181,7 +181,7 @@ const Login: NextPage = function Login() {
         try {
           const currentUser = await authService.login(email, password);
           const storeUserInfo = await storeUserService.findStoreUserInfo(
-            currentUser?.email ?? null,
+            currentUser?.id ?? null,
           );
           if (currentUser) dispatch(authActions.setCurrentUser(currentUser));
           if (storeUserInfo)
@@ -274,7 +274,7 @@ const Login: NextPage = function Login() {
               <Button
                 width={300}
                 disabled={loginError}
-                onClick={e => onSubmit(e)}
+                onClick={onSubmit}
                 text="로그인"
               />
             </RightBox>
