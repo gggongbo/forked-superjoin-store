@@ -10,8 +10,8 @@ const CategoryTagBlock = styled.div<{
   customStyle?: CSSProp;
 }>`
   display: flex;
-  align-items: 'center';
-  justify-content: 'center';
+  align-items: center;
+  justify-content: center;
   border-radius: 6px;
   background-color: ${({ backgroundColor }) => backgroundColor};
   padding: ${({ padding }) => padding};

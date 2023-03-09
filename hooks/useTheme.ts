@@ -1,5 +1,6 @@
 import { useTheme as useSCTheme } from 'styled-components';
-import { Theme } from '@styles/theme/index';
+
+import { Theme } from '@styles/theme';
 
 declare module 'styled-components' {
   export type ProjectDefaultTheme = Theme;

@@ -31,7 +31,6 @@ const SelectBlock = styled.label<{
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border: solid 1px;
   border-radius: ${({ borderRadius }) => borderRadius || '6px'};
   padding: ${({ customSize }) => {
     switch (customSize) {
@@ -44,10 +43,12 @@ const SelectBlock = styled.label<{
     }
   }};
 
-  border-color: ${props =>
-    props.inClicked
-      ? props.theme.colors.singletons.textGreen
-      : props.theme.colors.singletons.enabledGray};
+  border: 1px solid
+    ${props =>
+      props.inClicked
+        ? props.theme.colors.singletons.textGreen
+        : props.theme.colors.singletons.enabledGray};
+
   :hover {
     border-color: ${props =>
       props.inClicked
@@ -133,17 +134,19 @@ const SelectItem = styled.li<{ isSelected: boolean; customSize?: string }>`
     props.isSelected
       ? props.theme.colors.singletons.textGreen
       : props.theme.colors.singletons.black};
+
   :hover {
     background-color: ${({ theme }) =>
       `${theme.colors.singletons.pressGreen}24`};
   }
+
   :active {
     background-color: ${({ theme }) =>
       `${theme.colors.singletons.pressGreen}60`};
   }
 `;
 
-interface SelectboxProps {
+interface SelectableProps {
   optionList: OptionType[];
   defaultOption?: OptionType;
   placeholder?: number | string;
@@ -155,7 +158,7 @@ interface SelectboxProps {
   onChange?: (e: any) => void;
 }
 
-const SelectBox: FC<SelectboxProps> = function SelectBox(props) {
+const SelectBox: FC<SelectableProps> = function SelectBox(props) {
   const {
     optionList = [],
     defaultOption,

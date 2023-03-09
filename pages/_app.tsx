@@ -1,5 +1,5 @@
-import { withAuthUser, AuthAction } from 'next-firebase-auth';
 import type { AppProps } from 'next/app';
+import { withAuthUser, AuthAction } from 'next-firebase-auth';
 import { QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';

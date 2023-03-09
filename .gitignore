@@ -26,8 +26,7 @@ yarn-error.log*
 .pnpm-debug.log*
 /firebase-debug.log
 
-# local env files
-.env*.local
+.env
 
 # vercel
 .vercel
@@ -36,3 +35,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 /.idea/*
+/.firebase
+/firestore-debug.log
+/ui-debug.log
+/functions/firestore-debug.log
+/functions/ui-debug.log
+/functions/firebase-debug.log
