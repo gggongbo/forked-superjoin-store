@@ -46,8 +46,15 @@
 
 ## **Test**
 
+1. UI 테스트
+
 - `yan dev` 명령어로 로컬 빌드 후 테스트
 - localhost:3000에서 로컬 빌드된 소스 확인 가능
+
+2. 서버 테스트
+
+- superjoin-store-firebase 에뮬레이터 실행
+- \_app.tsx 에서 `import ../debug.config` 파일 주석 해제
 
 ## **Build**
 

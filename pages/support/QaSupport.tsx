@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import Accordion from '@components/basicComponent/Accordion';
-import { QaType } from '@constants/types/support';
+import { SupportType } from '@constants/types/support';
 import { supportService } from '@services/support';
 
 const AccordionBlock = styled.div`
@@ -13,7 +13,7 @@ const AccordionBlock = styled.div`
 `;
 
 const QaSupport: NextPage = function QaSupport() {
-  const [data, setData] = useState<QaType[]>([]);
+  const [data, setData] = useState<SupportType[]>([]);
 
   useEffect(() => {
     supportService.getAllQa().then(qaList => setData(qaList));

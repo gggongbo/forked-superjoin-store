@@ -146,7 +146,7 @@ const SelectItem = styled.li<{ isSelected: boolean; customSize?: string }>`
   }
 `;
 
-interface SelectableProps {
+interface SelectBoxProps {
   optionList: OptionType[];
   defaultOption?: OptionType;
   placeholder?: number | string;
@@ -158,7 +158,7 @@ interface SelectableProps {
   onChange?: (e: any) => void;
 }
 
-const SelectBox: FC<SelectableProps> = function SelectBox(props) {
+const SelectBox: FC<SelectBoxProps> = function SelectBox(props) {
   const {
     optionList = [],
     defaultOption,

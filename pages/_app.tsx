@@ -1,5 +1,5 @@
-import type { AppProps } from 'next/app';
 import { withAuthUser, AuthAction } from 'next-firebase-auth';
+import type { AppProps } from 'next/app';
 import { QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -11,6 +11,8 @@ import { authService } from '@services/auth';
 import store, { persistor } from '@store/rootStore';
 import { theme } from '@styles/theme';
 import queryClient from '@utils/queryUtils';
+// firebase emulator 테스트 시 아래 주석 해제
+// import '../debug.config';
 
 authService.initAuth();
 
