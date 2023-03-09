@@ -1,9 +1,10 @@
 import { initializeApp, getApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
-import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getFunctions } from 'firebase/functions';
 
-const storeFirebaseConfig = {
+// superjoin-store-firebase
+const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_API_KEY as string,
   authDomain: 'peeps-store-22f24.firebaseapp.com',
   projectId: 'peeps-store-22f24',
@@ -13,6 +14,7 @@ const storeFirebaseConfig = {
   measurementId: 'G-K6JLR9GG38',
 };
 
+// superjoin-business
 const businessFirebaseConfig = {
   apiKey: 'AIzaSyCG4K72fSes1zjUxie3WrcnNEJPANOmGoA',
   authDomain: 'peeps-business.firebaseapp.com',
@@ -25,27 +27,17 @@ const businessFirebaseConfig = {
 };
 
 try {
-  initializeApp(storeFirebaseConfig, 'store');
+  initializeApp(firebaseConfig);
   initializeApp(businessFirebaseConfig, 'business');
 } catch (e) {
   /* empty */
 }
 
-const app = getApp('store');
+const app = getApp();
 const businessApp = getApp('business');
 const db = getFirestore(app);
 const businessDb = getFirestore(businessApp);
 const auth = getAuth(app);
 const functions = getFunctions(app);
-
-if (process.env.NODE_ENV === 'development') {
-  try {
-    connectFirestoreEmulator(db, 'localhost', 8280);
-    connectFunctionsEmulator(functions, 'localhost', 5201);
-    connectAuthEmulator(auth, 'http://localhost:9399');
-  } catch (e) {
-    // no logic
-  }
-}
 
 export { db, functions, auth, businessDb };

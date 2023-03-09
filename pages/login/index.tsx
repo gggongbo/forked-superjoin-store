@@ -181,7 +181,7 @@ const Login: NextPage = function Login() {
         try {
           const currentUser = await authService.login(email, password);
           const storeUserInfo = await storeUserService.findStoreUserInfo(
-            currentUser?.id ?? null,
+            currentUser?.id,
           );
           if (currentUser) dispatch(authActions.setCurrentUser(currentUser));
           if (storeUserInfo)
