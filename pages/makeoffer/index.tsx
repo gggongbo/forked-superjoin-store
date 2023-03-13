@@ -18,7 +18,7 @@ import { offerService } from '@services/offer';
 const MakeOfferBlock = styled.main`
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: ${({ theme }) => theme.componentSizes.pagePadding}px;
 `;
 
 const ContentBlock = styled.form`

@@ -19,9 +19,10 @@ const optionList = [
 ];
 
 const OfferBlock = styled.main`
+  min-width: ${({ theme }) => theme.componentSizes.table.width}px;
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: ${({ theme }) => theme.componentSizes.pagePadding}px;
 `;
 
 const HeaderBlock = styled.div`
@@ -37,14 +38,14 @@ const HeaderText = styled.div<{ offerType: string; defaultValue: string }>`
   font-weight: ${props => props.offerType === props.defaultValue && 500};
   color: ${props =>
     props.offerType === props.defaultValue
-      ? props.theme.colors.text[6]
-      : props.theme.colors.text[2]};
+      ? props.theme.colors.text[600]
+      : props.theme.colors.text[200]};
 `;
 
 const HeaderDivider = styled(Divider)`
   margin: 0 20px;
   height: 24px;
-  border-color: ${props => props.theme.colors.gray[6]};
+  border-color: ${props => props.theme.colors.gray[600]};
 `;
 
 const HeaderRightBlock = styled.div`
@@ -55,7 +56,7 @@ const HeaderRightBlock = styled.div`
 `;
 
 const Offer: NextPage = function Offer() {
-  const [offerType, setOfferType] = useState<string>('send');
+  const [offerType, setOfferType] = useState<'send' | 'receive'>('send');
   const [input, setInput] = useState<SearchType>();
   const [search, setSearch] = useState<SearchType>();
 

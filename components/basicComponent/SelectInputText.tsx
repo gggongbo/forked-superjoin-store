@@ -17,19 +17,20 @@ const InputTextBlock = styled.div<{ isFocused: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border-style: solid;
-  border-width: 1px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
   border-radius: 0px 6px 6px 0px;
-  padding: 10px 12px 10px 0px;
+  padding: 11px 12px 11px 0px;
   border-color: ${props =>
     props.isFocused
-      ? props.theme.colors.singletons.textGreen
+      ? props.theme.colors.green[600]
       : props.theme.colors.singletons.enabledGray};
   :hover {
     border-color: ${props =>
       props.isFocused
-        ? props.theme.colors.singletons.textGreen
-        : `${props.theme.colors.singletons.textGreen}50`};
+        ? props.theme.colors.green[600]
+        : `${props.theme.colors.green[600]}50`};
   }
 `;
 

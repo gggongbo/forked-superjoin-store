@@ -46,14 +46,14 @@ const SelectBlock = styled.label<{
   border: 1px solid
     ${props =>
       props.inClicked
-        ? props.theme.colors.singletons.textGreen
+        ? props.theme.colors.green[600]
         : props.theme.colors.singletons.enabledGray};
 
   :hover {
     border-color: ${props =>
       props.inClicked
-        ? props.theme.colors.singletons.textGreen
-        : `${props.theme.colors.singletons.textGreen}50`};
+        ? props.theme.colors.green[600]
+        : `${props.theme.colors.green[600]}50`};
   }
 `;
 
@@ -75,6 +75,7 @@ const Select = styled.select<{
   flex: 1;
   border: 0px;
   outline: none;
+  padding: 1px 0px 1px 0px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -132,17 +133,15 @@ const SelectItem = styled.li<{ isSelected: boolean; customSize?: string }>`
   }};
   color: ${props =>
     props.isSelected
-      ? props.theme.colors.singletons.textGreen
+      ? props.theme.colors.green[600]
       : props.theme.colors.singletons.black};
 
   :hover {
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}24`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}24`};
   }
 
   :active {
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}60`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}60`};
   }
 `;
 
@@ -163,7 +162,7 @@ const SelectBox: FC<SelectBoxProps> = function SelectBox(props) {
     optionList = [],
     defaultOption,
     placeholder,
-    placeholderColor = { color: 'text', index: 2, opacity: '' },
+    placeholderColor = { color: 'text', index: 200, opacity: '' },
     customSize = 'medium',
     width = 0,
     borderRadius,
@@ -285,7 +284,7 @@ const SelectBox: FC<SelectBoxProps> = function SelectBox(props) {
 SelectBox.defaultProps = {
   defaultOption: { name: '', value: '' },
   placeholder: '',
-  placeholderColor: { color: 'text', index: 2, opacity: '' },
+  placeholderColor: { color: 'text', index: 200, opacity: '' },
   width: 0,
   borderRadius: '6px',
   customSize: 'medium',

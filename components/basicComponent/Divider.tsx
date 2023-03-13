@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Divider = styled.div<{ isVertical: boolean }>`
-  border-color: ${({ theme }) => theme.colors.gray[3]};
+  border-color: ${({ theme }) => theme.colors.gray[300]};
   border-style: solid;
   border-width: 0px;
   border-right-width: ${({ isVertical }) => (isVertical ? 1 : 0)}px;

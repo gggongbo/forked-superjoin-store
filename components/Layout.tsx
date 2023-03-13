@@ -10,6 +10,7 @@ import TopNavbar from './TopNavbar';
 import { ReduxStoreType } from '@constants/types/redux';
 import { authService } from '@services/auth';
 import { persistor } from '@store/rootStore';
+import { useWindowSize } from '~/hooks/useWindowSize';
 
 interface LayoutProps {
   children: React.ReactElement;
@@ -20,19 +21,20 @@ const LayoutBlock = styled.div`
   flex-direction: column;
   width: 100vw;
   height: 100vh;
-  color: ${props => props.theme.colors.singletons.black}; //default color
+  color: ${({ theme }) => theme.colors.singletons.black}; //default color
 `;
 
 const MainBlock = styled.div``;
 
 const LoginBlock = styled.div``;
 
-const ContentBlock = styled.div`
+const ContentBlock = styled.div<{ height: number }>`
   display: flex;
   flex: 1;
   flex-direction: row;
   width: 100vw;
-  min-height: 89vh;
+  height: ${({ height, theme }) =>
+    height - theme.componentSizes.topNavbar.height}px;
 `;
 
 const MainContentBlock = styled.div`
@@ -49,6 +51,7 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
   const autoLogin = useSelector<ReduxStoreType, boolean>(
     ({ auth }) => auth.autoLogin,
   );
+  const { windowSize } = useWindowSize();
 
   useLayoutEffect(() => {
     const sessionStart = Boolean(sessionStorage.getItem('sessionStart'));
@@ -70,14 +73,14 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
       {children && type?.displayName !== 'Login' ? (
         <MainBlock>
           <TopNavbar />
-          <ContentBlock>
+          <ContentBlock height={windowSize.height}>
             <SideNavbar />
             <MainContentBlock>{children}</MainContentBlock>
           </ContentBlock>
         </MainBlock>
       ) : (
         <LoginBlock>
-          <ContentBlock>
+          <ContentBlock height={windowSize.height}>
             <MainBlock>{children}</MainBlock>
           </ContentBlock>
         </LoginBlock>

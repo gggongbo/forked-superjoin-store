@@ -29,7 +29,7 @@ const ButtonBlock = styled.button<{
   }
 
   :disabled {
-    background: ${({ theme }) => theme.colors.gray[4]};
+    background: ${({ theme }) => theme.colors.gray[400]};
   }
 
   ${({ customStyle }) => customStyle};
@@ -40,7 +40,7 @@ const ButtonText = styled.div<{ textStyle?: CSSProp; disabled?: boolean }>`
   font-weight: 500;
   text-align: center;
   color: ${({ disabled, theme }) =>
-    disabled ? theme.colors.text[1] : theme.colors.singletons.white};
+    disabled ? theme.colors.text[100] : theme.colors.singletons.white};
   ${({ textStyle }) => textStyle};
 `;
 

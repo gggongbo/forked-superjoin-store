@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { FC, useCallback, useMemo, useState } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -7,7 +9,6 @@ import InputText from '@components/basicComponent/InputText';
 import SubText from '@components/basicComponent/SubText';
 import { SubRowProps } from '@constants/types/components';
 import { singletons } from '@styles/theme/colors';
-import { getFormattedTime } from '@utils/dateUtils';
 
 const SubRowBlock = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const RewardRequestMemberBlock = styled.div`
 
 const colorCommonStyle = css<{ disabled: boolean }>`
   color: ${({ disabled, theme }) =>
-    disabled ? `${theme.colors.text[6]}40` : theme.colors.text[6]};
+    disabled ? `${theme.colors.text[600]}40` : theme.colors.text[600]};
 `;
 
 const DescriptionBlock = styled.div<{ disabled: boolean }>`
@@ -58,7 +59,7 @@ const RequestMemberItemBlock = styled.div<{ disabled: boolean }>`
   padding: 4px 8px;
   margin-right: 8px;
   background-color: ${({ disabled, theme }) =>
-    disabled ? `${theme.colors.gray[2]}40` : theme.colors.gray[2]};
+    disabled ? `${theme.colors.gray[200]}40` : theme.colors.gray[200]};
 `;
 
 const RequestMemberPhotoBlock = styled.div<{
@@ -125,7 +126,7 @@ const ButtonBackgroundBlock = styled.div<{ disabled?: boolean }>`
 const AppealTimeBlock = styled.div<{ disabled?: boolean }>`
   font-size: 13px;
   color: ${({ disabled, theme }) =>
-    disabled ? `${theme.colors.text[2]}40` : theme.colors.text[2]};
+    disabled ? `${theme.colors.text[200]}40` : theme.colors.text[200]};
   margin-left: 8px;
 `;
 
@@ -170,7 +171,7 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
             width: 16,
             height: 16,
             color: 'text',
-            colorIndex: 4,
+            colorIndex: 400,
             opacity: disabled ? 40 : undefined,
           }}
           disabled={disabled}
@@ -248,7 +249,7 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
           />
           {appealTime && (
             <AppealTimeBlock disabled={disabled}>
-              {getFormattedTime(appealTime, false)}
+              {format(appealTime, 'h:mm')}
             </AppealTimeBlock>
           )}
           {!confirmed && !disabled && (
@@ -277,7 +278,7 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
           width: 16,
           height: 16,
           color: 'text',
-          colorIndex: 4,
+          colorIndex: 400,
           opacity: disabled ? 40 : undefined,
         }}
         disabled={disabled}
@@ -294,20 +295,20 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
           width: 16,
           height: 16,
           color: 'text',
-          colorIndex: 4,
+          colorIndex: 400,
           opacity: disabled ? 40 : undefined,
         }}
         disabled={disabled}
         customStyle={subTextStyle}
       />
       <SubText
-        title={`${getFormattedTime(deadline, true)}에 제안 마감`}
+        title={`${format(deadline, 'a h:mm', { locale: ko })}에 제안 마감`}
         icon={{
           name: 'ClockDeadLine',
           width: 16,
           height: 16,
           color: 'text',
-          colorIndex: 4,
+          colorIndex: 400,
           opacity: disabled ? 40 : undefined,
         }}
         disabled={disabled}

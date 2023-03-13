@@ -22,18 +22,17 @@ const InputTextBlock = styled.div<{
   border: 1px solid
     ${({ isFocused, theme }) =>
       isFocused
-        ? theme.colors.singletons.textGreen
+        ? theme.colors.green[600]
         : theme.colors.singletons.enabledGray};
   border-color: ${({ isError, theme }) =>
     isError && theme.colors.singletons.errorRed};
-  border-color: ${({ disabled, theme }) => disabled && theme.colors.gray[2]};
+  border-color: ${({ disabled, theme }) => disabled && theme.colors.gray[200]};
 
   :hover {
     border-color: ${({ isFocused, theme }) =>
-      isFocused
-        ? theme.colors.singletons.textGreen
-        : `${theme.colors.singletons.textGreen}50`};
-    border-color: ${({ disabled, theme }) => disabled && theme.colors.gray[2]};
+      isFocused ? theme.colors.green[600] : `${theme.colors.green[600]}50`};
+    border-color: ${({ disabled, theme }) =>
+      disabled && theme.colors.gray[200]};
   }
   ${({ customStyle }) => customStyle};
 `;
@@ -48,7 +47,7 @@ const placeholderCommonStyle = css<{
         (placeholderColor?.opacity || '')
       : (theme.colors.singletons[placeholderColor.color] ||
           placeholderColor.color) + (placeholderColor.opacity || '')};
-  color: ${({ disabled, theme }) => disabled && theme.colors.text[1]};
+  color: ${({ disabled, theme }) => disabled && theme.colors.text[100]};
 `;
 
 // 합치면 css 미적용돼서 따로 선언
@@ -91,7 +90,7 @@ const InputTextField = styled.input<{
   :disabled {
     background-color: ${({ theme }) =>
       theme.colors.singletons.defaultBackground};
-    color: ${({ theme }) => theme.colors.text[1]};
+    color: ${({ theme }) => theme.colors.text[100]};
   }
   ${placeholderStyle};
 `;
@@ -154,7 +153,7 @@ const InputText: FC<InputTextProps> = function InputText(props) {
     isError,
     disabled,
     placeholder,
-    placeholderColor = { color: 'text', index: 2, opacity: '' },
+    placeholderColor = { color: 'text', index: 200, opacity: '' },
     maxLength,
     range,
     customStyle,
@@ -263,7 +262,7 @@ InputText.defaultProps = {
   isError: false,
   disabled: false,
   placeholder: '',
-  placeholderColor: { color: 'text', index: 2, opacity: '' },
+  placeholderColor: { color: 'text', index: 200, opacity: '' },
   maxLength: undefined,
   range: { max: undefined, min: undefined },
   rightComponent: null,

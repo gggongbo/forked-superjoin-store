@@ -11,7 +11,7 @@ import Header from '@components/basicComponent/Header';
 const SupportBlock = styled.main`
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: ${({ theme }) => theme.componentSizes.pagePadding}px;
 `;
 
 const HeaderBlock = styled.div`
@@ -26,14 +26,14 @@ const HeaderText = styled.div<{ supportType: string; defaultValue: string }>`
   font-weight: ${props => props.supportType === props.defaultValue && 500};
   color: ${props =>
     props.supportType === props.defaultValue
-      ? props.theme.colors.text[6]
-      : props.theme.colors.text[2]};
+      ? props.theme.colors.text[600]
+      : props.theme.colors.text[200]};
 `;
 
 const HeaderDivider = styled(Divider)`
   margin: 0px 20px 0px 20px;
   height: 24px;
-  border-color: ${props => props.theme.colors.gray[6]};
+  border-color: ${props => props.theme.colors.gray[600]};
 `;
 
 const Support: NextPage = function Support() {

@@ -18,8 +18,8 @@ const SubTextTitle = styled.div<{
 }>`
   font-size: ${({ titleSize }) => titleSize}px;
   color: ${({ color, theme }) =>
-    color && color?.length > 1 ? color : theme.colors.text[4]};
-  color: ${({ disabled, theme }) => disabled && `${theme.colors.text[4]}60`};
+    color && color?.length > 1 ? color : theme.colors.text[400]};
+  color: ${({ disabled, theme }) => disabled && `${theme.colors.text[400]}60`};
   margin-left: 10px;
   text-align: center;
 `;

@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
 import { useMemo, useCallback, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -8,7 +10,6 @@ import { OfferProps } from '@constants/types/offer';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { offerService } from '@services/offer';
-import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
 import { ArrayToString } from '@utils/stringUtils';
 
 const SendOfferBlock = styled.main`
@@ -99,45 +100,32 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
   //   [],
   // );
 
-  /* eslint-disable no-param-reassign */
   const filteredData = useMemo(
     () =>
       initData &&
       initData
-        ?.map((filterData: any) => {
-          const {
-            category,
-            title,
-            callSendTime,
-            callEndTime,
-            status,
-            callId,
-            createdAt,
-          } = filterData;
-
-          filterData.title =
-            typeof title === 'object'
-              ? title
-              : callTitleComponent(category, title);
-
-          filterData.callSendTime =
-            typeof callSendTime === 'object'
-              ? `${getFormattedDate(createdAt, true)}
-            ${getFormattedTime(createdAt, true)}`
-              : callSendTime;
-          filterData.callEndTime = callEndTimeComponent(callEndTime, status);
-          filterData.callStatus = callStatusComponent(status);
-          filterData.callButton = callButtonComponent(
-            status,
-            callId,
-            currentStoreUser,
-          );
-          filterData.deleteButton = callDeleteButtonComponent(
-            status,
-            callId,
-            currentStoreUser.user.uid,
-          );
-          return filterData;
+        ?.map((data: any) => {
+          const { category, title, callEndTime, status, callId, createdAt } =
+            data;
+          return {
+            ...data,
+            title: callTitleComponent(category, title),
+            callSendTime: createdAt
+              ? format(createdAt, 'yyyy년 M월 d일 / a h:mm', {
+                  locale: ko,
+                })
+              : null,
+            callEndTime: callEndTime
+              ? callEndTimeComponent(callEndTime, status)
+              : null,
+            callStatus: callStatusComponent(status),
+            callButton: callButtonComponent(status, callId, currentStoreUser),
+            deleteButton: callDeleteButtonComponent(
+              status,
+              callId,
+              currentStoreUser.user.uid,
+            ),
+          };
         })
         .filter((filterData: any) => {
           if (!search || !search?.type || !search.value) {

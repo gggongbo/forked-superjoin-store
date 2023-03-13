@@ -1,6 +1,6 @@
 import { SearchType } from '@constants/types/components';
 
-export interface CustomerProps {
+export interface RewardProps {
   search?: SearchType;
   columns: any;
 }
