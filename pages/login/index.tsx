@@ -81,7 +81,7 @@ const LogoTitle = styled.div`
 
 const TitleText = styled.div`
   font-size: 26px;
-  color: ${({ theme }) => theme.colors.text[6]};
+  color: ${({ theme }) => theme.colors.text[600]};
   margin-top: 22px;
 `;
 
@@ -141,14 +141,14 @@ const FooterLogoTitle = styled.div`
 const FooterTitleText = styled.div`
   font-size: 12px;
   letter-spacing: -0.27px;
-  color: ${({ theme }) => `${theme.colors.text[6]}64`};
+  color: ${({ theme }) => `${theme.colors.text[600]}64`};
   text-align: center;
   margin-left: 16px;
 `;
 
 const subTextStyle = css`
   font-size: 13px;
-  color: ${({ theme }) => theme.colors.text[6]};
+  color: ${({ theme }) => theme.colors.text[600]};
   align-items: flex-start;
 `;
 
@@ -248,7 +248,7 @@ const Login: NextPage = function Login() {
                           width={20}
                           height={20}
                           color="gray"
-                          colorIndex={6}
+                          colorIndex={600}
                           onClick={() => setShowPassword(!showPassword)}
                         />
                       }

@@ -6,8 +6,8 @@ body {
   padding: 0;
   margin: 0;
   width: 100vw;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow-y: inherit;
+  overflow-x: inherit;
   font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Segoe UI,
     Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
     sans-serif;

@@ -8,10 +8,10 @@ import routerName from '@constants/router';
 const NavbarBlock = styled.div<{ selectedMenu?: string }>`
   display: flex;
   flex-direction: column;
-  width: 312px;
+  min-width: ${({ theme }) => theme.componentSizes.sideNavbar.width}px;
   padding: 16px;
   background-color: ${({ theme }) => theme.colors.singletons.backgroundGray};
-  border-color: ${({ theme }) => theme.colors.gray[3]};
+  border-color: ${({ theme }) => theme.colors.gray[300]};
   border-style: solid;
   border-width: 0px;
   border-right-width: 1px;

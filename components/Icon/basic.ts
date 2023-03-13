@@ -31,3 +31,4 @@ export { default as MarkPointGray } from '@resources/svg/icon/mark-point-gray.sv
 export { default as MarkPointYellow } from '@resources/svg/icon/mark-point-yellow.svg';
 export { default as MarkQ } from '@resources/svg/icon/mark-q.svg';
 export { default as MarkTableNew } from '@resources/svg/icon/mark-table-new.svg';
+export { default as Help } from '@resources/svg/icon/ic-help.svg';

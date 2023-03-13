@@ -11,8 +11,7 @@ const InfoTextBlock = styled.div<{ width: number }>`
   min-width: 160px;
   padding: 6px 0px;
   border-radius: 6px;
-  background-color: ${({ theme }) =>
-    `${theme.colors.singletons.contentBoxGreen}18`};
+  background-color: ${({ theme }) => `${theme.colors.green[400]}18`};
 `;
 
 const InfoTextContent = styled.div`

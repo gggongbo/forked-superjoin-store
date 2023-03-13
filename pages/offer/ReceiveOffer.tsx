@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
 import { useEffect, useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
@@ -5,7 +7,6 @@ import styled from 'styled-components';
 import Table from '@components/basicComponent/Table';
 import { OfferProps } from '@constants/types/offer';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { getFormattedDate, getFormattedTime } from '@utils/dateUtils';
 
 const RecieveOfferBlock = styled.main`
   display: flex;
@@ -84,7 +85,6 @@ const ReceiveOffer: NextPage<OfferProps> = function ReceiveOffer(props) {
     [],
   );
 
-  /* eslint-disable no-param-reassign */
   const filteredData = useMemo(
     () =>
       testData &&
@@ -99,15 +99,18 @@ const ReceiveOffer: NextPage<OfferProps> = function ReceiveOffer(props) {
             status,
             appealContent,
           } = data;
-          data.title = callTitleComponent(category, title);
-          if (callReceiveTime)
-            data.callReceiveTime = `${getFormattedDate(callReceiveTime, true)} /
-          ${getFormattedTime(callReceiveTime, true)}`;
-          if (callEndTime) data.callEndTime = `${callEndTime}분 후`;
-          data.callStatus = callStatusComponent(status);
-          data.appealStatus = appealStatusComponent(appealContent, status);
-
-          return data;
+          return {
+            ...data,
+            title: callTitleComponent(category, title),
+            callReceiveTime: callReceiveTime
+              ? format(callReceiveTime, 'yyyy년 M월 d일 / a h:mm', {
+                  locale: ko,
+                })
+              : null,
+            callEndTime: callEndTime ? `${callEndTime}분 후` : null,
+            callStatus: callStatusComponent(status),
+            appealStatus: appealStatusComponent(appealContent, status),
+          };
         })
         ?.filter((data: any) => {
           if (!search || !search?.type || !search.value) return true;

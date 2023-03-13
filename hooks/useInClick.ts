@@ -21,5 +21,4 @@ const useInClick = (refObject: RefObject<HTMLElement>) => {
   return { inClicked, setInClikced };
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export { useInClick };

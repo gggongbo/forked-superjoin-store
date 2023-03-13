@@ -83,7 +83,7 @@ const ReceiveOffer = [
   },
 ];
 
-const NearCustomer = [
+const ConfirmedCustomer = [
   {
     accessor: 'id',
     Header: 'ID',
@@ -91,22 +91,24 @@ const NearCustomer = [
   {
     accessor: 'nickname',
     Header: '닉네임',
-    width: 455,
+    width: 350,
     disableSortBy: true,
   },
   {
     accessor: 'callCount',
     Header: '제안 보낸 횟수',
     width: 200,
+    disableSortBy: true,
   },
   {
     accessor: 'confirmCount',
     Header: '방문 확정 횟수',
     width: 200,
+    disableSortBy: true,
   },
   {
     accessor: 'rewardStatus',
-    Header: '리워드 제공 여부',
+    Header: '지급 리워드',
     width: 200,
     Filter: SelectColumnFilter,
     filter: FilterIncludes,
@@ -114,4 +116,99 @@ const NearCustomer = [
   },
 ];
 
-export { SendOffer, ReceiveOffer, NearCustomer };
+const ExpectedCustomer = [
+  {
+    accessor: 'id',
+    Header: 'ID',
+  },
+  {
+    accessor: 'nickname',
+    Header: '닉네임',
+    width: 350,
+    disableSortBy: true,
+  },
+  {
+    accessor: 'reserveTime',
+    Header: '방문 제안 날짜 / 시간',
+    width: 250,
+    tooltip: '제안 마감 시간으로 정확하지 않을 수 있습니다.',
+    disableSortBy: true,
+  },
+  {
+    accessor: 'reward',
+    Header: '지급 예정 리워드',
+    width: 175,
+    disableSortBy: true,
+  },
+  {
+    accessor: 'visit',
+    Header: '방문 확인',
+    width: 175,
+    tooltip:
+      '확인을 누르시면 리워드가 제공되므로 고객이 방문하여 결제할 때 확인을 눌러주세요!',
+    disableSortBy: true,
+  },
+];
+
+const ConfirmedReward = [
+  {
+    accessor: 'id',
+    Header: 'ID',
+    fadable: true, // true인 경우, component width 1000px 보다 작아질 시 숨겨짐
+  },
+  {
+    accessor: 'nickname',
+    Header: '지급 고객 (닉네임)',
+    width: 300,
+    disableSortBy: true,
+  },
+  {
+    accessor: 'rewardTime',
+    Header: '지급 날짜 / 시간',
+    width: 300,
+    tooltip: '정확하지 않을 수 있습니다.',
+    disableSortBy: true,
+  },
+  {
+    accessor: 'reward',
+    Header: '지급 리워드',
+    width: 250,
+    disableSortBy: true,
+  },
+];
+
+const ExpectedReward = [
+  {
+    accessor: 'id',
+    Header: 'ID',
+    fadable: true,
+  },
+  {
+    accessor: 'nickname',
+    Header: '지급 예정 고객 (닉네임)',
+    width: 300,
+    disableSortBy: true,
+  },
+  {
+    accessor: 'visitTime',
+    Header: '방문 날짜 / 시간',
+    width: 300,
+    tooltip: '정확하지 않을 수 있습니다.',
+    disableSortBy: true,
+  },
+  {
+    accessor: 'reward',
+    Header: '지급 예정 리워드',
+    width: 250,
+    disableSortBy: true,
+  },
+];
+
+export {
+  SendOffer,
+  ReceiveOffer,
+  ConfirmedCustomer,
+  ExpectedCustomer,
+  ConfirmedReward,
+  ExpectedReward,
+};

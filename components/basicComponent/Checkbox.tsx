@@ -23,10 +23,10 @@ const CheckboxBlock = styled.label<{
 
 const iconStyle = css`
   :hover {
-    background-color: ${({ theme }) => theme.colors.singletons.green};
+    background-color: ${({ theme }) => theme.colors.green[500]};
   }
   :active {
-    background-color: ${({ theme }) => theme.colors.singletons.textGrreen};
+    background-color: ${({ theme }) => theme.colors.green[600]};
   }
 `;
 
@@ -64,7 +64,7 @@ const CheckboxItem = styled.li`
 `;
 
 const UncheckedBlock = styled(Oval)`
-  background-color: ${({ theme }) => theme.colors.gray[3]};
+  background-color: ${({ theme }) => theme.colors.gray[300]};
 `;
 
 const CheckedBlock = styled.div<{ width: number }>`
@@ -151,7 +151,8 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
             width={18}
             height={20}
             name="ListFilter"
-            color="textGreen"
+            color="green"
+            colorIndex={600}
             customStyle={iconStyle}
           />
         ) : (
@@ -160,7 +161,7 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
             height={18}
             name="ListFilter"
             color="gray"
-            colorIndex={6}
+            colorIndex={600}
             customStyle={iconStyle}
           />
         )}

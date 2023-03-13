@@ -6,12 +6,19 @@ import {
   useSortBy,
   usePagination,
 } from 'react-table';
+import { Tooltip } from 'react-tooltip';
 import styled, { css } from 'styled-components';
 
 import Divider from '@components/basicComponent/Divider';
 import IconButton from '@components/basicComponent/IconButton';
 import SelectBox from '@components/basicComponent/Selectbox';
 import Icon from '@components/Icon';
+import { useWindowSize } from '@hooks/useWindowSize';
+import { componentSizes } from '@styles/theme/media';
+
+const defaultPageSizeList = [10, 25, 50, 75, 100];
+const extraWidth =
+  componentSizes.sideNavbar.width + componentSizes.pagePadding * 2;
 
 interface TableProps {
   columns: any;
@@ -24,8 +31,6 @@ interface TableProps {
   pageCount: number;
   type?: string;
 }
-
-const defaultPageSizeList = [10, 25, 50, 75, 100];
 
 const TableBlock = styled.div`
   width: 100%;
@@ -42,7 +47,7 @@ const TableContentBlock = styled.table`
 
 const HeadBlock = styled.thead`
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.colors.gray[2]};
+  background-color: ${({ theme }) => theme.colors.gray[200]};
 `;
 const HeadRowBlock = styled.tr`
   display: flex;
@@ -58,7 +63,7 @@ const HeadColumnBlock = styled.th<{ width?: string | number; flex: boolean }>`
   align-items: center;
   font-size: 14px;
   font-weight: normal;
-  color: ${({ theme }) => theme.colors.text[4]};
+  color: ${({ theme }) => theme.colors.text[400]};
 `;
 
 const HeadColumnContentBlock = styled.div`
@@ -67,13 +72,38 @@ const HeadColumnContentBlock = styled.div`
   align-items: center;
 `;
 
+const HeadColumnTooltipBlock = styled.div`
+  margin-left: 10px;
+  display: flex;
+`;
+
+const HeaderColumnToolTip = styled(Tooltip)`
+  position: absolute;
+  padding: 2px 8px 2px 8px;
+  background-color: ${({ theme }) => theme.colors.green[200]};
+  border: 1px solid ${({ theme }) => theme.colors.green[300]};
+  border-radius: 4px;
+  -webkit-box-shadow: 0px 1px 8px 0px
+    ${({ theme }) => `${theme.colors.singletons.realBlack}20`};
+  box-shadow: 0px 1px 8px 0px
+    ${({ theme }) => `${theme.colors.singletons.realBlack}20`};
+  font-size: 13px;
+  color: ${({ theme }) => theme.colors.text[600]};
+`;
+
 const FilterBlock = styled.div`
   display: flex;
   align-items: center;
 `;
+
+const tooltipIconStyle = css`
+  :hover {
+    background-color: ${({ theme }) => theme.colors.singletons.green};
+  }
+`;
+
 const sortIconStyle = css`
   margin-left: 10px;
-
   :hover {
     background-color: ${({ theme }) => theme.colors.singletons.green};
   }
@@ -91,11 +121,12 @@ const BodyColumnBlock = styled.td<{ width?: string | number; flex: boolean }>`
   flex: ${({ flex }) => (flex ? 1 : 'none')};
   flex-direction: row;
   width: ${({ width }) => width}px;
-  padding: 12px 20px;
+  height: 44px; //fixed
+  padding-left: 20px;
   align-items: center;
   font-size: 14px;
   font-weight: normal;
-  color: ${({ theme }) => theme.colors.text[6]};
+  color: ${({ theme }) => theme.colors.text[600]};
 `;
 
 const ExpandedRowBlock = styled.tr<{ isExpanded: boolean }>`
@@ -129,13 +160,13 @@ const PaginationBlock = styled.div`
 
 const PerPageTextBlock = styled.div`
   font-size: 12px;
-  color: ${({ theme }) => theme.colors.text[4]};
+  color: ${({ theme }) => theme.colors.text[400]};
   margin-right: 12px;
 `;
 
 const PageInfoText = styled.div`
   font-size: 12px;
-  color: ${({ theme }) => theme.colors.text[4]};
+  color: ${({ theme }) => theme.colors.text[400]};
   margin-right: 20px;
 `;
 
@@ -147,7 +178,8 @@ const DividerBlock = styled.div`
   padding-bottom: 4px;
 `;
 
-// todo: pagination fc 분리
+// TODO : pagination fc 분리
+// TODO : error <div> cannot appear as a child of <tbody> 처리 방법 확인
 const Table: FC<TableProps> = function Table(props) {
   const {
     columns,
@@ -160,6 +192,7 @@ const Table: FC<TableProps> = function Table(props) {
     pageCount: pageCountFromServer,
     type,
   } = props;
+  const { windowSize } = useWindowSize();
 
   const defaultColumn = useMemo(
     () => ({
@@ -203,6 +236,7 @@ const Table: FC<TableProps> = function Table(props) {
   /* eslint-disable react/jsx-props-no-spreading */
   /* eslint-disable no-nested-ternary */
   /* eslint-disable react/button-has-type */
+  /* eslint-disable react/no-array-index-key */
   return (
     <TableBlock>
       {pageSizeList?.length > 0 && (
@@ -212,18 +246,40 @@ const Table: FC<TableProps> = function Table(props) {
               {headerGroups?.map(headerGroup => (
                 <HeadRowBlock {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers?.map((column, index) => {
-                    return (
+                    return windowSize.width - extraWidth <=
+                      componentSizes.table.width &&
+                      columns[index]?.fadable ? null : (
                       <HeadColumnBlock
                         {...column.getHeaderProps(
                           column.getSortByToggleProps(),
                         )}
                         width={column.width}
                         flex={index === 0}
-                        // eslint-disable-next-line react/no-array-index-key
                         key={index}
                       >
                         <HeadColumnContentBlock>
                           {column.render('Header')}
+                          {columns[index]?.tooltip ? (
+                            <HeadColumnTooltipBlock
+                              data-tooltip-id={`head-column-tooltip${index}`}
+                              data-tooltip-content={columns[index]?.tooltip}
+                            >
+                              <Icon
+                                name="Help"
+                                width={16}
+                                height={16}
+                                customStyle={tooltipIconStyle}
+                                color="gray"
+                                colorIndex={500}
+                              />
+                              <HeaderColumnToolTip
+                                id={`head-column-tooltip${index}`}
+                                place="bottom"
+                                offset={4}
+                                noArrow
+                              />
+                            </HeadColumnTooltipBlock>
+                          ) : null}
                           {column.canSort ? (
                             <Icon
                               name={
@@ -252,7 +308,9 @@ const Table: FC<TableProps> = function Table(props) {
                   <Fragment key={row.id}>
                     <BodyRowBlock {...row.getRowProps()}>
                       {row.cells?.map((cell, index) => {
-                        return (
+                        return windowSize.width - extraWidth <=
+                          componentSizes.table.width &&
+                          columns[index].fadable ? null : (
                           <BodyColumnBlock
                             {...cell.getCellProps()}
                             width={cell.column.width}

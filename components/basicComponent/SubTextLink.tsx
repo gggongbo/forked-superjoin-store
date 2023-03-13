@@ -14,7 +14,7 @@ const buttonPalette = css<{ isSelected?: boolean }>`
   border: 1px solid;
   border-color: ${props =>
     props.isSelected
-      ? props.theme.colors.gray[3]
+      ? props.theme.colors.gray[300]
       : props.theme.colors.singletons.backgroundGray};
 
   border-radius: 6px;
@@ -25,7 +25,7 @@ const buttonPalette = css<{ isSelected?: boolean }>`
   :active,
   :visited {
     background-color: ${({ theme }) => theme.colors.singletons.white};
-    border-color: ${({ theme }) => theme.colors.gray[3]};
+    border-color: ${({ theme }) => theme.colors.gray[300]};
   }
 `;
 

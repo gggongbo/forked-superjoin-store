@@ -12,7 +12,7 @@ const CheckboxTextBlock = styled.div<{ customStyle?: CSSProp }>`
 `;
 
 const UncheckedBlock = styled(Oval)`
-  background-color: ${({ theme }) => theme.colors.gray[3]};
+  background-color: ${({ theme }) => theme.colors.gray[300]};
 `;
 
 const CheckedBlock = styled.div<{ width: number }>`
@@ -32,8 +32,8 @@ const TitleTextBlock = styled.div<{
 }>`
   font-size: ${({ titleSize }) => titleSize}px;
   color: ${({ color, theme }) =>
-    color && color?.length > 1 ? color : theme.colors.text[6]};
-  color: ${({ disabled, theme }) => disabled && `${theme.colors.text[6]}60`};
+    color && color?.length > 1 ? color : theme.colors.text[600]};
+  color: ${({ disabled, theme }) => disabled && `${theme.colors.text[600]}60`};
   margin-left: 10px;
   text-align: center;
 `;

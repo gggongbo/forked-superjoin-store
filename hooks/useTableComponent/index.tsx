@@ -8,6 +8,7 @@ import { OptionType, SubRowProps } from '@constants/types/components';
 import { offerService } from '@services/offer';
 import {
   singletons,
+  green as GreenColors,
   gray as GrayColors,
   text as TextColors,
 } from '@styles/theme/colors';
@@ -50,7 +51,7 @@ const CallStatusTextBlock = styled.div<{ color?: string }>`
 const CallEndTimeBlock = styled.div<{ disabled: boolean }>`
   font-size: 14px;
   color: ${({ disabled, theme }) =>
-    disabled ? theme.colors.text[2] : theme.colors.text[6]};
+    disabled ? theme.colors.text[200] : theme.colors.text[600]};
 `;
 
 const CallButtonBlock = styled.button<{
@@ -75,22 +76,24 @@ const DeleteButtonBlock = styled.button<{ disabled: boolean }>`
 
 const deleteButtonIconStyle = css`
   :hover {
-    background-color: ${({ theme }) => theme.colors.singletons.green};
+    background-color: ${({ theme }) => theme.colors.green[500]};
   }
 
   :active,
   :visited {
-    background-color: ${({ theme }) => theme.colors.singletons.textGreen};
+    background-color: ${({ theme }) => theme.colors.green[600]};
   }
 `;
 
-const RewardBlock = styled.div<{ option: OptionType }>`
+const RewardBlock = styled.div<{ option?: OptionType }>`
   display: flex;
   flex-direction: row;
 `;
 
-const RewardTextBlock = styled.div`
+const RewardTextBlock = styled.div<{ rewardStatus?: boolean }>`
   margin-left: 8px;
+  color: ${({ rewardStatus = true, theme }) =>
+    rewardStatus ? theme.colors.text[600] : theme.colors.text[200]};
 `;
 
 const AppealStatusBlock = styled.div<{
@@ -101,7 +104,21 @@ const AppealStatusBlock = styled.div<{
   flex-direction: row;
   font-size: 14px;
   color: ${({ disabled, theme }) =>
-    disabled ? `${theme.colors.text[6]}40` : theme.colors.text[6]};
+    disabled ? `${theme.colors.text[600]}40` : theme.colors.text[600]};
+`;
+
+const VisitButtonBlock = styled.button`
+  display: flex;
+  flex: 0.5;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.singletons.black};
+  color: ${({ theme }) => theme.colors.singletons.white};
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 14px;
 `;
 
 const useTableComponent = () => {
@@ -149,14 +166,14 @@ const useTableComponent = () => {
         break;
       case 'confirmed':
         icon = 'CircleCheck';
-        backgroundColor = `${singletons.contentBoxGreen}18`;
+        backgroundColor = `${GreenColors[400]}18`;
         color = singletons.green;
         text = '제안 확정';
         break;
       case 'expired':
         icon = 'ClockDone';
-        backgroundColor = GrayColors[3];
-        color = TextColors[6];
+        backgroundColor = GrayColors[300];
+        color = TextColors[600];
         text = '제안 마감';
         break;
       default:
@@ -204,7 +221,7 @@ const useTableComponent = () => {
       currentStoreUser: CurrentStoreUserType,
     ) => {
       const backgroundColor =
-        callStatus === 'proceeding' ? GrayColors[3] : singletons.black;
+        callStatus === 'proceeding' ? GrayColors[300] : singletons.black;
       const color =
         callStatus === 'proceeding' ? singletons.black : singletons.white;
       const text = callStatus === 'proceeding' ? '다시 제안' : '제안 취소';
@@ -226,7 +243,8 @@ const useTableComponent = () => {
 
   const callDeleteButtonComponent = useCallback(
     (callStatus: string, callId: string, userId: string) => {
-      const color = callStatus === 'proceeding' ? GrayColors[3] : GrayColors[5];
+      const color =
+        callStatus === 'proceeding' ? GrayColors[300] : GrayColors[500];
       const disabled = callStatus === 'proceeding';
       return (
         <DeleteButtonBlock
@@ -250,22 +268,41 @@ const useTableComponent = () => {
     [],
   );
 
-  const rewardStatusComponent = useCallback((rewardStatus: boolean) => {
-    const option = {
-      name: rewardStatus ? '제공' : '미제공',
-      value: rewardStatus ? 'rewarded' : 'notRewarded',
-    };
-    return (
-      <RewardBlock option={option}>
-        <Icon
-          width={20}
-          height={20}
-          name={rewardStatus ? 'MarkPointYellow' : 'MarkPointGray'}
-        />
-        <RewardTextBlock>{option?.name}</RewardTextBlock>
-      </RewardBlock>
-    );
-  }, []);
+  const rewardComponent = useCallback(
+    (rewardStatus: boolean, reward: number) => {
+      return (
+        <RewardBlock>
+          <Icon
+            width={20}
+            height={20}
+            name={rewardStatus ? 'MarkPointYellow' : 'MarkPointGray'}
+          />
+          <RewardTextBlock>{reward}</RewardTextBlock>
+        </RewardBlock>
+      );
+    },
+    [],
+  );
+
+  const rewardStatusComponent = useCallback(
+    (rewardStatus: boolean, reward?: number) => {
+      const option = {
+        name: rewardStatus ? '제공' : '미제공',
+        value: rewardStatus ? 'rewarded' : 'notRewarded',
+      };
+      return (
+        <RewardBlock option={option}>
+          {rewardStatus ? (
+            <Icon width={20} height={20} name="MarkPointYellow" />
+          ) : null}
+          <RewardTextBlock rewardStatus={rewardStatus}>
+            {rewardStatus ? reward : option?.name}
+          </RewardTextBlock>
+        </RewardBlock>
+      );
+    },
+    [],
+  );
 
   const appealStatusComponent = useCallback(
     (appealContent: string, status: string) => {
@@ -301,6 +338,24 @@ const useTableComponent = () => {
     [],
   );
 
+  const visitButtonComponent = useCallback(
+    (userId: string, currentStoreUser: CurrentStoreUserType) => {
+      return (
+        <VisitButtonBlock
+          onClick={async () => {
+            console.log('visit button clicked', userId, currentStoreUser);
+            // TODO: 방문 예약 고객 => 방문 고객으로 변경해주는 로직 추가
+            // await customerService.visitCustomer(userId, currentStoreUser);
+            alert('방문이 확인되었습니다.');
+          }}
+        >
+          확인
+        </VisitButtonBlock>
+      );
+    },
+    [],
+  );
+
   const renderRowSubComponent = useCallback(({ row, type }: SubRowProps) => {
     return <SubRow row={row} type={type} />;
   }, []);
@@ -312,8 +367,10 @@ const useTableComponent = () => {
     callEndTimeComponent,
     callButtonComponent,
     callDeleteButtonComponent,
+    rewardComponent,
     rewardStatusComponent,
     appealStatusComponent,
+    visitButtonComponent,
     renderRowSubComponent,
   };
 };

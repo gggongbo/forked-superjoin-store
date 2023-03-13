@@ -23,7 +23,7 @@ const UserImage = styled.div<{ userImage?: string | null }>`
   aspect-ratio: 1;
   border-radius: 8px;
   background-image: url(${props => props.userImage});
-  background-color: gray;
+  background-color: ${({ theme }) => theme.colors.gray[400]};
   background-position: center;
   background-size: cover;
   @media ${({ theme }) => theme.media.mobile} {
@@ -34,7 +34,7 @@ const UserImage = styled.div<{ userImage?: string | null }>`
 const UserEmail = styled.div`
   margin: 0 16px;
   font-size: 14px;
-  color: ${props => `${props.theme.colors.singletons.realBlack}84`};
+  color: ${({ theme }) => `${theme.colors.singletons.realBlack}84`};
   word-break: keep-all;
   @media ${({ theme }) => theme.media.tablet} {
     margin: 0 8px;
@@ -50,20 +50,18 @@ const IconBlock = styled.div<{ inClicked: boolean }>`
   border-style: solid;
   border-width: 0px;
   padding: 8px;
-  background-color: ${props =>
-    props.inClicked
-      ? `${props.theme.colors.singletons.pressGreen}60`
-      : props.theme.colors.singletons.defaultBackground};
+  background-color: ${({ inClicked, theme }) =>
+    inClicked
+      ? `${theme.colors.green[100]}60`
+      : theme.colors.singletons.defaultBackground};
 
   :hover {
-    background-color: ${props =>
-      `${props.theme.colors.singletons.pressGreen}24`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}24`};
   }
 
   :active,
   :visited {
-    background-color: ${props =>
-      `${props.theme.colors.singletons.pressGreen}60`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}60`};
   }
 `;
 
@@ -72,7 +70,7 @@ const UserBlock = styled.div<{ contentHeight?: number }>`
   display: flex;
   flex-direction: column;
   right: 0px;
-  top: ${props => (props.contentHeight || 0) + 2}px;
+  top: ${({ contentHeight }) => (contentHeight || 0) + 2}px;
   width: 155px;
   aspect-ratio: 2.9;
 `;

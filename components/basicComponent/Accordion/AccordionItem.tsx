@@ -10,15 +10,13 @@ const AccordionItemBlock = styled.div<{ contentVisible: boolean }>`
   transition: 0.4s;
   border-style: solid;
   border-width: 0px 0px 1px 0px;
-  border-color: ${({ theme }) => theme.colors.gray[3]};
+  border-color: ${({ theme }) => theme.colors.gray[300]};
   :hover {
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}24`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}24`};
   }
   :active,
   :visited {
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}60`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}60`};
   }
 `;
 
@@ -56,14 +54,14 @@ const ContentBlock = styled.div`
   padding: 16px 20px;
   margin-bottom: 16px;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.colors.gray[2]};
+  background-color: ${({ theme }) => theme.colors.gray[200]};
 `;
 
 const ContentText = styled.pre`
   font-family: 'Noto Sans KR';
   font-size: 14px;
   font-weight: normal;
-  color: ${({ theme }) => theme.colors.text[4]};
+  color: ${({ theme }) => theme.colors.text[400]};
 `;
 
 const ArrowBlock = styled.div<{ contentVisible: boolean }>`

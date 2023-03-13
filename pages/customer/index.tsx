@@ -2,8 +2,8 @@ import type { NextPage } from 'next';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import NearReceiveCustomer from './NearReceiveCustomer';
-import NearSendCustomer from './NearSendCustomer';
+import ConfirmedCustomer from './ConfirmedCustomer';
+import ExpectedCustomer from './ExpectedCustomer';
 
 import Divider from '@components/basicComponent/Divider';
 import Header from '@components/basicComponent/Header';
@@ -17,9 +17,10 @@ const optionList = [
 ];
 
 const CustomerBlock = styled.main`
+  min-width: ${({ theme }) => theme.componentSizes.table.width}px;
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: ${({ theme }) => theme.componentSizes.pagePadding}px;
 `;
 
 const HeaderBlock = styled.div`
@@ -35,14 +36,14 @@ const HeaderText = styled.div<{ customerType: string; defaultValue: string }>`
   font-weight: ${props => props.customerType === props.defaultValue && 500};
   color: ${props =>
     props.customerType === props.defaultValue
-      ? props.theme.colors.text[6]
-      : props.theme.colors.text[2]};
+      ? props.theme.colors.text[600]
+      : props.theme.colors.text[200]};
 `;
 
 const HeaderDivider = styled(Divider)`
   margin: 0px 20px 0px 20px;
   height: 24px;
-  border-color: ${props => props.theme.colors.gray[6]};
+  border-color: ${props => props.theme.colors.gray[600]};
 `;
 
 const HeaderRightBlock = styled.div`
@@ -52,7 +53,9 @@ const HeaderRightBlock = styled.div`
 `;
 
 const Customer: NextPage = function Customer() {
-  const [customerType, setCustomerType] = useState<string>('send');
+  const [customerType, setCustomerType] = useState<'expected' | 'confirmed'>(
+    'confirmed',
+  );
   const [input, setInput] = useState<SearchType>();
   const [search, setSearch] = useState<SearchType>();
 
@@ -68,11 +71,11 @@ const Customer: NextPage = function Customer() {
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setCustomerType('send')}
+          onClick={() => setCustomerType('confirmed')}
           customerType={customerType}
-          defaultValue="send"
+          defaultValue="confirmed"
         >
-          근처 멤버 관리 (보낸 제안)
+          방문 고객 관리
         </HeaderText>
         <HeaderDivider isVertical />
       </HeaderBlock>
@@ -83,11 +86,11 @@ const Customer: NextPage = function Customer() {
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setCustomerType('receive')}
+          onClick={() => setCustomerType('expected')}
           customerType={customerType}
-          defaultValue="receive"
+          defaultValue="expected"
         >
-          근처 멤버 관리 (받은 제안)
+          방문 예약 고객 관리
         </HeaderText>
       </HeaderBlock>
     );
@@ -114,10 +117,13 @@ const Customer: NextPage = function Customer() {
         leftComponent={headerLeftComponent}
         rightComponent={headerRightComponent}
       />
-      {customerType === 'send' ? (
-        <NearSendCustomer columns={Columns.NearCustomer} search={search} />
+      {customerType === 'confirmed' ? (
+        <ConfirmedCustomer
+          columns={Columns.ConfirmedCustomer}
+          search={search}
+        />
       ) : (
-        <NearReceiveCustomer columns={Columns.NearCustomer} search={search} />
+        <ExpectedCustomer columns={Columns.ExpectedCustomer} search={search} />
       )}
     </CustomerBlock>
   );

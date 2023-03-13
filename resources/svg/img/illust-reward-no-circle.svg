@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="182" height="182" viewBox="0 0 182 182" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>img/illust-reward</title>
+    <defs>
+        <filter x="-6.7%" y="-5.1%" width="113.5%" height="113.5%" filterUnits="objectBoundingBox" id="7770eyjtda">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-6.6%" y="-5.1%" width="113.3%" height="113.6%" filterUnits="objectBoundingBox" id="37pgapae2d">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-7.9%" y="-8%" width="115.8%" height="118.9%" filterUnits="objectBoundingBox" id="6hlh2rh7sg">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-25%" y="-11%" width="150%" height="120.6%" filterUnits="objectBoundingBox" id="pstgpafisj">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-6.4%" y="-19%" width="112.9%" height="144.8%" filterUnits="objectBoundingBox" id="178kmczsum">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.0829873252 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-15.5%" y="-13.1%" width="131%" height="131%" filterUnits="objectBoundingBox" id="y1srzy4u7o">
+            <feOffset dy="1" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" in="shadowBlurOuter1"/>
+        </filter>
+        <linearGradient x1="11.937%" y1="0%" x2="84.046%" y2="92.15%" id="ecrrddro3c">
+            <stop stop-color="#FFF" stop-opacity=".5" offset="0%"/>
+            <stop stop-color="#E0BE00" stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="11.937%" y1=".659%" x2="84.046%" y2="91.595%" id="nfagafzzif">
+            <stop stop-color="#FFF" stop-opacity=".5" offset="0%"/>
+            <stop stop-color="#E0BE00" stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="24.204%" y1="20.968%" x2="57.251%" y2="77.685%" id="29q0k69xri">
+            <stop stop-color="#00B3A8" offset="0%"/>
+            <stop stop-color="#3A8BD2" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="39.708%" y1="0%" x2="59.206%" y2="92.15%" id="6y8tbkdqol">
+            <stop stop-color="#FFF" stop-opacity=".5" offset="0%"/>
+            <stop stop-color="#E0BE00" stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="11.937%" y1="0%" x2="84.046%" y2="92.15%" id="0tq1o4iwdq">
+            <stop stop-color="#FFE983" stop-opacity=".5" offset=".005%"/>
+            <stop stop-color="#FFB100" stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <path d="M35.272 4.29 65.341 34.36a6 6 0 0 1 0 8.485L52.797 55.388a6 6 0 0 1-8.486 0L14.243 25.32a6 6 0 0 1 0-8.486L26.787 4.29a6 6 0 0 1 8.485 0z" id="mzxbfnpx5b"/>
+        <path d="M66.582 4.248 36.285 34.345a6 6 0 0 0 0 8.513L48.941 55.43a6 6 0 0 0 8.457 0l30.297-30.096a6 6 0 0 0 0-8.514L75.039 4.248a6 6 0 0 0-8.457 0z" id="ky8zhiayge"/>
+        <path d="M40 25.025h22a2 2 0 0 1 2 2v42.293a3 3 0 0 1-4.701 2.471l-6.598-4.541a3 3 0 0 0-3.402 0l-6.598 4.541A3 3 0 0 1 38 69.318V27.025a2 2 0 0 1 2-2z" id="6hgect42ek"/>
+        <rect id="qbrj0j553h" x="9.75" y="36.667" width="82.5" height="68.75" rx="8"/>
+        <rect id="x0lzshlomn" x=".583" y="18.333" width="100.833" height="29" rx="8"/>
+        <circle id="x2zr3k3i0p" cx="21" cy="21" r="21"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g transform="translate(40 38)">
+            <use fill="#000" filter="url(#7770eyjtda)" xlink:href="#mzxbfnpx5b"/>
+            <use fill="#FFAB00" xlink:href="#mzxbfnpx5b"/>
+            <use fill="url(#ecrrddro3c)" xlink:href="#mzxbfnpx5b"/>
+        </g>
+        <g transform="translate(40 38)">
+            <use fill="#000" filter="url(#37pgapae2d)" xlink:href="#ky8zhiayge"/>
+            <use fill="#FFAB00" xlink:href="#ky8zhiayge"/>
+            <use fill="url(#nfagafzzif)" xlink:href="#ky8zhiayge"/>
+        </g>
+        <g transform="translate(40 38)">
+            <use fill="#000" filter="url(#6hlh2rh7sg)" xlink:href="#qbrj0j553h"/>
+            <use fill="url(#29q0k69xri)" xlink:href="#qbrj0j553h"/>
+        </g>
+        <g transform="translate(40 38)">
+            <use fill="#000" filter="url(#pstgpafisj)" xlink:href="#6hgect42ek"/>
+            <use fill="#FFD424" xlink:href="#6hgect42ek"/>
+            <use fill="url(#6y8tbkdqol)" xlink:href="#6hgect42ek"/>
+        </g>
+        <g transform="translate(40 38)">
+            <use fill="#000" filter="url(#178kmczsum)" xlink:href="#x0lzshlomn"/>
+            <use fill="#00BAAF" xlink:href="#x0lzshlomn"/>
+        </g>
+        <g>
+            <g transform="translate(112 110)">
+                <use fill="#000" filter="url(#y1srzy4u7o)" xlink:href="#x2zr3k3i0p"/>
+                <use fill="#FFCD00" xlink:href="#x2zr3k3i0p"/>
+                <use fill="url(#0tq1o4iwdq)" xlink:href="#x2zr3k3i0p"/>
+            </g>
+            <path d="M133 114c9.389 0 17 7.611 17 17s-7.611 17-17 17-17-7.611-17-17 7.611-17 17-17zm0 2c-8.284 0-15 6.716-15 15 0 8.284 6.716 15 15 15 8.284 0 15-6.716 15-15 0-8.284-6.716-15-15-15z" fill="#FFF" fill-rule="nonzero" opacity=".25"/>
+            <path d="M132.258 139v-5.786h2.178c3.498 0 6.292-1.672 6.292-5.39 0-3.85-2.772-5.104-6.38-5.104h-5.346V139h3.256zm1.958-8.36h-1.958v-5.346h1.848c2.244 0 3.432.638 3.432 2.53 0 1.87-1.078 2.816-3.322 2.816z" fill="#FFF" fill-rule="nonzero" opacity=".903"/>
+        </g>
+    </g>
+</svg>

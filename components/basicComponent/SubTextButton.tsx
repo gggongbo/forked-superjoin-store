@@ -24,13 +24,11 @@ const SubHoverBlock = styled.div`
   margin: 8px 0px 8px 0px;
   padding: 8px 15px 8px 15px;
   :hover {
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}24`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}24`};
   }
   :active,
   :visited {
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}60`};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}60`};
   }
 `;
 

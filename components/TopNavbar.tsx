@@ -13,8 +13,8 @@ const NavbarBlock = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100vw;
-  aspect-ratio: 26;
-  min-height: 50px;
+  min-width: ${({ theme }) => theme.componentSizes.topNavbar.width}px;
+  height: ${({ theme }) => theme.componentSizes.topNavbar.height}px;
   top: 0px;
   padding: 0px 32px;
   background-color: ${props => props.theme.colors.singletons.defaultBackground};
@@ -23,9 +23,6 @@ const NavbarBlock = styled.div`
   box-shadow: 0px 1px 3px 0px
     ${props => `${props.theme.colors.singletons.realBlack}20`};
   z-index: 999;
-  @media ${({ theme }) => theme.media.mobile} {
-    padding: 0px 20px;
-  }
 `;
 
 const TitleBlock = styled.div`
@@ -56,9 +53,6 @@ const TitleText = styled.div`
   font-weight: 500;
   color: ${props => props.theme.colors.singletons.realBlack};
   word-break: keep-all;
-  @media ${({ theme }) => theme.media.mobile} {
-    font-size: 15px;
-  }
 `;
 
 const TitleOval = styled(Oval)`

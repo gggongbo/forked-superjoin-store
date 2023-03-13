@@ -18,17 +18,15 @@ const ButtonBlock = styled.button<{
   border-radius: 6px;
   border-color: ${({ theme }) => theme.colors.singletons.enabledGray};
   :hover {
-    border-color: ${({ theme }) => theme.colors.gray[3]};
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}24`};
+    border-color: ${({ theme }) => theme.colors.gray[300]};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}24`};
   }
   :active {
-    border-color: ${({ theme }) => theme.colors.gray[3]};
-    background-color: ${({ theme }) =>
-      `${theme.colors.singletons.pressGreen}60`};
+    border-color: ${({ theme }) => theme.colors.gray[300]};
+    background-color: ${({ theme }) => `${theme.colors.green[100]}60`};
   }
   :disabled {
-    border-color: ${({ theme }) => theme.colors.gray[2]};
+    border-color: ${({ theme }) => theme.colors.gray[200]};
   }
   ${({ customStyle }) => customStyle};
 `;
@@ -65,7 +63,7 @@ const IconButton: FC<ButtonProps> = function IconButton(props) {
         height={icon.height}
         name={icon.name}
         color={disabled ? 'gray' : 'black'}
-        colorIndex={disabled ? 3 : undefined}
+        colorIndex={disabled ? 300 : undefined}
       />
     </ButtonBlock>
   );
