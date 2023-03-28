@@ -1,6 +1,7 @@
 import { Row } from 'react-table';
 
 export type OptionType = {
+  id?: string | number;
   name: string | number;
   value: string | number;
 };
@@ -31,3 +32,8 @@ export interface SubRowProps {
   row: Row<any>;
   type?: string;
 }
+
+export type TooltipType = {
+  value: string;
+  position?: { top?: number; right?: number; bottom?: number; left?: number };
+};

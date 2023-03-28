@@ -1,0 +1,75 @@
+<svg width="28" height="27" viewBox="0 0 28 27" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter x="-6.9%" y="-6.9%" width="113.8%" height="113.8%" filterUnits="objectBoundingBox" id="t1xtpdwv6a">
+            <feOffset in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation=".5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-6.8%" y="-7%" width="113.7%" height="113.9%" filterUnits="objectBoundingBox" id="17q5zv30td">
+            <feOffset in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation=".5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-7.9%" y="-9.6%" width="115.8%" height="119.2%" filterUnits="objectBoundingBox" id="zcsk87zvzg">
+            <feOffset in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation=".5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-25%" y="-12.5%" width="150%" height="119.6%" filterUnits="objectBoundingBox" id="jw1hed6i9j">
+            <feOffset in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation=".5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0" in="shadowBlurOuter1"/>
+        </filter>
+        <filter x="-6.5%" y="-21.4%" width="113%" height="142.9%" filterUnits="objectBoundingBox" id="omyo6si0lm">
+            <feOffset in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation=".5" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0" in="shadowBlurOuter1"/>
+        </filter>
+        <linearGradient x1="11.937%" y1="0%" x2="84.046%" y2="92.15%" id="z3oeojlzic">
+            <stop stop-color="#FFF" stop-opacity=".5" offset="0%"/>
+            <stop stop-color="#E0BE00" stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="11.937%" y1=".659%" x2="84.046%" y2="91.595%" id="4qrpgjgczf">
+            <stop stop-color="#FFF" stop-opacity=".5" offset="0%"/>
+            <stop stop-color="#E0BE00" stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="24.204%" y1="21.805%" x2="57.251%" y2="76.887%" id="pvp0u56zgi">
+            <stop stop-color="#00B3A8" offset="0%"/>
+            <stop stop-color="#3A8BD2" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="40.484%" y1="0%" x2="58.512%" y2="92.15%" id="7q6l39z3wl">
+            <stop stop-color="#FFF" stop-opacity=".5" offset="0%"/>
+            <stop stop-color="#E0BE00" stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <path d="m10.005 1.974 6.825 6.824a1.362 1.362 0 0 1 0 1.926l-2.847 2.847a1.362 1.362 0 0 1-1.926 0L5.233 6.747a1.362 1.362 0 0 1 0-1.926L8.08 1.974a1.362 1.362 0 0 1 1.925 0z" id="kw7836fclb"/>
+        <path d="m17.112 1.964-6.877 6.831a1.362 1.362 0 0 0 0 1.932l2.873 2.854a1.362 1.362 0 0 0 1.92 0l6.875-6.831a1.362 1.362 0 0 0 0-1.932l-2.872-2.854a1.362 1.362 0 0 0-1.92 0z" id="3s5o0c7oze"/>
+        <path d="M10.954 6h5.092c.25 0 .454.203.454.454v10.221a.68.68 0 0 1-1.077.554l-1.527-1.093a.68.68 0 0 0-.792 0l-1.527 1.093a.68.68 0 0 1-1.077-.554V6.454c0-.25.203-.454.454-.454z" id="x38v1vd1pk"/>
+        <rect id="i8b07myfgh" x="4" y="9" width="19" height="15.604" rx="1.816"/>
+        <rect id="t5moxx0g6n" x="2" y="5" width="23" height="7" rx="1.816"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <use fill="#000" filter="url(#t1xtpdwv6a)" xlink:href="#kw7836fclb"/>
+            <use fill="#FFAB00" xlink:href="#kw7836fclb"/>
+            <use fill="url(#z3oeojlzic)" xlink:href="#kw7836fclb"/>
+        </g>
+        <g>
+            <use fill="#000" filter="url(#17q5zv30td)" xlink:href="#3s5o0c7oze"/>
+            <use fill="#FFAB00" xlink:href="#3s5o0c7oze"/>
+            <use fill="url(#4qrpgjgczf)" xlink:href="#3s5o0c7oze"/>
+        </g>
+        <g>
+            <use fill="#000" filter="url(#zcsk87zvzg)" xlink:href="#i8b07myfgh"/>
+            <use fill="url(#pvp0u56zgi)" xlink:href="#i8b07myfgh"/>
+        </g>
+        <g>
+            <use fill="#000" filter="url(#jw1hed6i9j)" xlink:href="#x38v1vd1pk"/>
+            <use fill="#FFD424" xlink:href="#x38v1vd1pk"/>
+            <use fill="url(#7q6l39z3wl)" xlink:href="#x38v1vd1pk"/>
+        </g>
+        <g>
+            <use fill="#000" filter="url(#omyo6si0lm)" xlink:href="#t5moxx0g6n"/>
+            <use fill="#00BAAF" xlink:href="#t5moxx0g6n"/>
+        </g>
+    </g>
+</svg>

@@ -1,7 +1,7 @@
 import { addMinutes } from 'date-fns';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
@@ -13,6 +13,7 @@ import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import { categoryList } from '@constants/categoryList';
 import type { MakeOfferType } from '@constants/types/offer';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
+import { RewardItemType } from '@constants/types/reward';
 import { offerService } from '@services/offer';
 
 const MakeOfferBlock = styled.main`
@@ -69,7 +70,7 @@ const MakeOffer: NextPage = function MakeOffer() {
   const [description, setDescription] = useState<string>();
   const [userNum, setUserNum] = useState<number>(0);
   const [deadline, setDeadline] = useState<Date>();
-  const [reward, setReward] = useState<number>(0);
+  const [reward, setReward] = useState<RewardItemType>();
 
   const submit = () => {
     if (
@@ -79,7 +80,7 @@ const MakeOffer: NextPage = function MakeOffer() {
       userNum < 1 ||
       userNum > 10 ||
       !deadline ||
-      reward < 1
+      !reward
     )
       return;
     const data: MakeOfferType = {
@@ -95,6 +96,19 @@ const MakeOffer: NextPage = function MakeOffer() {
       .createOffer(data, currentStoreUser)
       .then(() => router.replace('/offer', '/offer', { shallow: true }));
   };
+
+  // TODO: dummy => fetch
+  const rewardData = useMemo(
+    () => [
+      { id: 1, name: '음료수', value: '음료수' },
+      { id: 2, name: '음료수2', value: '음료수2' },
+      { id: 3, name: '음료수3', value: '음료수3' },
+      { id: 4, name: '음료수4', value: '음료수4' },
+      { id: 5, name: '음료수5', value: '음료수5' },
+      { id: undefined, name: '없음', value: '없음' },
+    ],
+    [],
+  );
 
   return (
     <MakeOfferBlock>
@@ -166,17 +180,22 @@ const MakeOffer: NextPage = function MakeOffer() {
           rightText="분 후"
         />
         <VerticalSubText
-          title="제공할 보상"
-          customStyle={inputTextNumberStyle}
+          title="제공할 리워드"
+          customStyle={selectBoxStyle}
+          tooltip={{
+            value:
+              '리워드 관리에서 제공할 리워드를 추가하고 제공할 리워드를 선택해보세요!',
+            position: { left: 200 },
+          }}
           content={
-            <InputText
-              type="number"
-              onChange={e => setReward(e.target.value)}
-              placeholder="최소 1포인트"
-              range={{ min: 1 }}
+            <SelectBox
+              optionList={rewardData}
+              onChange={e => {
+                setReward(e.target.selectValue);
+              }}
+              placeholder="리워드 선택"
             />
           }
-          rightText="포인트"
         />
       </ContentBlock>
       <ButtonBlock>
@@ -191,7 +210,7 @@ const MakeOffer: NextPage = function MakeOffer() {
             userNum < 1 ||
             userNum > 10 ||
             !deadline ||
-            reward < 1
+            !reward
           }
           customStyle={buttonStyle}
         />

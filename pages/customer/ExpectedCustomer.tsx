@@ -7,8 +7,8 @@ import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
 import { CustomerProps } from '@constants/types/customer';
+import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { CurrentStoreUserType, ReduxStoreType } from '~/constants/types/redux';
 
 const ExpectedCustomerBlock = styled.main`
   display: flex;

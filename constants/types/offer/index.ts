@@ -1,3 +1,5 @@
+import { RewardItemType } from '../reward';
+
 import { SearchType } from '@constants/types/components';
 
 export interface OfferProps {
@@ -12,7 +14,7 @@ export type MakeOfferType = {
   description: string;
   userNum: number;
   deadline: Date;
-  reward: number;
+  reward: RewardItemType;
   email: string | null;
   storeInfo?: object;
 };

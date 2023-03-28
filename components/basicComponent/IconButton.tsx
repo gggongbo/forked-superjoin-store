@@ -37,8 +37,7 @@ interface ButtonProps {
   type?: ButtonType;
   disabled?: boolean;
   customStyle?: CSSProp;
-  // eslint-disable-next-line no-unused-vars
-  onClick?: (e: any) => void;
+  onClick?: () => void;
 }
 
 const IconButton: FC<ButtonProps> = function IconButton(props) {
@@ -62,8 +61,8 @@ const IconButton: FC<ButtonProps> = function IconButton(props) {
         width={icon.width}
         height={icon.height}
         name={icon.name}
-        color={disabled ? 'gray' : 'black'}
-        colorIndex={disabled ? 300 : undefined}
+        color={disabled ? 'gray' : icon.color || 'black'}
+        colorIndex={disabled ? 300 : icon.colorIndex || undefined}
       />
     </ButtonBlock>
   );

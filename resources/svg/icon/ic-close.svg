@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-close</title>
+    <defs>
+        <path d="M14.41 4.41a.833.833 0 0 1 1.18 1.18L11.177 10l4.411 4.41a.834.834 0 0 1 .075 1.094l-.075.085a.833.833 0 0 1-1.178 0L10 11.178l-4.41 4.411a.834.834 0 0 1-1.094.075l-.085-.075a.833.833 0 0 1 0-1.178L8.82 10l-4.41-4.41a.834.834 0 0 1-.075-1.094l.075-.085a.833.833 0 0 1 1.178 0L10 8.82z" id="j2vhezqk3a"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <mask id="xlgxn956kb" fill="#000000">
+            <use xlink:href="#j2vhezqk3a"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#j2vhezqk3a"/>
+        <g mask="url(#xlgxn956kb)" fill="#000000">
+            <path d="M0 0h20v20H0z"/>
+        </g>
+    </g>
+</svg>
