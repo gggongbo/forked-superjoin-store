@@ -8,9 +8,9 @@ import SideNavbar from './SideNavbar';
 import TopNavbar from './TopNavbar';
 
 import { ReduxStoreType } from '@constants/types/redux';
+import { useWindowSize } from '@hooks/useWindowSize';
 import { authService } from '@services/auth';
 import { persistor } from '@store/rootStore';
-import { useWindowSize } from '~/hooks/useWindowSize';
 
 interface LayoutProps {
   children: React.ReactElement;

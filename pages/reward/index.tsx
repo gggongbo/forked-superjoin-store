@@ -1,195 +1,149 @@
 import type { NextPage } from 'next';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
+import { useCallback, useMemo, useState } from 'react';
+import styled, { css } from 'styled-components';
 
-import ConfirmedReward from './ConfirmedReward';
-import ExpectedReward from './ExpectedReward';
+import RewardItem from './RewardItem';
 
+import Button from '@components/basicComponent/Button';
 import Header from '@components/basicComponent/Header';
-import * as Columns from '@constants/tableColumns';
-import rewardImage from '@resources/svg/img/illust-reward-no-circle.svg';
-import Divider from '~/components/basicComponent/Divider';
-import SelectInputText from '~/components/basicComponent/SelectInputText';
-import { SearchType } from '~/constants/types/components';
-
-const optionList = [
-  { name: 'ID', value: 'id' },
-  { name: '닉네임', value: 'nickname' },
-];
+import InputText from '@components/basicComponent/InputText';
+import ListBox from '@components/basicComponent/ListBox';
+import { RewardItemType } from '@constants/types/reward';
+import emptyImage from '@resources/svg/img/service-gift-gray.svg';
 
 const RewardBlock = styled.main`
   display: flex;
+  flex: 1;
   flex-direction: column;
   padding: ${({ theme }) => theme.componentSizes.pagePadding}px;
 `;
 
-const RewardPointBlock = styled.div`
-  width: 440px;
-  margin-top: 15px;
+const RewardInputBlock = styled.div`
+  width: 50%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: ${({ theme }) => `${theme.colors.green[400]}10`};
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.colors.green[700]};
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.gray[200]};
+  border-radius: 6px;
+  margin-top: 32px;
+  padding: 16px;
 `;
 
-const RewardImageBlock = styled.div`
-  width: 125px;
+const InputTextBlock = styled.div`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+`;
+
+const inputStyle = css`
+  background-color: ${({ theme }) => theme.colors.singletons.white};
+`;
+
+const InputButton = styled(Button)`
+  justify-content: center;
+`;
+
+const RewardContentBlock = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 42px;
+`;
+
+const TextBlock = styled.div`
+  font-size: 20px;
+  font-weight: 500;
+`;
+
+const RewardListBlock = styled.div`
+  display: flex;
+  flex: 1;
+  margin-top: 22px;
+`;
+
+const EmptyBlock = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 78px;
+`;
+
+const EmptyImageBlock = styled.div`
+  width: 160px;
   aspect-ratio: 1;
-  background-image: url(${rewardImage.src});
+  background-image: url(${emptyImage.src});
   background-position: center;
   background-size: cover;
 `;
 
-const RewardPointContentBlock = styled.div``;
-
-const PointTitleBlock = styled.a`
-  font-size: 14px;
-  letter-spacing: -0.32px;
-  color: ${({ theme }) => theme.colors.green[500]};
-`;
-
-const PointTextBlock = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  margin-top: 8px;
-`;
-
-const PointBlock = styled.a`
-  font-size: 32px;
-  font-weight: bold;
-  line-height: 100%;
-  letter-spacing: -0.73px;
-  color: ${({ theme }) => theme.colors.singletons.black};
-  margin-right: 12px;
-`;
-
-const TextBlock = styled.a`
-  font-size: 14px;
-  letter-spacing: -0.32px;
-  color: ${({ theme }) => theme.colors.text[400]};
-`;
-
-const RewardTableBlock = styled.div`
-  min-width: ${({ theme }) => theme.componentSizes.table.width}px;
-  margin-top: 37px;
-`;
-
-const HeaderBlock = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const HeaderText = styled.div<{ rewardType: string; defaultValue: string }>`
-  display: flex;
-  font-size: 20px;
-  letter-spacing: -0.45px;
-  font-weight: ${props => props.rewardType === props.defaultValue && 500};
-  color: ${props =>
-    props.rewardType === props.defaultValue
-      ? props.theme.colors.text[600]
-      : props.theme.colors.text[200]};
-`;
-
-const HeaderDivider = styled(Divider)`
-  margin: 0px 16px 0px 16px;
-  height: 20px;
-  border-color: ${props => props.theme.colors.gray[600]};
-`;
-
-const HeaderRightBlock = styled.div`
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
+const EmptyTextBlock = styled.div`
+  margin-top: 24px;
+  color: ${({ theme }) => `${theme.colors.text[200]}80`};
+  font-size: 16px;
 `;
 
 const Reward: NextPage = function Reward() {
-  const point = 2000; // todo : get point logic add
-  const [rewardType, setRewardType] = useState<'expected' | 'confirmed'>(
-    'confirmed',
-  );
-  const [input, setInput] = useState<SearchType>();
-  const [search, setSearch] = useState<SearchType>();
+  // eslint-disable-next-line no-unused-vars
+  const [newReward, setNewReward] = useState<string>();
 
-  useEffect(() => {
-    setSearch(undefined);
-  }, [rewardType]);
-
-  const handleInputChange = useCallback((e: any) => {
-    setInput(e.target.valueObject);
+  const renderRewardItem = useCallback(({ item }: RewardItemType) => {
+    if (!item) return null;
+    return (
+      <RewardItem
+        id={item.id}
+        value={item.value}
+        onUpdateClick={() => {}}
+        onDeleteClick={() => {}}
+      />
+    );
   }, []);
 
-  const headerLeftComponent = useMemo(() => {
-    return (
-      <HeaderBlock>
-        <HeaderText
-          onClick={() => setRewardType('confirmed')}
-          rewardType={rewardType}
-          defaultValue="confirmed"
-        >
-          지급 리워드
-        </HeaderText>
-        <HeaderDivider isVertical />
-      </HeaderBlock>
-    );
-  }, [rewardType]);
-
-  const headertitleComponent = useMemo(() => {
-    return (
-      <HeaderBlock>
-        <HeaderText
-          onClick={() => setRewardType('expected')}
-          rewardType={rewardType}
-          defaultValue="expected"
-        >
-          지급 예정 리워드
-        </HeaderText>
-      </HeaderBlock>
-    );
-  }, [rewardType]);
-
-  const headerRightComponent = useMemo(() => {
-    return (
-      <HeaderRightBlock>
-        <SelectInputText
-          optionList={optionList}
-          onChange={handleInputChange}
-          onClick={() => {
-            setSearch(input);
-          }}
-        />
-      </HeaderRightBlock>
-    );
-  }, [input, handleInputChange]);
+  // TODO: dummy => fetch
+  const data = useMemo(
+    () => [
+      { id: 1, value: '음료수' },
+      { id: 2, value: '음료수2' },
+      { id: 3, value: '음료수3' },
+      { id: 4, value: '음료수4' },
+      { id: 5, value: '음료수5' },
+    ],
+    [],
+  );
 
   return (
     <RewardBlock>
       <Header title="리워드 관리" />
-      <RewardPointBlock>
-        <RewardImageBlock />
-        <RewardPointContentBlock>
-          <PointTitleBlock>보유 리워드</PointTitleBlock>
-          <PointTextBlock>
-            <PointBlock>{point}</PointBlock>
-            <TextBlock>포인트</TextBlock>
-          </PointTextBlock>
-        </RewardPointContentBlock>
-      </RewardPointBlock>
-      <RewardTableBlock>
-        <Header
-          titleComponent={headertitleComponent}
-          leftComponent={headerLeftComponent}
-          rightComponent={headerRightComponent}
-        />
-        {rewardType === 'confirmed' ? (
-          <ConfirmedReward columns={Columns.ConfirmedReward} search={search} />
-        ) : (
-          <ExpectedReward columns={Columns.ExpectedReward} search={search} />
-        )}
-      </RewardTableBlock>
+      <RewardInputBlock>
+        <InputTextBlock>
+          <InputText
+            placeholder="제공할 리워드를 입력해주세요. (10자)"
+            onChange={e => setNewReward(e.target.value)}
+            customStyle={inputStyle}
+          />
+        </InputTextBlock>
+        <InputButton width={90} text="추가" color="green" />
+      </RewardInputBlock>
+      <RewardContentBlock>
+        <TextBlock>리워드</TextBlock>
+        <RewardListBlock>
+          <ListBox
+            data={data}
+            renderItem={renderRewardItem}
+            listEmptyComponent={
+              <EmptyBlock>
+                <EmptyImageBlock />
+                <EmptyTextBlock>
+                  제공할 리워드가 없습니다. 리워드를 추가해보세요!
+                </EmptyTextBlock>
+              </EmptyBlock>
+            }
+          />
+        </RewardListBlock>
+      </RewardContentBlock>
     </RewardBlock>
   );
 };

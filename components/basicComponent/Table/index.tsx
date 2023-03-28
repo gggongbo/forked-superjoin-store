@@ -404,4 +404,5 @@ Table.defaultProps = {
   pageSizeList: defaultPageSizeList,
   type: '',
 };
+
 export default Table;

@@ -5,6 +5,7 @@ import { CategoryTag } from '@components/basicComponent/CategoryTag';
 import { SubRow } from '@components/basicComponent/Table/SubRow';
 import Icon from '@components/Icon';
 import { OptionType, SubRowProps } from '@constants/types/components';
+import { CurrentStoreUserType } from '@constants/types/redux';
 import { offerService } from '@services/offer';
 import {
   singletons,
@@ -12,7 +13,6 @@ import {
   gray as GrayColors,
   text as TextColors,
 } from '@styles/theme/colors';
-import { CurrentStoreUserType } from '~/constants/types/redux';
 
 const CatetgoryBlock = styled.div`
   display: flex;

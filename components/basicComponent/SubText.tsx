@@ -12,6 +12,7 @@ const SubTextBlock = styled.div<{ customStyle?: CSSProp }>`
 `;
 
 const SubTextTitle = styled.div<{
+  titleStyle?: CSSProp;
   titleSize?: number;
   color?: string;
   disabled?: boolean;
@@ -22,6 +23,7 @@ const SubTextTitle = styled.div<{
   color: ${({ disabled, theme }) => disabled && `${theme.colors.text[400]}60`};
   margin-left: 10px;
   text-align: center;
+  ${({ titleStyle }) => titleStyle};
 `;
 
 interface SubTextPropTypes {
@@ -31,10 +33,19 @@ interface SubTextPropTypes {
   color?: string;
   disabled?: boolean;
   customStyle?: CSSProp;
+  titleStyle?: CSSProp;
 }
 
 const SubText: FC<SubTextPropTypes> = function SubText(props) {
-  const { title, icon, titleSize = 14, color, disabled, customStyle } = props;
+  const {
+    title,
+    icon,
+    titleSize = 14,
+    color,
+    disabled,
+    customStyle,
+    titleStyle,
+  } = props;
 
   return (
     <SubTextBlock customStyle={customStyle}>
@@ -46,7 +57,12 @@ const SubText: FC<SubTextPropTypes> = function SubText(props) {
         colorIndex={icon?.colorIndex}
         opacity={icon?.opacity}
       />
-      <SubTextTitle titleSize={titleSize} color={color} disabled={disabled}>
+      <SubTextTitle
+        titleStyle={titleStyle}
+        titleSize={titleSize}
+        color={color}
+        disabled={disabled}
+      >
         {title}
       </SubTextTitle>
     </SubTextBlock>
@@ -58,6 +74,7 @@ SubText.defaultProps = {
   color: '',
   disabled: false,
   customStyle: {},
+  titleStyle: {},
 };
 
 export default SubText;
