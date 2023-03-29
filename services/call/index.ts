@@ -1,9 +1,14 @@
+import { httpsCallable } from 'firebase/functions';
+
 // TODO : missing permison 발생하므로 function 호출로 로직 변경
 // TODO : return Promise<DocumentData>, any 타입 => type 선언해서 변경
 // TODO : CallChatRoom 관련 요구사항 확인후 추가
+
+import { functions } from '@services/app';
+
 // TODO : 로직 테스트
-const createOffer = async (data: any, storeUserInfo: any) => {
-  console.log('create offer', data, storeUserInfo);
+const createStoreCall = async (data: any, storeUserInfo: any) => {
+  console.log('createCall', data, storeUserInfo);
   // if (!data || !storeUserInfo) return null;
   // // eslint-disable-next-line no-unused-vars
   // const { storeInfo, deadline, content, userNum, title } = data;
@@ -59,8 +64,8 @@ const createOffer = async (data: any, storeUserInfo: any) => {
   // });
 };
 
-const reopenOffer = async (callId: string, storeUserInfo: any) => {
-  console.log('reopen offer', callId, storeUserInfo);
+const reopenStoreCall = async (callId: string, storeUserInfo: any) => {
+  console.log('reopenStoreCall', callId, storeUserInfo);
   // const userId = storeUserInfo.user.uid;
   // const callDocRef = doc(collection(superjoinDb, 'calls', callId));
   // const now = new Date();
@@ -143,8 +148,8 @@ const reopenOffer = async (callId: string, storeUserInfo: any) => {
   // });
 };
 
-const cancelOffer = async (callId: string, storeUserInfo: any) => {
-  console.log('cancel offer', callId, storeUserInfo);
+const cancelStoreCall = async (callId: string, storeUserInfo: any) => {
+  console.log('cancelStoreCall', callId, storeUserInfo);
   // const userId = storeUserInfo.user.uid;
   // const now = new Date();
   // const callDocRef = doc(collection(superjoinDb, 'calls', callId));
@@ -202,8 +207,8 @@ const cancelOffer = async (callId: string, storeUserInfo: any) => {
   // });
 };
 
-const deleteOffer = async (callId: string, userId: string) => {
-  console.log('delete offer', callId, userId);
+const deleteStoreCall = async (callId: string, userId: string) => {
+  console.log('deleteStoreCall', callId, userId);
   // if (!callId) return null;
   // const callDocRef = doc(collection(superjoinDb, 'calls', callId));
   // const currentCallOfUserDocRef = doc(
@@ -234,50 +239,16 @@ const deleteOffer = async (callId: string, userId: string) => {
 // return userDoc.data();
 // };
 
-const getSendOffer = async (userId: any): Promise<any | null> => {
-  console.log('get sendOffer', userId);
-  // if (!userId) return null;
-  // const callQuery = query(
-  //   collection(superjoinDb, 'calls'),
-  //   where('callHostId', '==', userId),
-  // );
-  // const querySnapshot = await getDocs(callQuery);
-  // return querySnapshot.docs.map(async (callDoc: DocumentData) => {
-  //   const callData = callDoc.data();
-  //   const { deadline, createdAt, updatedAt, callMemberList } = callData;
-  //   const convertDeadline = firebaseTimestampToDate(deadline);
-  //   const callEndTime = Math.floor(
-  //     (convertDeadline.getTime() - new Date().getTime()) / 1000 / 60,
-  //   );
-  //   if (callMemberList.length !== 0) {
-  //     const userList = await Promise.all(
-  //       callMemberList.map(async (memberId: string) => {
-  //         return findUserById(memberId);
-  //       }),
-  //     );
-  //     return {
-  //       ...callData,
-  //       callMemberList: userList,
-  //       deadline: convertDeadline,
-  //       callSendTime: firebaseTimestampToDate(createdAt),
-  //       callEndTime,
-  //       callUpdateTime: firebaseTimestampToDate(updatedAt),
-  //     };
-  //   }
-  //   return {
-  //     ...callData,
-  //     deadline: convertDeadline,
-  //     callSendTime: firebaseTimestampToDate(createdAt),
-  //     callEndTime,
-  //     callUpdateTime: firebaseTimestampToDate(updatedAt),
-  //   };
-  // });
+// TODO: functions name change
+const getStoreCallList = async (userId: any): Promise<any | null> => {
+  const storeCallList = await httpsCallable(functions, 'getSendOffer')(userId);
+  return storeCallList?.data;
 };
 
-export const offerService = {
-  createOffer,
-  reopenOffer,
-  cancelOffer,
-  deleteOffer,
-  getSendOffer,
+export const callService = {
+  createStoreCall,
+  reopenStoreCall,
+  cancelStoreCall,
+  deleteStoreCall,
+  getStoreCallList,
 };

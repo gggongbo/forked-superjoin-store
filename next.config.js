@@ -6,7 +6,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/makeoffer',
+        destination: '/createCall',
         permanent: true,
       },
       {
@@ -20,9 +20,8 @@ const nextConfig = {
     return {
       '/': { page: '/' },
       '/login': { page: '/login' },
-      '/makeoffer': { page: '/makeoffer' },
-      '/offer': { page: '/offer' },
-      // '/calendar': { page: '/calendar' },Holding: calendar logic
+      '/createCall': { page: '/createCall' },
+      '/call': { page: '/call' },
       '/customer': { page: '/customer' },
       '/reward': { page: '/reward' },
       '/support': { page: '/support' },

@@ -1,19 +1,21 @@
 import { QueryFunction, useQuery } from 'react-query';
 
+// TODO queryKey type add
 const useReactQuery = <T>(
-  queryKey: string,
+  queryKey: any,
   queryFn: QueryFunction,
   onSuccess?: Function,
 ) => {
-  useQuery(queryKey, queryFn, {
-    refetchOnWindowFocus: false,
-    retry: 0,
+  const { data, isLoading, isError, isSuccess } = useQuery(queryKey, queryFn, {
     onSuccess(item: T) {
       onSuccess?.(item);
     },
-
-    refetchInterval: 1000 * 60 * 60,
+    onError(error: Error) {
+      console.log('react-query error : ', error);
+    },
   });
+
+  return { data, isLoading, isError, isSuccess };
 };
 
 export { useReactQuery };

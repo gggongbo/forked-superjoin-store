@@ -3,7 +3,7 @@ import {
   FilterIncludes,
 } from '@components/basicComponent/Table/Filter';
 
-const SendOffer = [
+const SendCall = [
   {
     accessor: 'title',
     Header: '제목',
@@ -42,7 +42,7 @@ const SendOffer = [
   },
 ];
 
-const ReceiveOffer = [
+const ReceiveCall = [
   {
     accessor: 'title',
     Header: '제목',
@@ -150,4 +150,4 @@ const ExpectedCustomer = [
   },
 ];
 
-export { SendOffer, ReceiveOffer, ConfirmedCustomer, ExpectedCustomer };
+export { SendCall, ReceiveCall, ConfirmedCustomer, ExpectedCustomer };
