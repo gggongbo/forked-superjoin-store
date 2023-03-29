@@ -35,6 +35,5 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 export default withAuthUser({
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-  whenAuthed: AuthAction.RENDER,
   // @ts-ignore
 })(MyApp);

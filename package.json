@@ -1,6 +1,6 @@
 {
-  "name": "superjoin-business-client",
-  "version": "0.1.0",
+  "name": "superjoin-store",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "cp env .env && next dev",
@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
-    "deploy": "firebase deploy",
-    "emulators": "cd functions && yarn serve"
+    "deploy-first": "next lint && next build && firebase experiments:enable webframeworks && firebase init hosting && firebase deploy",
+    "deploy": "next lint && next build && firebase deploy"
   },
   "engines": {
     "node": "18"

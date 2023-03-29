@@ -32,7 +32,8 @@ const ListBox: FC<ListBoxPropTypes> = function ListBox(props) {
     if (!data) return null;
     return data.map((item, index) => {
       return (
-        <ListItemBlock customStyle={customStyle}>
+        // eslint-disable-next-line react/no-array-index-key
+        <ListItemBlock key={`${index}${item}`} customStyle={customStyle}>
           {renderItem({ item, index })}
         </ListItemBlock>
       );

@@ -19,7 +19,7 @@ const NavbarBlock = styled.div<{ selectedMenu?: string }>`
 
 const SideNavbar: FC = function SideNavbar() {
   const router = useRouter();
-  const [selectedRouter, setSelectedRouter] = useState<string>(''); // TODO: redux store로 관리
+  const [selectedRouter, setSelectedRouter] = useState<string>('');
 
   useEffect(() => {
     const currentPage = router.pathname.split('/').pop();
