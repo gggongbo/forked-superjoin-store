@@ -45,7 +45,7 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
 
   const getSedndOffer = useCallback(async () => {
     const sendOfferData = await offerService.getSendOffer(
-      currentStoreUser.user.uid,
+      currentStoreUser?.user?.uid,
     );
     if (!sendOfferData) return;
     setInitData((prev: any) => {
@@ -54,7 +54,7 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
       }
       return prev;
     });
-  }, [currentStoreUser.user.uid]);
+  }, [currentStoreUser?.user?.uid]);
 
   useEffect(() => {
     getSedndOffer();
@@ -123,7 +123,7 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
             deleteButton: callDeleteButtonComponent(
               status,
               callId,
-              currentStoreUser.user.uid,
+              currentStoreUser?.user?.uid,
             ),
           };
         })

@@ -1,7 +1,6 @@
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  User,
 } from 'firebase/auth';
 import { init } from 'next-firebase-auth';
 
@@ -11,7 +10,7 @@ import { auth } from '@services/app';
 const initAuth = () => {
   init({
     authPageURL: '/login',
-    appPageURL: '/makeoffer',
+    appPageURL: '/',
     loginAPIEndpoint: '/api/auth/login',
     logoutAPIEndpoint: '/api/auth/logout',
     onLoginRequestError: err => {
@@ -92,8 +91,9 @@ const logOut = (): void => {
   auth.signOut();
 };
 
-const getCurrentUser = (): User | null => {
-  return auth.currentUser;
+const isCurrentUserAuthed = (): boolean => {
+  if (!auth?.currentUser) return false;
+  return true;
 };
 
 const updatePassword = async (email: string) => {
@@ -105,6 +105,6 @@ export const authService = {
   initAuth,
   login,
   logOut,
-  getCurrentUser,
+  isCurrentUserAuthed,
   updatePassword,
 };

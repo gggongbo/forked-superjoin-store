@@ -69,7 +69,23 @@ yarn export #nextjs로 빌드된 결과를 static html로 쪼개주어 웹서버
 
 ## **Deploy**
 
-- TODO
+1. 맨 처음 배포 방법(파이어베이스 세팅 과정 포함)
+
+```bash
+yarn deploy-first
+
+#fireabse init hosting 실행 시 setup 옵션 설정 방법
+=== Hosting Setup
+? Detected an existing Next.js codebase in the current directory, should we use this? `Yes`
+? In which region would you like to host server-side content, if applicable? `asia-east1 (Taiwan)`
+? Set up automatic builds and deploys with GitHub? `No`
+```
+
+2. 파이어베이스 세팅이 완료된 이후, 배포 방법
+
+```bash
+yarn deploy
+```
 
 ## **Code Managing**
 

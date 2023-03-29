@@ -189,7 +189,9 @@ const Login: NextPage = function Login() {
 
           dispatch(authActions.setAutoLogin(autoLogin));
           sessionStorage.setItem('sessionStart', String(true));
-          await router.push('/makeoffer', '/makeoffer', { shallow: true });
+          router.push('/makeoffer', undefined, {
+            shallow: true,
+          });
         } catch (error) {
           setLoginError(true);
         }
