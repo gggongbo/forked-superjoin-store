@@ -24,6 +24,7 @@ const TableBlock = styled.div`
   width: 100%;
 `;
 
+// TODO : getServerSideProps + react-query prefetch+dehydrate + serverside redux store approaching logic add
 const SendCall: NextPage<CallProps> = function SendCall(props) {
   const { columns, search, type } = props;
   const [loading, setLoading] = useState<boolean>(false);

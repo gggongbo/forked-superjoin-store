@@ -16,6 +16,7 @@ import queryClient from '@utils/queryUtils';
 
 authService.initAuth();
 
+// TODO-redux-wrapper 관련 로직 추가
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
