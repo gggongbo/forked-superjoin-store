@@ -1,14 +1,13 @@
-import { RewardItemType } from '../reward';
-
 import { SearchType } from '@constants/types/components';
+import { RewardItemType } from '@constants/types/reward';
 
-export interface OfferProps {
+export interface CallProps {
   columns: any;
   search?: SearchType;
   type?: string;
 }
 
-export type MakeOfferType = {
+export type CreateCallType = {
   title: string;
   category: string;
   description: string;

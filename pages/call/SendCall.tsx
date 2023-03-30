@@ -1,18 +1,20 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
-import { useMemo, useCallback, useState, useEffect } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
-import { OfferProps } from '@constants/types/offer';
+import { callKeys } from '@constants/queryKeys';
+import { CallProps } from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
+import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { offerService } from '@services/offer';
+import { callService } from '@services/call';
 import { ArrayToString } from '@utils/stringUtils';
 
-const SendOfferBlock = styled.main`
+const SendCallBlock = styled.main`
   display: flex;
   flex-direction: column;
 `;
@@ -22,7 +24,8 @@ const TableBlock = styled.div`
   width: 100%;
 `;
 
-const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
+// TODO : getServerSideProps + react-query prefetch+dehydrate + serverside redux store approaching logic add
+const SendCall: NextPage<CallProps> = function SendCall(props) {
   const { columns, search, type } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
@@ -43,22 +46,21 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
     renderRowSubComponent,
   } = useTableComponent();
 
-  const getSedndOffer = useCallback(async () => {
-    const sendOfferData = await offerService.getSendOffer(
-      currentStoreUser?.user?.uid,
-    );
-    if (!sendOfferData) return;
+  const fetchSendCall = useCallback((callData: any) => {
+    if (!callData) return;
     setInitData((prev: any) => {
-      if (ArrayToString(prev) !== ArrayToString(sendOfferData)) {
-        return sendOfferData;
+      if (ArrayToString(prev) !== ArrayToString(callData)) {
+        return callData;
       }
       return prev;
     });
-  }, [currentStoreUser?.user?.uid]);
+  }, []);
 
-  useEffect(() => {
-    getSedndOffer();
-  }, [getSedndOffer]);
+  useReactQuery<any>(
+    callKeys.getStoreCallList(currentStoreUser?.user?.uid),
+    () => callService.getStoreCallList(currentStoreUser?.user?.uid),
+    (resultData: any) => fetchSendCall(resultData),
+  );
 
   // const initData = useMemo(
   //   () => [
@@ -164,7 +166,7 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
   );
 
   return (
-    <SendOfferBlock>
+    <SendCallBlock>
       {!initData ? null : (
         <TableBlock>
           <Table
@@ -180,13 +182,13 @@ const SendOffer: NextPage<OfferProps> = function SendOffer(props) {
           />
         </TableBlock>
       )}
-    </SendOfferBlock>
+    </SendCallBlock>
   );
 };
 
-SendOffer.defaultProps = {
+SendCall.defaultProps = {
   search: { type: '', value: '' },
   type: '',
 };
 
-export default SendOffer;
+export default SendCall;

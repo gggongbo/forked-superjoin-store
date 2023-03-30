@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app';
 import { withAuthUser, AuthAction } from 'next-firebase-auth';
-import { QueryClientProvider } from 'react-query';
+import { Hydrate, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
@@ -16,17 +16,20 @@ import queryClient from '@utils/queryUtils';
 
 authService.initAuth();
 
+// TODO-redux-wrapper 관련 로직 추가
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider theme={theme}>
-            <Layout>
-              {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
+          <Hydrate state={pageProps.dehydratedState}>
+            <ThemeProvider theme={theme}>
+              <Layout>
+                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                <Component {...pageProps} />
+              </Layout>
+            </ThemeProvider>
+          </Hydrate>
         </QueryClientProvider>
       </PersistGate>
     </Provider>

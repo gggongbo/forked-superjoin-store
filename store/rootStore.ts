@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
-import logger from 'redux-logger';
 import {
   persistStore,
   persistReducer,
@@ -32,6 +31,7 @@ const authPersistConfig = {
   blacklist: [],
 };
 
+// TODO-redux-wrapper 관련 로직 추가
 const appReducer = combineReducers({
   auth: persistReducer(authPersistConfig, auth),
   storeUser: persistReducer(storeUserPersistConfig, storeUser),
@@ -51,7 +51,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(logger),
+    }),
 });
 
 export const persistor = persistStore(store);

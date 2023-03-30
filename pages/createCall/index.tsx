@@ -11,12 +11,12 @@ import InputText from '@components/basicComponent/InputText';
 import SelectBox from '@components/basicComponent/Selectbox';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import { categoryList } from '@constants/categoryList';
-import type { MakeOfferType } from '@constants/types/offer';
+import type { CreateCallType } from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { RewardItemType } from '@constants/types/reward';
-import { offerService } from '@services/offer';
+import { callService } from '@services/call';
 
-const MakeOfferBlock = styled.main`
+const CreateCallBlock = styled.main`
   display: flex;
   flex-direction: column;
   padding: ${({ theme }) => theme.componentSizes.pagePadding}px;
@@ -57,7 +57,7 @@ const buttonStyle = css`
   width: 50%;
 `;
 
-const MakeOffer: NextPage = function MakeOffer() {
+const CreateCall: NextPage = function CreateCall() {
   const router = useRouter();
   const email = useSelector<ReduxStoreType, string | null>(
     ({ auth }) => auth?.currentUser?.email,
@@ -83,7 +83,7 @@ const MakeOffer: NextPage = function MakeOffer() {
       !reward
     )
       return;
-    const data: MakeOfferType = {
+    const data: CreateCallType = {
       title,
       category,
       description,
@@ -92,9 +92,9 @@ const MakeOffer: NextPage = function MakeOffer() {
       reward,
       email,
     };
-    offerService
-      .createOffer(data, currentStoreUser)
-      .then(() => router.replace('/offer', '/offer', { shallow: true }));
+    callService
+      .createStoreCall(data, currentStoreUser)
+      .then(() => router.replace('/call', undefined, { shallow: true }));
   };
 
   // TODO: dummy => fetch
@@ -111,7 +111,7 @@ const MakeOffer: NextPage = function MakeOffer() {
   );
 
   return (
-    <MakeOfferBlock>
+    <CreateCallBlock>
       <Header title="방문 제안" />
       <ContentBlock>
         <VerticalSubText
@@ -215,8 +215,8 @@ const MakeOffer: NextPage = function MakeOffer() {
           customStyle={buttonStyle}
         />
       </ButtonBlock>
-    </MakeOfferBlock>
+    </CreateCallBlock>
   );
 };
 
-export default MakeOffer;
+export default CreateCall;

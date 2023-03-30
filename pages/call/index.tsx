@@ -2,8 +2,8 @@ import type { NextPage } from 'next';
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
-import ReceiveOffer from './ReceiveOffer';
-import SendOffer from './SendOffer';
+import ReceiveCall from './ReceiveCall';
+import SendCall from './SendCall';
 
 import Divider from '@components/basicComponent/Divider';
 import Header from '@components/basicComponent/Header';
@@ -18,7 +18,7 @@ const optionList = [
   { name: '제안 보낸 사람', value: 'callSendUser' },
 ];
 
-const OfferBlock = styled.main`
+const CallBlock = styled.main`
   min-width: ${({ theme }) => theme.componentSizes.table.width}px;
   display: flex;
   flex-direction: column;
@@ -31,15 +31,16 @@ const HeaderBlock = styled.div`
   align-items: center;
 `;
 
-const HeaderText = styled.div<{ offerType: string; defaultValue: string }>`
+const HeaderText = styled.div<{ callType: string; defaultValue: string }>`
   display: flex;
   font-size: 24px;
   letter-spacing: -0.55px;
-  font-weight: ${props => props.offerType === props.defaultValue && 500};
-  color: ${props =>
-    props.offerType === props.defaultValue
-      ? props.theme.colors.text[600]
-      : props.theme.colors.text[200]};
+  font-weight: ${({ callType, defaultValue }) =>
+    callType === defaultValue && 500};
+  color: ${({ theme, callType, defaultValue }) =>
+    callType === defaultValue
+      ? theme.colors.text[600]
+      : theme.colors.text[200]};
 `;
 
 const HeaderDivider = styled(Divider)`
@@ -55,14 +56,14 @@ const HeaderRightBlock = styled.div`
   justify-content: flex-end;
 `;
 
-const Offer: NextPage = function Offer() {
-  const [offerType, setOfferType] = useState<'send' | 'receive'>('send');
+const Call: NextPage = function Call() {
+  const [callType, setCallType] = useState<'send' | 'receive'>('send');
   const [input, setInput] = useState<SearchType>();
   const [search, setSearch] = useState<SearchType>();
 
   useEffect(() => {
     setSearch(undefined);
-  }, [offerType]);
+  }, [callType]);
 
   const handleInputChange = useCallback((e: any) => {
     setInput(e.target.valueObject);
@@ -72,8 +73,8 @@ const Offer: NextPage = function Offer() {
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setOfferType('send')}
-          offerType={offerType}
+          onClick={() => setCallType('send')}
+          callType={callType}
           defaultValue="send"
         >
           보낸 제안 관리
@@ -81,12 +82,12 @@ const Offer: NextPage = function Offer() {
         <HeaderDivider isVertical />
       </HeaderBlock>
     );
-  }, [offerType]);
+  }, [callType]);
 
   const headerRightComponent = useMemo(() => {
     return (
       <HeaderRightBlock>
-        {offerType === 'send' ? (
+        {callType === 'send' ? (
           <InputText
             width={280}
             placeholder="제목 검색"
@@ -115,44 +116,40 @@ const Offer: NextPage = function Offer() {
         )}
       </HeaderRightBlock>
     );
-  }, [offerType, handleInputChange, input]);
+  }, [callType, handleInputChange, input]);
 
   const headerTitleComponent = useMemo(() => {
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setOfferType('receive')}
-          offerType={offerType}
+          onClick={() => setCallType('receive')}
+          callType={callType}
           defaultValue="receive"
         >
           받은 제안 관리
         </HeaderText>
       </HeaderBlock>
     );
-  }, [offerType]);
+  }, [callType]);
 
   return (
-    <OfferBlock>
+    <CallBlock>
       <Header
         titleComponent={headerTitleComponent}
         leftComponent={headerLeftComponent}
         rightComponent={headerRightComponent}
       />
-      {offerType === 'send' ? (
-        <SendOffer
-          columns={Columns.SendOffer}
-          search={search}
-          type={offerType}
-        />
+      {callType === 'send' ? (
+        <SendCall columns={Columns.SendCall} search={search} type={callType} />
       ) : (
-        <ReceiveOffer
-          columns={Columns.ReceiveOffer}
+        <ReceiveCall
+          columns={Columns.ReceiveCall}
           search={search}
-          type={offerType}
+          type={callType}
         />
       )}
-    </OfferBlock>
+    </CallBlock>
   );
 };
 
-export default Offer;
+export default Call;

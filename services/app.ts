@@ -38,6 +38,6 @@ const businessApp = getApp('business');
 const db = getFirestore(app);
 const businessDb = getFirestore(businessApp);
 const auth = getAuth(app);
-const functions = getFunctions(app);
+const functions = getFunctions(app, 'asia-northeast2');
 
 export { db, functions, auth, businessDb };

@@ -5,10 +5,10 @@ import { useEffect, useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
-import { OfferProps } from '@constants/types/offer';
+import { CallProps } from '@constants/types/call';
 import { useTableComponent } from '@hooks/useTableComponent';
 
-const RecieveOfferBlock = styled.main`
+const RecieveCallBlock = styled.main`
   display: flex;
   flex-direction: column;
 `;
@@ -18,7 +18,7 @@ const TableBlock = styled.main`
   width: 100%;
 `;
 
-const ReceiveOffer: NextPage<OfferProps> = function ReceiveOffer(props) {
+const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
   const { columns, search, type } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
@@ -144,7 +144,7 @@ const ReceiveOffer: NextPage<OfferProps> = function ReceiveOffer(props) {
   );
 
   return (
-    <RecieveOfferBlock>
+    <RecieveCallBlock>
       {isMounted && (
         <TableBlock>
           <Table
@@ -160,8 +160,8 @@ const ReceiveOffer: NextPage<OfferProps> = function ReceiveOffer(props) {
           />
         </TableBlock>
       )}
-    </RecieveOfferBlock>
+    </RecieveCallBlock>
   );
 };
 
-export default ReceiveOffer;
+export default ReceiveCall;

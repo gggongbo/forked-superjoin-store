@@ -6,7 +6,7 @@ import { SubRow } from '@components/basicComponent/Table/SubRow';
 import Icon from '@components/Icon';
 import { OptionType, SubRowProps } from '@constants/types/components';
 import { CurrentStoreUserType } from '@constants/types/redux';
-import { offerService } from '@services/offer';
+import { callService } from '@services/call';
 import {
   singletons,
   green as GreenColors,
@@ -230,7 +230,7 @@ const useTableComponent = () => {
           backgroundColor={backgroundColor}
           color={color}
           onClick={async () => {
-            await offerService.cancelOffer(callId, currentStoreUser);
+            await callService.cancelStoreCall(callId, currentStoreUser);
             alert('제안이 취소 되었습니다.');
           }}
         >
@@ -250,7 +250,7 @@ const useTableComponent = () => {
         <DeleteButtonBlock
           disabled={disabled}
           onClick={async () => {
-            await offerService.deleteOffer(callId, userId);
+            await callService.deleteStoreCall(callId, userId);
             alert('제안이 삭제 되었습니다.');
           }}
         >

@@ -189,9 +189,10 @@ const Login: NextPage = function Login() {
 
           dispatch(authActions.setAutoLogin(autoLogin));
           sessionStorage.setItem('sessionStart', String(true));
-          router.push('/makeoffer', undefined, {
+          router.replace('/createCall', undefined, {
             shallow: true,
           });
+          router.reload();
         } catch (error) {
           setLoginError(true);
         }

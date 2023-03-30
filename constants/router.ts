@@ -1,8 +1,7 @@
 const router = {
   Login: '/login',
-  MakeOffer: '/makeoffer',
-  Offer: '/offer',
-  //   Calendar: '/calendar', Holding: calendar logic
+  CreateCall: '/createCall',
+  Call: '/call',
   Customer: '/customer',
   Reward: '/reward',
   Support: '/support',

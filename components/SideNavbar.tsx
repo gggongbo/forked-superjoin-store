@@ -31,13 +31,13 @@ const SideNavbar: FC = function SideNavbar() {
       <SubTextLink
         title="방문 제안 (함께해요)"
         icon="UserNow"
-        routerName={routerName.MakeOffer}
+        routerName={routerName.CreateCall}
         selectedRouter={selectedRouter}
       />
       <SubTextLink
         title="제안 관리"
         icon="Offer"
-        routerName={routerName.Offer}
+        routerName={routerName.Call}
         selectedRouter={selectedRouter}
       />
       <SubTextLink
