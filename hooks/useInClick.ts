@@ -1,14 +1,14 @@
 import { useState, useEffect, RefObject } from 'react';
 
 const useInClick = (refObject: RefObject<HTMLElement>) => {
-  const [inClicked, setInClikced] = useState(false);
+  const [inClicked, setInClicked] = useState(false);
 
   useEffect(() => {
     const handleInsideClick = (event: Event) => {
       if (!event.target) return;
 
       if (!refObject.current?.contains(event.target as HTMLElement)) {
-        setInClikced(false);
+        setInClicked(false);
       }
     };
     document.addEventListener('click', handleInsideClick);
@@ -18,7 +18,7 @@ const useInClick = (refObject: RefObject<HTMLElement>) => {
       document.removeEventListener('touchstart', handleInsideClick);
     };
   }, [refObject]);
-  return { inClicked, setInClikced };
+  return { inClicked, setInClicked };
 };
 
 export { useInClick };

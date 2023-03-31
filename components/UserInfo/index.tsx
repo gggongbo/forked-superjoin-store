@@ -9,6 +9,7 @@ import { CurrentUserType, ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';
 import { useInClick } from '@hooks/useInClick';
 import { authService } from '@services/auth';
+import { storeUserService } from '@services/storeUser';
 import { persistor } from '@store/rootStore';
 
 const UserInfoBlock = styled.div`
@@ -84,7 +85,7 @@ const UserInfo: FC = function UserInfo() {
   const userImage = currentUser?.avatar || null;
   const [contentHeight, setContentHeight] = useState<number>(0);
   const contentRef = useRef(null);
-  const { inClicked, setInClikced } = useInClick(contentRef);
+  const { inClicked, setInClicked } = useInClick(contentRef);
   const confirm = useConfirm();
 
   useLayoutEffect(() => {
@@ -97,10 +98,12 @@ const UserInfo: FC = function UserInfo() {
   const onLogout = useCallback(() => {
     persistor.purge().then(() => {
       sessionStorage.clear();
-      authService.logOut();
-      router.reload();
+      storeUserService
+        .resetPushToken(currentUser.id)
+        .finally(() => authService.logOut())
+        .finally(() => router.reload());
     });
-  }, [router]);
+  }, [currentUser.id, router]);
 
   const onUpdatePassword = useCallback(() => {
     if (!userEmail) return;
@@ -115,7 +118,7 @@ const UserInfo: FC = function UserInfo() {
   }, [confirm, userEmail]);
 
   return (
-    <UserInfoBlock onClick={() => setInClikced(prev => !prev)} ref={contentRef}>
+    <UserInfoBlock onClick={() => setInClicked(prev => !prev)} ref={contentRef}>
       <UserImage userImage={userImage} />
       <UserEmail>{userEmail}</UserEmail>
       <IconBlock inClicked={inClicked}>

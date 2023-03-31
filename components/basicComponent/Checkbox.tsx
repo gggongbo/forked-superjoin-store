@@ -92,7 +92,7 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
     (string | number)[]
   >([]);
   const checkboxRef = useRef(null);
-  const { inClicked, setInClikced } = useInClick(checkboxRef);
+  const { inClicked, setInClicked } = useInClick(checkboxRef);
   const [checkboxPosition, setCheckboxPosition] = useState({
     width: 0,
     height: 0,
@@ -108,9 +108,9 @@ const Checkbox: FC<CheckboxProps> = function Checkbox(props) {
   const handleOpenCheckBox = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      setInClikced(true);
+      setInClicked(true);
     },
-    [setInClikced],
+    [setInClicked],
   );
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

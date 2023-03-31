@@ -7,9 +7,11 @@ import styled from 'styled-components';
 import SideNavbar from './SideNavbar';
 import TopNavbar from './TopNavbar';
 
-import { ReduxStoreType } from '@constants/types/redux';
+import { ReduxStoreType, CurrentUserType } from '@constants/types/redux';
+import { usePushNotification } from '@hooks/usePushNotification';
 import { useWindowSize } from '@hooks/useWindowSize';
 import { authService } from '@services/auth';
+import { storeUserService } from '@services/storeUser';
 import { persistor } from '@store/rootStore';
 
 interface LayoutProps {
@@ -48,10 +50,12 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
   const { children } = props;
   // eslint-disable-next-line no-undef
   const { type } = children as JSX.Element;
-  const autoLogin = useSelector<ReduxStoreType, boolean>(
-    ({ auth }) => auth.autoLogin,
-  );
+  const { autoLogin, currentUser } = useSelector<
+    ReduxStoreType,
+    { autoLogin: boolean; currentUser: CurrentUserType }
+  >(({ auth }) => auth);
   const { windowSize } = useWindowSize();
+  const { getToken } = usePushNotification();
 
   useLayoutEffect(() => {
     const sessionStart = Boolean(sessionStorage.getItem('sessionStart'));
@@ -62,6 +66,19 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
       });
     }
   }, [autoLogin]);
+
+  useLayoutEffect(() => {
+    (async () => {
+      if (!currentUser?.id) return;
+      const token = await getToken();
+      if (token) {
+        storeUserService.updatePushToken(currentUser.id, token);
+        return;
+      }
+      // TODO: push notification permission 허용해야 한다는 안내 표시
+      console.log('push notification permission 없어영');
+    })();
+  }, [currentUser, getToken]);
 
   return (
     <LayoutBlock>
