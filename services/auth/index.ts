@@ -87,8 +87,8 @@ const login = async (
   return null;
 };
 
-const logOut = (): void => {
-  auth.signOut();
+const logOut = (): Promise<void> => {
+  return auth.signOut();
 };
 
 const isCurrentUserAuthed = (): boolean => {

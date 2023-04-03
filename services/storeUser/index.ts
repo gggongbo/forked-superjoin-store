@@ -1,4 +1,4 @@
-import { doc, DocumentData, getDoc } from 'firebase/firestore';
+import { doc, DocumentData, getDoc, setDoc } from 'firebase/firestore';
 
 import { db } from '@services/app';
 
@@ -11,6 +11,24 @@ const findStoreUserInfo = async (
   return storeDoc.data() ?? null;
 };
 
+const updatePushToken = async (userId: string, token: string) => {
+  return setDoc(
+    doc(db, 'account', userId),
+    { pushToken: token },
+    { merge: true },
+  );
+};
+
+const resetPushToken = async (userId: string) => {
+  return setDoc(
+    doc(db, 'account', userId),
+    { pushToken: null },
+    { merge: true },
+  );
+};
+
 export const storeUserService = {
   findStoreUserInfo,
+  updatePushToken,
+  resetPushToken,
 };

@@ -169,7 +169,7 @@ const SelectBox: FC<SelectBoxProps> = function SelectBox(props) {
     onChange,
   } = props;
   const selectRef = useRef(null);
-  const { inClicked, setInClikced } = useInClick(selectRef);
+  const { inClicked, setInClicked } = useInClick(selectRef);
   const [selectOption, setSelectOption] = useState<number | string>(
     defaultOption?.value || '',
   );
@@ -185,16 +185,16 @@ const SelectBox: FC<SelectBoxProps> = function SelectBox(props) {
   const handleOpenSelectBox = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-      setInClikced(prev => !prev);
+      setInClicked(prev => !prev);
     },
-    [setInClikced],
+    [setInClicked],
   );
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     e.preventDefault();
     // if (!e.code) return;
     // if (e.code === 'Enter' || e.code === 'Space') {
-    //   setInClikced(true);
+    //   setInClicked(true);
     // }
   }, []);
 
@@ -202,13 +202,13 @@ const SelectBox: FC<SelectBoxProps> = function SelectBox(props) {
     (e: any, option?: OptionType) => {
       const optionValue = option?.value || e.target.value;
       setSelectOption(optionValue);
-      setInClikced(false);
+      setInClicked(false);
       const { target } = e;
       target.selectValue = optionValue;
       const chengedEvent = { ...e, target };
       onChange?.(chengedEvent);
     },
-    [onChange, setInClikced],
+    [onChange, setInClicked],
   );
 
   const iconSize = useMemo(() => {
