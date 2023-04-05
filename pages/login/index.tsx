@@ -10,6 +10,7 @@ import InputText from '@components/basicComponent/InputText';
 import Oval from '@components/basicComponent/Oval';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import Icon from '@components/Icon';
+import { CurrentStoreUserType } from '@constants/types/redux';
 import loginBg from '@resources/svg/img/img-login-bg.svg';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';
 import logoTitle from '@resources/svg/logo/logo-title.svg';
@@ -185,7 +186,11 @@ const Login: NextPage = function Login() {
           );
           if (currentUser) dispatch(authActions.setCurrentUser(currentUser));
           if (storeUserInfo)
-            dispatch(storeUserActions.setCurrentStoreUser(storeUserInfo));
+            dispatch(
+              storeUserActions.setCurrentStoreUser(
+                storeUserInfo as CurrentStoreUserType,
+              ),
+            );
 
           dispatch(authActions.setAutoLogin(autoLogin));
           sessionStorage.setItem('sessionStart', String(true));

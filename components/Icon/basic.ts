@@ -28,6 +28,10 @@ export { default as UserList } from '@resources/svg/icon/ic-user-list.svg';
 export { default as UserNow } from '@resources/svg/icon/ic-user-now.svg';
 export { default as Users } from '@resources/svg/icon/ic-users.svg';
 export { default as Close } from '@resources/svg/icon/ic-close.svg';
+export { default as Bell } from '@resources/svg/icon/ic-bell.svg';
+export { default as BellSurface } from '@resources/svg/icon/ic-bell-surface.svg';
+export { default as UserV } from '@resources/svg/icon/ic-user-v.svg';
+
 export { default as MarkPointGray } from '@resources/svg/icon/mark-point-gray.svg';
 export { default as MarkPointYellow } from '@resources/svg/icon/mark-point-yellow.svg';
 export { default as MarkQ } from '@resources/svg/icon/mark-q.svg';

@@ -93,7 +93,9 @@ const Select = styled.select<{
   background-color: ${({ theme }) =>
     `${theme.colors.singletons.defaultBackground}00`};
   color: ${({ value, placeholderValue, theme }) =>
-    !value && placeholderValue
+    ((typeof value !== 'number' && !value) ||
+      (typeof value === 'number' && value < -1)) &&
+    placeholderValue
       ? placeholderTextColor
       : theme.colors.singletons.black};
 `;

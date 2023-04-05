@@ -5,25 +5,25 @@ import {
 
 const SendCall = [
   {
-    accessor: 'title',
+    accessor: 'callTitle',
     Header: '제목',
     disableSortBy: true,
   },
   {
     accessor: 'callSendTime',
     Header: '제안 보낸 날짜 / 시간',
-    width: 240,
+    width: 250,
   },
   {
     accessor: 'callEndTime',
     Header: '제안 마감 시간',
-    width: 160,
+    width: 150,
     disableSortBy: true,
   },
   {
     accessor: 'callStatus',
     Header: '제안 상태',
-    width: 200,
+    width: 150,
     Filter: SelectColumnFilter,
     filter: FilterIncludes,
     disableSortBy: true,
@@ -31,20 +31,20 @@ const SendCall = [
   {
     accessor: 'callButton',
     Header: '',
-    width: 120,
+    width: 200,
     disableSortBy: true,
   },
   {
     accessor: 'deleteButton',
     Header: '',
-    width: 60,
+    width: 70,
     disableSortBy: true,
   },
 ];
 
 const ReceiveCall = [
   {
-    accessor: 'title',
+    accessor: 'callTitle',
     Header: '제목',
     disableSortBy: true,
   },
@@ -83,48 +83,60 @@ const ReceiveCall = [
   },
 ];
 
-const ConfirmedCustomer = [
+const VisitedCustomer = [
   {
-    accessor: 'id',
+    accessor: 'customerId',
     Header: 'ID',
   },
   {
-    accessor: 'nickname',
+    accessor: 'customerName',
     Header: '닉네임',
-    width: 350,
+    width: 250,
     disableSortBy: true,
   },
   {
-    accessor: 'callCount',
+    accessor: 'customerNumOfConfirm',
     Header: '제안 보낸 횟수',
     width: 200,
     disableSortBy: true,
   },
   {
-    accessor: 'confirmCount',
+    accessor: 'customerNumOfCancel',
+    Header: '방문 취소 횟수',
+    width: 200,
+    disableSortBy: true,
+  },
+  {
+    accessor: 'customerNumOfVisit',
     Header: '방문 확정 횟수',
     width: 200,
     disableSortBy: true,
   },
   {
-    accessor: 'rewardStatus',
-    Header: '지급 리워드',
-    width: 200,
+    accessor: 'customerNumOfReward',
+    Header: '지급 리워드 횟수',
+    width: 250,
     Filter: SelectColumnFilter,
     filter: FilterIncludes,
     disableSortBy: true,
   },
 ];
 
-const ExpectedCustomer = [
+const ReservedCustomer = [
   {
-    accessor: 'id',
+    accessor: 'customerId',
     Header: 'ID',
   },
   {
-    accessor: 'nickname',
+    accessor: 'customerName',
     Header: '닉네임',
-    width: 350,
+    width: 250,
+    disableSortBy: true,
+  },
+  {
+    accessor: 'callTitle',
+    Header: '제안 제목',
+    width: 250,
     disableSortBy: true,
   },
   {
@@ -137,17 +149,17 @@ const ExpectedCustomer = [
   {
     accessor: 'reward',
     Header: '지급 예정 리워드',
-    width: 175,
+    width: 200,
     disableSortBy: true,
   },
   {
     accessor: 'visit',
     Header: '방문 확인',
-    width: 175,
+    width: 200,
     tooltip:
       '확인을 누르시면 리워드가 제공되므로 고객이 방문하여 결제할 때 확인을 눌러주세요!',
     disableSortBy: true,
   },
 ];
 
-export { SendCall, ReceiveCall, ConfirmedCustomer, ExpectedCustomer };
+export { SendCall, ReceiveCall, VisitedCustomer, ReservedCustomer };

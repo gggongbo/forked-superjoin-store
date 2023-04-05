@@ -1,3 +1,4 @@
+import { FirebaseTimestamp } from '@constants/types/common';
 import { SearchType } from '@constants/types/components';
 
 export interface RewardProps {
@@ -5,7 +6,21 @@ export interface RewardProps {
   columns: any;
 }
 
+export type RewardInfo = {
+  id: string;
+  name: string;
+};
+
+export type RewardType = {
+  id: string;
+  name: string;
+  storeId: string;
+  createdAt: Date | FirebaseTimestamp;
+  updatedAt: Date | FirebaseTimestamp;
+  deleted: boolean;
+};
+
 export type RewardItemType = {
-  item: { id: string | number; value: string };
+  item: RewardInfo;
   index: number;
 };

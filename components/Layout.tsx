@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import SideNavbar from './SideNavbar';
 import TopNavbar from './TopNavbar';
 
+import NotificationList from '@components/UserNotification/NotificationList';
 import { ReduxStoreType, CurrentUserType } from '@constants/types/redux';
 import { usePushNotification } from '@hooks/usePushNotification';
 import { useWindowSize } from '@hooks/useWindowSize';
@@ -93,6 +94,7 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
           <ContentBlock height={windowSize.height}>
             <SideNavbar />
             <MainContentBlock>{children}</MainContentBlock>
+            <NotificationList />
           </ContentBlock>
         </MainBlock>
       ) : (

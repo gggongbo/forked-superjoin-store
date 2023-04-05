@@ -1,254 +1,116 @@
 import { httpsCallable } from 'firebase/functions';
 
-// TODO : missing permison 발생하므로 function 호출로 로직 변경
 // TODO : return Promise<DocumentData>, any 타입 => type 선언해서 변경
-// TODO : CallChatRoom 관련 요구사항 확인후 추가
-
+import {
+  ConfirmCallParamType,
+  CreateCallParamType,
+  RegisterCommentCallParamType,
+  AcceptRequestCallParamType,
+  RejectRequestCallParamType,
+  CommentType,
+} from '@constants/types/call';
+import { FirebaseTimestamp, LocationType } from '@constants/types/common';
 import { functions } from '@services/app';
+import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
 // TODO : 로직 테스트
-const createStoreCall = async (data: any, storeUserInfo: any) => {
-  console.log('createCall', data, storeUserInfo);
-  // if (!data || !storeUserInfo) return null;
-  // // eslint-disable-next-line no-unused-vars
-  // const { storeInfo, deadline, content, userNum, title } = data;
-  // const { address, category, location, geohash, user, name, image } =
-  //   storeUserInfo;
-  // const now = new Date();
-  // const callDocRef = doc(collection(superjoinDb, 'calls'));
-  // const currentCallOfUserDocRef = doc(
-  //   collection(superjoinDb, 'currentCallOfUser', user.uid),
-  // );
-  // const callInfo = {
-  //   callId: callDocRef.id,
-  //   callHostId: user.uid,
-  //   callHost: {
-  //     userId: user.uid,
-  //     userName: name || '',
-  //     userPhoto: image,
-  //   },
-  //   deadline: deadline.getTime(),
-  //   viewedUserList: [user.uid],
-  //   callMemberList: [],
-  //   callMemberIdList: [],
-  //   commentList: [],
-  //   requestList: [],
-  //   address,
-  //   location,
-  //   geohash,
-  //   category,
-  //   maxNumOfUser: parseInt(userNum, 10),
-  //   status: 'proceeding', // ENUM으로 변경
-  //   updatedAt: now,
-  //   createdAt: now,
-  // };
-  // return runTransaction(superjoinDb, async (transaction: Transaction) => {
-  //   const currentCallOfUserDoc = await transaction.get(currentCallOfUserDocRef);
-  //   const currentCallOfUserData = currentCallOfUserDoc.data();
-  //   if (currentCallOfUserData?.callId) {
-  //     const currentCallDoc = await getDoc(
-  //       doc(superjoinDb, 'calls', currentCallOfUserData.callId),
-  //     );
-  //     const currentCallData = currentCallDoc.data();
-  //     if (currentCallData?.status === 'proceeding')
-  //       transaction.update(currentCallDoc.ref, {
-  //         status: 'expired',
-  //       });
-  //   }
-  //   transaction.set(callDocRef, callInfo);
-  //   transaction.set(
-  //     currentCallOfUserDocRef,
-  //     { callId: callInfo.callId, timestamp: now },
-  //     { merge: true },
-  //   );
-  // });
+const createCall = async (params: CreateCallParamType) => {
+  if (!params || !params.deadline) return;
+  await httpsCallable(functions, 'createCall')(params);
 };
 
-const reopenStoreCall = async (callId: string, storeUserInfo: any) => {
-  console.log('reopenStoreCall', callId, storeUserInfo);
-  // const userId = storeUserInfo.user.uid;
-  // const callDocRef = doc(collection(superjoinDb, 'calls', callId));
-  // const now = new Date();
-  // const currentCallOfUserDocRef = doc(
-  //   collection(superjoinDb, 'currentCallOfUser', userId),
-  // );
-  // return runTransaction(superjoinDb, async (transaction: Transaction) => {
-  //   try {
-  //     const callDoc = await transaction.get(callDocRef);
-  //     if (!callDoc.exists) Promise.reject(new Error('no call data'));
-  //     const currentCallOfUserDoc = await transaction.get(
-  //       currentCallOfUserDocRef,
-  //     );
-  //     const currentCallOfUserData = currentCallOfUserDoc.data();
-  //     if (currentCallOfUserData?.callId) {
-  //       const currentCallDocRef = doc(
-  //         collection(superjoinDb, 'calls', currentCallOfUserData.callId),
-  //       );
-  //       const currentCallDoc = await transaction.get(currentCallDocRef);
-  //       // if (currentCallDoc.exists) {
-  //       const {
-  //         status,
-  //         callMemberIdList,
-  //         callId: currentCallId,
-  //         callHostId: currentCallHost,
-  //       } = currentCallDoc.data() as any;
-  //       if (status === 'proceeding') {
-  //         const { callHostId, title } = callDoc.data() as any;
-  //         const callNotification = {
-  //           type: 'expiredCall',
-  //           userInfo: {
-  //             userId: currentCallHost,
-  //             name: storeUserInfo.name || '',
-  //             image: storeUserInfo.image,
-  //           },
-  //           callInfo: { callId, title },
-  //           timestamp: now,
-  //           deleted: false,
-  //           unread: true,
-  //         };
-  //         transaction.update(currentCallDocRef, { status: 'expired' });
-  //         callMemberIdList?.forEach((memberUserId: string) => {
-  //           const callNotificationsOfUserDocRef = doc(
-  //             collection(
-  //               doc(
-  //                 collection(
-  //                   superjoinDb,
-  //                   'callNotificationsOfUser',
-  //                   memberUserId,
-  //                 ),
-  //               ),
-  //               'callNotificationId',
-  //               `expiredCall@${currentCallId}${callHostId}}`,
-  //             ),
-  //           );
-  //           transaction.set(callNotificationsOfUserDocRef, callNotification, {
-  //             merge: true,
-  //           });
-  //         });
-  //       }
-  //     }
-  //     const callDocData = callDoc.data();
-  //     const deadline = firebaseTimestampToDate(callDocData?.deadline);
-  //     const newDeadline =
-  //       now.getTime() >= deadline.getTime() ? addHours(now, 1) : deadline;
-  //     transaction.set(
-  //       currentCallOfUserDocRef,
-  //       { callId, timestamp: now },
-  //       { merge: true },
-  //     );
-  //     transaction.update(callDocRef, {
-  //       status: 'proceeding',
-  //       deadline: newDeadline,
-  //       updatedAt: now,
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     // do nothing
-  //   }
-  // });
+const confirmCall = async (params: ConfirmCallParamType) => {
+  if (!params) return;
+  await httpsCallable(functions, 'updateCallConfirmed')(params);
 };
 
-const cancelStoreCall = async (callId: string, storeUserInfo: any) => {
-  console.log('cancelStoreCall', callId, storeUserInfo);
-  // const userId = storeUserInfo.user.uid;
-  // const now = new Date();
-  // const callDocRef = doc(collection(superjoinDb, 'calls', callId));
-  // const currentCallOfUserDocRef = doc(
-  //   collection(superjoinDb, 'currentCallOfUser', userId),
-  // );
-  // return runTransaction(superjoinDb, async (transaction: Transaction) => {
-  //   try {
-  //     const callDoc = await transaction.get(callDocRef);
-  //     const currentCallOfUserDoc = await transaction.get(
-  //       currentCallOfUserDocRef,
-  //     );
-  //     const currentCallOfUserData = currentCallOfUserDoc.data();
-  //     if (currentCallOfUserData?.callId === callId) {
-  //       transaction.set(
-  //         currentCallOfUserDocRef,
-  //         { callId: null, timestamp: null },
-  //         { merge: true },
-  //       );
-  //     }
-  //     const { callHostId, callMemberIdList, title } = callDoc.data() as any;
-  //     const callNotification = {
-  //       type: 'canceledCall',
-  //       userInfo: {
-  //         userId: callHostId,
-  //         name: storeUserInfo.name || '',
-  //         image: storeUserInfo.image,
-  //       },
-  //       callInfo: { callId, title },
-  //       timestamp: now,
-  //       deleted: false,
-  //       unread: true,
-  //     };
-  //     callMemberIdList?.forEach((memberUserId: string) => {
-  //       const callNotificationsOfUserDocRef = doc(
-  //         collection(
-  //           doc(
-  //             collection(superjoinDb, 'callNotificationsOfUser', memberUserId),
-  //           ),
-  //           'callNotificationId',
-  //           `canceledCall@${callId}${callHostId}}`,
-  //         ),
-  //       );
-  //       transaction.set(callNotificationsOfUserDocRef, callNotification, {
-  //         merge: true,
-  //       });
-  //     });
-  //   } catch (error) {
-  //     // do nothing
-  //   }
-  //   transaction.update(callDocRef, {
-  //     status: 'canceled',
-  //     updatedAt: now,
-  //   });
-  // });
+const cancelCall = async (callId: string) => {
+  if (!callId) return;
+  await httpsCallable(functions, 'cancelCall')(callId);
 };
 
-const deleteStoreCall = async (callId: string, userId: string) => {
-  console.log('deleteStoreCall', callId, userId);
-  // if (!callId) return null;
-  // const callDocRef = doc(collection(superjoinDb, 'calls', callId));
-  // const currentCallOfUserDocRef = doc(
-  //   collection(superjoinDb, 'currentCallOfUser', userId),
-  // );
-  // return runTransaction(superjoinDb, async (transaction: Transaction) => {
-  //   try {
-  //     const currentCallOfUserDoc = await transaction.get(
-  //       currentCallOfUserDocRef,
-  //     );
-  //     const currentCallOfUserData = currentCallOfUserDoc.data();
-  //     if (currentCallOfUserData?.callId === callId)
-  //       transaction.set(
-  //         currentCallOfUserDocRef,
-  //         { callId: null, timestamp: null },
-  //         { merge: true },
-  //       );
-  //   } catch (error) {
-  //     // do nothing
-  //   }
-  //   transaction.delete(callDocRef);
-  // });
+const deleteCall = async (callId: string) => {
+  if (!callId) return;
+  await httpsCallable(functions, 'deleteCall')(callId);
 };
 
-// const findUserById = async (userId: string) => {
-// const userRef = doc(collection(superjoinDb, 'users', userId));
-// const userDoc = await getDoc(userRef);
-// return userDoc.data();
-// };
+const acceptRequestCall = async (params: AcceptRequestCallParamType) => {
+  if (!params) return;
+  await httpsCallable(functions, 'acceptRequestCall')(params);
+};
 
-// TODO: functions name change
-const getStoreCallList = async (userId: any): Promise<any | null> => {
-  const storeCallList = await httpsCallable(functions, 'getSendOffer')(userId);
-  return storeCallList?.data;
+const rejectRequestCall = async (params: RejectRequestCallParamType) => {
+  if (!params) return;
+  await httpsCallable(functions, 'rejectRequestCall')(params);
+};
+
+const registerCommentCall = async (params: RegisterCommentCallParamType) => {
+  if (!params) return;
+  await httpsCallable(functions, 'registerCommentCall')(params);
+};
+
+const getSendCall = async (storeId: any): Promise<any | null> => {
+  const storeCallList: any = await httpsCallable(
+    functions,
+    'getSendCall',
+  )(storeId);
+  if (!storeCallList?.data) return null;
+  return storeCallList.data.map((callData: any) => {
+    return {
+      ...callData,
+      deadline: firebaseTimestampToDate(callData.deadline),
+      updatedAt: firebaseTimestampToDate(callData.updatedAt),
+      createdAt: firebaseTimestampToDate(callData.createdAt),
+    };
+  });
+};
+
+const getReceiveCall = async (params: LocationType): Promise<any | null> => {
+  if (!params) return null;
+
+  const storeCallList: any = await httpsCallable(
+    functions,
+    'getReceiveCall',
+  )({
+    ...params,
+    latitude: Number(params.latitude),
+    longitude: Number(params.longitude),
+  });
+  if (!storeCallList?.data) return null;
+  return storeCallList.data.map((callData: any) => {
+    return {
+      ...callData,
+      deadline: firebaseTimestampToDate(callData.deadline),
+      updatedAt: firebaseTimestampToDate(callData.updatedAt),
+      createdAt: firebaseTimestampToDate(callData.createdAt),
+      commentList:
+        callData.commentList?.length > 0
+          ? callData.commentList.map((comment: CommentType) => ({
+              ...comment,
+              createdAt: !comment.createdAt
+                ? undefined
+                : firebaseTimestampToDate(
+                    comment.createdAt as FirebaseTimestamp,
+                  ),
+              updatedAt: !comment.updatedAt
+                ? undefined
+                : firebaseTimestampToDate(
+                    comment.updatedAt as FirebaseTimestamp,
+                  ),
+            }))
+          : [],
+    };
+  });
 };
 
 export const callService = {
-  createStoreCall,
-  reopenStoreCall,
-  cancelStoreCall,
-  deleteStoreCall,
-  getStoreCallList,
+  createCall,
+  confirmCall,
+  cancelCall,
+  deleteCall,
+  acceptRequestCall,
+  rejectRequestCall,
+  registerCommentCall,
+  getSendCall,
+  getReceiveCall,
 };

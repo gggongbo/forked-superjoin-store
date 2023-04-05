@@ -23,7 +23,7 @@ const rootPersistConfig = {
 const storeUserPersistConfig = {
   key: 'storeUser',
   storage,
-  blacklist: [],
+  blacklist: ['notificationVisible', 'numOfNotification'],
 };
 const authPersistConfig = {
   key: 'auth',

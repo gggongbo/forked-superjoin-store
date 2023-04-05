@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import { useMemo, useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
@@ -11,12 +12,8 @@ import InputText from '@components/basicComponent/InputText';
 import SelectInputText from '@components/basicComponent/SelectInputText';
 import Icon from '@components/Icon';
 import * as Columns from '@constants/tableColumns';
+import { CallRouterType } from '@constants/types/call';
 import { SearchType } from '@constants/types/components';
-
-const optionList = [
-  { name: '제목', value: 'title' },
-  { name: '제안 보낸 사람', value: 'callSendUser' },
-];
 
 const CallBlock = styled.main`
   min-width: ${({ theme }) => theme.componentSizes.table.width}px;
@@ -56,8 +53,16 @@ const HeaderRightBlock = styled.div`
   justify-content: flex-end;
 `;
 
-const Call: NextPage = function Call() {
-  const [callType, setCallType] = useState<'send' | 'receive'>('send');
+const optionList = [
+  { name: '제목', value: 'title' },
+  { name: '제안 보낸 사람', value: 'callSendUser' },
+];
+
+const Call: NextPage<WithRouterProps> = function Call({ router: routerProps }) {
+  const { query } = routerProps as CallRouterType;
+  const [callType, setCallType] = useState<'send' | 'receive'>(
+    query?.callType || 'send',
+  );
   const [input, setInput] = useState<SearchType>();
   const [search, setSearch] = useState<SearchType>();
 
@@ -152,4 +157,4 @@ const Call: NextPage = function Call() {
   );
 };
 
-export default Call;
+export default withRouter(Call);

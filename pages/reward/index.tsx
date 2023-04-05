@@ -1,5 +1,7 @@
 import type { NextPage } from 'next';
-import { useCallback, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
 import RewardItem from './RewardItem';
@@ -8,8 +10,18 @@ import Button from '@components/basicComponent/Button';
 import Header from '@components/basicComponent/Header';
 import InputText from '@components/basicComponent/InputText';
 import ListBox from '@components/basicComponent/ListBox';
-import { RewardItemType } from '@constants/types/reward';
+import { rewardKeys } from '@constants/queryKeys';
+import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
+import {
+  RewardInfo,
+  RewardItemType,
+  RewardType,
+} from '@constants/types/reward';
+import { useConfirm } from '@hooks/useConfirm';
+import { useReactMutation } from '@hooks/useReactMutation';
+import { useReactQuery } from '@hooks/useReactQuery';
 import emptyImage from '@resources/svg/img/service-gift-gray.svg';
+import { rewardService } from '@services/reward';
 
 const RewardBlock = styled.main`
   display: flex;
@@ -87,31 +99,87 @@ const EmptyTextBlock = styled.div`
 `;
 
 const Reward: NextPage = function Reward() {
-  // eslint-disable-next-line no-unused-vars
-  const [newReward, setNewReward] = useState<string>();
+  const { confirm } = useConfirm();
+  const router = useRouter();
+  const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
+    ({ storeUser }) => storeUser?.currentStoreUser,
+  );
 
-  const renderRewardItem = useCallback(({ item }: RewardItemType) => {
-    if (!item) return null;
-    return (
-      <RewardItem
-        id={item.id}
-        value={item.value}
-        onUpdateClick={() => {}}
-        onDeleteClick={() => {}}
-      />
-    );
+  const [newReward, setNewReward] = useState<string>();
+  const [rewardList, setRewardList] = useState<RewardType[]>();
+  const [loading, setLoading] = useState<boolean>();
+
+  useEffect(() => {
+    if (!rewardList) setLoading(true);
+    if (rewardList) setLoading(false);
+  }, [rewardList]);
+
+  const { mutate: createMutate } = useReactMutation<string>(
+    rewardKeys.createReward,
+    rewardService.createReward,
+    () => {
+      router.reload();
+    },
+    () => {
+      alert('리워드를 추가하는 도중 오류가 발생하였습니다.');
+      router.reload();
+    },
+  );
+
+  const { mutate: updateMutate } = useReactMutation<RewardInfo>(
+    rewardKeys.updateReward,
+    rewardService.updateReward,
+    () => {
+      router.reload();
+    },
+    () => {
+      alert('리워드를 수정하는 도중 오류가 발생하였습니다.');
+      router.reload();
+    },
+  );
+
+  const { mutate: deleteMutate } = useReactMutation<string>(
+    rewardKeys.deleteReward,
+    rewardService.deleteReward,
+    () => {
+      router.reload();
+    },
+    () => {
+      alert('리워드를 삭제하는 도중 오류가 발생하였습니다.');
+      router.reload();
+    },
+  );
+
+  const fetchRewardList = useCallback((rewardData: RewardType[]) => {
+    if (!rewardData) return;
+    setRewardList(rewardData);
   }, []);
 
-  // TODO: dummy => fetch
-  const data = useMemo(
-    () => [
-      { id: 1, value: '음료수' },
-      { id: 2, value: '음료수2' },
-      { id: 3, value: '음료수3' },
-      { id: 4, value: '음료수4' },
-      { id: 5, value: '음료수5' },
-    ],
-    [],
+  useReactQuery<RewardType[]>(
+    rewardKeys.getRewardList,
+    () => rewardService.getRewardList(currentStoreUser.id),
+    (resultData: RewardType[]) => {
+      fetchRewardList(resultData);
+    },
+  );
+
+  const renderRewardItem = useCallback(
+    ({ item }: RewardItemType) => {
+      if (!item) return null;
+      return (
+        <RewardItem
+          id={item.id}
+          name={item.name}
+          onUpdateClick={(rewardInfo: RewardInfo) => {
+            updateMutate(rewardInfo);
+          }}
+          onDeleteClick={(rewardId: string) => {
+            confirm('리워드를 삭제하시겠습니까?', () => deleteMutate(rewardId));
+          }}
+        />
+      );
+    },
+    [confirm, deleteMutate, updateMutate],
   );
 
   return (
@@ -125,23 +193,34 @@ const Reward: NextPage = function Reward() {
             customStyle={inputStyle}
           />
         </InputTextBlock>
-        <InputButton width={90} text="추가" color="green" />
+        <InputButton
+          width={90}
+          text="추가"
+          color="green"
+          onClick={() => {
+            if (!newReward) return;
+            createMutate(newReward);
+          }}
+        />
       </RewardInputBlock>
       <RewardContentBlock>
         <TextBlock>리워드</TextBlock>
         <RewardListBlock>
-          <ListBox
-            data={data}
-            renderItem={renderRewardItem}
-            listEmptyComponent={
-              <EmptyBlock>
-                <EmptyImageBlock />
-                <EmptyTextBlock>
-                  제공할 리워드가 없습니다. 리워드를 추가해보세요!
-                </EmptyTextBlock>
-              </EmptyBlock>
-            }
-          />
+          {!!rewardList && (
+            <ListBox
+              data={rewardList}
+              loading={loading}
+              renderItem={renderRewardItem}
+              listEmptyComponent={
+                <EmptyBlock>
+                  <EmptyImageBlock />
+                  <EmptyTextBlock>
+                    제공할 리워드가 없습니다. 리워드를 추가해보세요!
+                  </EmptyTextBlock>
+                </EmptyBlock>
+              }
+            />
+          )}
         </RewardListBlock>
       </RewardContentBlock>
     </RewardBlock>

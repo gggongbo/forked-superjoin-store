@@ -1,12 +1,13 @@
+import Link from 'next/link';
 import { useCallback, useRef } from 'react';
 import styled, { css } from 'styled-components';
 
 import { CategoryTag } from '@components/basicComponent/CategoryTag';
 import { SubRow } from '@components/basicComponent/Table/SubRow';
 import Icon from '@components/Icon';
+import { CallStatusType, CommentType } from '@constants/types/call';
 import { OptionType, SubRowProps } from '@constants/types/components';
-import { CurrentStoreUserType } from '@constants/types/redux';
-import { callService } from '@services/call';
+import { RewardInfo } from '@constants/types/reward';
 import {
   singletons,
   green as GreenColors,
@@ -54,20 +55,59 @@ const CallEndTimeBlock = styled.div<{ disabled: boolean }>`
     disabled ? theme.colors.text[200] : theme.colors.text[600]};
 `;
 
-const CallButtonBlock = styled.button<{
-  backgroundColor?: string;
-  color?: string;
-}>`
+const CallButtonBlock = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+`;
+
+const ReCallButtonBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.singletons.black};
+  color: ${({ theme }) => theme.colors.singletons.white};
+  padding: 4px 12px;
+  line-height: 1.5;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 8px;
+`;
+
+const CancelButtonBlock = styled.button`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.gray[300]};
+  color: ${({ theme }) => theme.colors.singletons.black};
+  padding: 6px 12px 4px 12px;
+  line-height: 1.5;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
+const ConfirmButtonBlock = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: ${({ backgroundColor }) => backgroundColor};
-  color: ${({ color }) => color};
-  padding: 4px 12px;
+  background-color: ${({ theme }) => theme.colors.singletons.green};
+  color: ${({ theme }) => theme.colors.singletons.white};
+  padding: 6px 12px 4px 12px;
+  line-height: 1.5;
   border-radius: 6px;
   font-size: 14px;
+  font-weight: 500;
+  margin-right: 8px;
 `;
 
 const DeleteButtonBlock = styled.button<{ disabled: boolean }>`
@@ -109,7 +149,7 @@ const AppealStatusBlock = styled.div<{
 
 const VisitButtonBlock = styled.button`
   display: flex;
-  flex: 0.5;
+  flex: 0.4;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -117,8 +157,17 @@ const VisitButtonBlock = styled.button`
   background-color: ${({ theme }) => theme.colors.singletons.black};
   color: ${({ theme }) => theme.colors.singletons.white};
   padding: 4px 12px;
+  line-height: 1.5;
   border-radius: 6px;
   font-size: 14px;
+  font-weight: 500;
+`;
+
+const CanceledVisitButtonBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.singletons.black};
 `;
 
 const useTableComponent = () => {
@@ -199,12 +248,12 @@ const useTableComponent = () => {
 
   const callEndTimeComponent = useCallback(
     (callEndTime: number, callStatus: string) => {
-      const disabled = callStatus !== 'proceeding';
+      const disabled = callStatus !== 'proceeding' || callEndTime < 0;
       if (typeof callEndTime === 'number') {
         const postFix = callEndTime > 0 ? '후' : '전';
         return (
           <CallEndTimeBlock disabled={disabled}>
-            {`${callEndTime} 분 ${postFix}`}
+            {`${Math.abs(callEndTime) + 1} 분 ${postFix}`}
           </CallEndTimeBlock>
         );
       }
@@ -213,28 +262,45 @@ const useTableComponent = () => {
     [],
   );
 
-  // TODO 다시 제안 정책 확인 후 추가 작성
   const callButtonComponent = useCallback(
     (
-      callStatus: string,
-      callId: string,
-      currentStoreUser: CurrentStoreUserType,
+      callData: any,
+      callStatus: CallStatusType,
+      onConfirmClick?: () => void,
+      onCancelClick?: () => void,
     ) => {
-      const backgroundColor =
-        callStatus === 'proceeding' ? GrayColors[300] : singletons.black;
-      const color =
-        callStatus === 'proceeding' ? singletons.black : singletons.white;
-      const text = callStatus === 'proceeding' ? '다시 제안' : '제안 취소';
       return (
-        <CallButtonBlock
-          backgroundColor={backgroundColor}
-          color={color}
-          onClick={async () => {
-            await callService.cancelStoreCall(callId, currentStoreUser);
-            alert('제안이 취소 되었습니다.');
-          }}
-        >
-          {text}
+        <CallButtonBlock>
+          {callStatus !== 'confirmed' && callStatus !== 'proceeding' && (
+            <ReCallButtonBlock>
+              <Link
+                href={{
+                  pathname: '/createCall',
+                  query: {
+                    title: callData.title,
+                    category: callData.category,
+                    description: callData.description,
+                    maxNumOfUser: callData.maxNumOfUser,
+                    reward: JSON.stringify(callData.reward),
+                  },
+                }}
+                as="/createCall"
+                shallow
+              >
+                다시 제안
+              </Link>
+            </ReCallButtonBlock>
+          )}
+          {callStatus === 'proceeding' && (
+            <ConfirmButtonBlock onClick={onConfirmClick}>
+              지금 확정
+            </ConfirmButtonBlock>
+          )}
+          {(callStatus === 'confirmed' || callStatus === 'proceeding') && (
+            <CancelButtonBlock onClick={onCancelClick}>
+              제안 취소
+            </CancelButtonBlock>
+          )}
         </CallButtonBlock>
       );
     },
@@ -242,18 +308,10 @@ const useTableComponent = () => {
   );
 
   const callDeleteButtonComponent = useCallback(
-    (callStatus: string, callId: string, userId: string) => {
-      const color =
-        callStatus === 'proceeding' ? GrayColors[300] : GrayColors[500];
-      const disabled = callStatus === 'proceeding';
+    (disabled: boolean, onDeleteClick: () => void) => {
+      const color = disabled ? GrayColors[300] : GrayColors[500];
       return (
-        <DeleteButtonBlock
-          disabled={disabled}
-          onClick={async () => {
-            await callService.deleteStoreCall(callId, userId);
-            alert('제안이 삭제 되었습니다.');
-          }}
-        >
+        <DeleteButtonBlock disabled={disabled} onClick={onDeleteClick}>
           <Icon
             name="Trash"
             width={18}
@@ -269,34 +327,32 @@ const useTableComponent = () => {
   );
 
   const rewardComponent = useCallback(
-    (rewardStatus: boolean, reward: number) => {
-      return (
-        <RewardBlock>
-          <Icon
-            width={20}
-            height={20}
-            name={rewardStatus ? 'MarkPointYellow' : 'MarkPointGray'}
-          />
-          <RewardTextBlock>{reward}</RewardTextBlock>
-        </RewardBlock>
-      );
-    },
-    [],
-  );
-
-  const rewardStatusComponent = useCallback(
-    (rewardStatus: boolean, reward?: number) => {
+    (rewardStatus: boolean, reward: RewardInfo) => {
       const option = {
         name: rewardStatus ? '제공' : '미제공',
         value: rewardStatus ? 'rewarded' : 'notRewarded',
       };
       return (
         <RewardBlock option={option}>
-          {rewardStatus ? (
-            <Icon width={20} height={20} name="MarkPointYellow" />
-          ) : null}
           <RewardTextBlock rewardStatus={rewardStatus}>
-            {rewardStatus ? reward : option?.name}
+            {rewardStatus ? reward.name : option?.name}
+          </RewardTextBlock>
+        </RewardBlock>
+      );
+    },
+    [],
+  );
+
+  const numOfRewardComponent = useCallback(
+    (rewardStatus: boolean, numOfReward?: number) => {
+      const option = {
+        name: rewardStatus ? '제공' : '미제공',
+        value: rewardStatus ? 'rewarded' : 'notRewarded',
+      };
+      return (
+        <RewardBlock option={option}>
+          <RewardTextBlock rewardStatus={rewardStatus}>
+            {rewardStatus ? `${numOfReward}회` : option?.name}
           </RewardTextBlock>
         </RewardBlock>
       );
@@ -305,32 +361,26 @@ const useTableComponent = () => {
   );
 
   const appealStatusComponent = useCallback(
-    (appealContent: string, status: string) => {
-      let appealStatus: string;
-      let appealStatusName: string;
-      switch (status) {
-        case 'proceeding':
-          appealStatus = appealContent?.length > 0 ? 'proceeding' : 'empty';
-          appealStatusName = appealContent?.length > 0 ? '미확정' : '미작성';
-          break;
-        case 'confirmed':
-          appealStatus = appealContent?.length > 0 ? 'confirmed' : 'empty';
-          appealStatusName = appealContent?.length > 0 ? '완료' : '미작성';
-          break;
-        default:
-          appealStatus = appealContent?.length > 0 ? 'proceeding' : 'empty';
-          appealStatusName = appealContent?.length > 0 ? '미확정' : '미작성';
-          break;
+    (comment: CommentType, status: string) => {
+      let appealStatus = '';
+      let appealStatusName = '';
+      if (!comment) {
+        appealStatus = 'empty';
+        appealStatusName = '미작성';
+      } else if (comment.confirmed) {
+        appealStatus = 'confirmed';
+        appealStatusName = '완료';
+      } else if (!comment.confirmed) {
+        appealStatus = 'proceeding';
+        appealStatusName = '미확정';
       }
       const option = {
         value: appealStatus,
         name: appealStatusName,
       };
+
       return (
-        <AppealStatusBlock
-          disabled={status === 'expired' || status === 'canceled'}
-          option={option}
-        >
+        <AppealStatusBlock disabled={status !== 'proceeding'} option={option}>
           {option?.name}
         </AppealStatusBlock>
       );
@@ -339,19 +389,15 @@ const useTableComponent = () => {
   );
 
   const visitButtonComponent = useCallback(
-    (userId: string, currentStoreUser: CurrentStoreUserType) => {
-      return (
-        <VisitButtonBlock
-          onClick={async () => {
-            console.log('visit button clicked', userId, currentStoreUser);
-            // TODO: 방문 예약 고객 => 방문 고객으로 변경해주는 로직 추가
-            // await customerService.visitCustomer(userId, currentStoreUser);
-            alert('방문이 확인되었습니다.');
-          }}
-        >
-          확인
-        </VisitButtonBlock>
-      );
+    (
+      canceled: boolean,
+      callId: string,
+      userId: string,
+      onVisitClick?: () => void,
+    ) => {
+      if (canceled)
+        return <CanceledVisitButtonBlock>취소됨</CanceledVisitButtonBlock>;
+      return <VisitButtonBlock onClick={onVisitClick}>확인</VisitButtonBlock>;
     },
     [],
   );
@@ -368,7 +414,7 @@ const useTableComponent = () => {
     callButtonComponent,
     callDeleteButtonComponent,
     rewardComponent,
-    rewardStatusComponent,
+    numOfRewardComponent,
     appealStatusComponent,
     visitButtonComponent,
     renderRowSubComponent,

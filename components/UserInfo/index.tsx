@@ -86,7 +86,7 @@ const UserInfo: FC = function UserInfo() {
   const [contentHeight, setContentHeight] = useState<number>(0);
   const contentRef = useRef(null);
   const { inClicked, setInClicked } = useInClick(contentRef);
-  const confirm = useConfirm();
+  const { confirm } = useConfirm();
 
   useLayoutEffect(() => {
     if (contentRef.current) {

@@ -3,10 +3,13 @@ import { useEffect, useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
-import { CustomerProps } from '@constants/types/customer';
+import { customerKeys } from '@constants/queryKeys';
+import { CustomerProps, StoresOfUserType } from '@constants/types/customer';
+import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
+import { customerService } from '@services/customer';
 
-const ConfirmedCustomerBlock = styled.main`
+const VisitedCustomerBlock = styled.main`
   display: flex;
   flex-direction: column;
 `;
@@ -16,16 +19,17 @@ const TableBlock = styled.div`
   width: 100%;
 `;
 
-const ConfirmedCustomer: NextPage<CustomerProps> = function ConfirmedCustomer({
+const VisitedCustomer: NextPage<CustomerProps> = function VisitedCustomer({
   columns,
   search,
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
+  const [initData, setInitData] = useState<StoresOfUserType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
-  const { getFetchedData, rewardStatusComponent } = useTableComponent();
+  const { getFetchedData, numOfRewardComponent } = useTableComponent();
 
   useEffect(() => {
     if (tableData) setIsMounted(true);
@@ -35,54 +39,46 @@ const ConfirmedCustomer: NextPage<CustomerProps> = function ConfirmedCustomer({
     };
   }, [tableData]);
 
-  const testData = useMemo(
-    () => [
-      {
-        id: 1,
-        nickname: 'aatest',
-        callCount: 1,
-        confirmCount: 5,
-        rewardStatus: true,
-        reward: 200,
-      },
-      {
-        id: 2,
-        nickname: 'bbtest',
-        callCount: 2,
-        confirmCount: 3,
-        rewardStatus: false,
-      },
-      {
-        id: 3,
-        nickname: 'ccctest',
-        callCount: 5,
-        confirmCount: 0,
-        rewardStatus: false,
-      },
-      {
-        id: 4,
-        nickname: 'dddtest',
-        callCount: 1,
-        confirmCount: 8,
-        rewardStatus: true,
-        reward: 100,
-      },
-    ],
+  const fetchVisitedCustomer = useCallback(
+    (customerData: StoresOfUserType[]) => {
+      if (!customerData) return;
+      setInitData(customerData!);
+    },
     [],
+  );
+
+  useReactQuery<StoresOfUserType[]>(
+    customerKeys.getVisitedCustomer,
+    () => customerService.getVisitedCustomer(),
+    (resultData: StoresOfUserType[]) => {
+      fetchVisitedCustomer(resultData);
+    },
   );
 
   const filteredData = useMemo(
     () =>
-      testData &&
-      testData
-        ?.map((data: any) => {
+      initData &&
+      initData
+        ?.map((data: StoresOfUserType) => {
           if (!data) return null;
-          const { callCount, confirmCount, rewardStatus, reward } = data;
+          const {
+            userInfo,
+            numOfVisit,
+            numOfConfirm,
+            numOfCancel,
+            rewardList,
+          } = data;
           return {
             ...data,
-            callCount: `${callCount}회`,
-            confirmCount: `${confirmCount}회`,
-            rewardStatus: rewardStatusComponent(rewardStatus, reward),
+            customerId: userInfo.id,
+            customerName: userInfo.name,
+            customerNumOfConfirm: `${numOfConfirm || 0}회`,
+            customerNumOfCancel: `${numOfCancel || 0}회`,
+            customerNumOfVisit: `${numOfVisit || 0}회`,
+            customerNumOfReward: numOfRewardComponent(
+              rewardList?.length > 0,
+              rewardList?.length > 0 ? rewardList.length : 0,
+            ),
           };
         })
         ?.filter((data: any) => {
@@ -92,7 +88,7 @@ const ConfirmedCustomer: NextPage<CustomerProps> = function ConfirmedCustomer({
           const dataValue = data[searchType];
           return searchValue?.toString() === dataValue?.toString();
         }),
-    [rewardStatusComponent, search, testData],
+    [initData, numOfRewardComponent, search],
   );
 
   const fetchData = useCallback(
@@ -111,7 +107,7 @@ const ConfirmedCustomer: NextPage<CustomerProps> = function ConfirmedCustomer({
   );
 
   return (
-    <ConfirmedCustomerBlock>
+    <VisitedCustomerBlock>
       {isMounted && (
         <TableBlock>
           <Table
@@ -124,12 +120,12 @@ const ConfirmedCustomer: NextPage<CustomerProps> = function ConfirmedCustomer({
           />
         </TableBlock>
       )}
-    </ConfirmedCustomerBlock>
+    </VisitedCustomerBlock>
   );
 };
 
-ConfirmedCustomer.defaultProps = {
+VisitedCustomer.defaultProps = {
   search: { type: '', value: '' },
 };
 
-export default ConfirmedCustomer;
+export default VisitedCustomer;
