@@ -1,20 +1,17 @@
 import type { NextPage } from 'next';
+import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import ConfirmedCustomer from './ConfirmedCustomer';
-import ExpectedCustomer from './ExpectedCustomer';
+import ReservedCustomer from './ReservedCustomer';
+import VisitedCustomer from './VisitedCustomer';
 
 import Divider from '@components/basicComponent/Divider';
 import Header from '@components/basicComponent/Header';
 import SelectInputText from '@components/basicComponent/SelectInputText';
 import * as Columns from '@constants/tableColumns';
 import { SearchType } from '@constants/types/components';
-
-const optionList = [
-  { name: 'ID', value: 'id' },
-  { name: '닉네임', value: 'nickname' },
-];
+import { CustomerRouterType } from '@constants/types/customer';
 
 const CustomerBlock = styled.main`
   min-width: ${({ theme }) => theme.componentSizes.table.width}px;
@@ -52,9 +49,17 @@ const HeaderRightBlock = styled.div`
   justify-content: flex-end;
 `;
 
-const Customer: NextPage = function Customer() {
-  const [customerType, setCustomerType] = useState<'expected' | 'confirmed'>(
-    'confirmed',
+const optionList = [
+  { name: 'ID', value: 'id' },
+  { name: '닉네임', value: 'nickname' },
+];
+
+const Customer: NextPage<WithRouterProps> = function Customer({
+  router: routerProps,
+}) {
+  const { query } = routerProps as CustomerRouterType;
+  const [customerType, setCustomerType] = useState<'visited' | 'reserved'>(
+    query?.customerType || 'visited',
   );
   const [input, setInput] = useState<SearchType>();
   const [search, setSearch] = useState<SearchType>();
@@ -71,9 +76,9 @@ const Customer: NextPage = function Customer() {
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setCustomerType('confirmed')}
+          onClick={() => setCustomerType('visited')}
           customerType={customerType}
-          defaultValue="confirmed"
+          defaultValue="visited"
         >
           방문 고객 관리
         </HeaderText>
@@ -86,9 +91,9 @@ const Customer: NextPage = function Customer() {
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setCustomerType('expected')}
+          onClick={() => setCustomerType('reserved')}
           customerType={customerType}
-          defaultValue="expected"
+          defaultValue="reserved"
         >
           방문 예약 고객 관리
         </HeaderText>
@@ -117,16 +122,13 @@ const Customer: NextPage = function Customer() {
         leftComponent={headerLeftComponent}
         rightComponent={headerRightComponent}
       />
-      {customerType === 'confirmed' ? (
-        <ConfirmedCustomer
-          columns={Columns.ConfirmedCustomer}
-          search={search}
-        />
+      {customerType === 'visited' ? (
+        <VisitedCustomer columns={Columns.VisitedCustomer} search={search} />
       ) : (
-        <ExpectedCustomer columns={Columns.ExpectedCustomer} search={search} />
+        <ReservedCustomer columns={Columns.ReservedCustomer} search={search} />
       )}
     </CustomerBlock>
   );
 };
 
-export default Customer;
+export default withRouter(Customer);

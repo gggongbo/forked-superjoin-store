@@ -1,12 +1,17 @@
-import { format } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
 import { useEffect, useMemo, useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
-import { CallProps } from '@constants/types/call';
+import { callKeys } from '@constants/queryKeys';
+import { CallProps, CommentType } from '@constants/types/call';
+import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
+import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
+import { callService } from '@services/call';
 
 const RecieveCallBlock = styled.main`
   display: flex;
@@ -20,15 +25,21 @@ const TableBlock = styled.main`
 
 const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
   const { columns, search, type } = props;
+  const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
+    ({ storeUser }) => storeUser?.currentStoreUser,
+  );
+
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
+  const [initData, setInitData] = useState([]);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
 
   const {
     getFetchedData,
     callTitleComponent,
+    callEndTimeComponent,
     callStatusComponent,
     appealStatusComponent,
     renderRowSubComponent,
@@ -42,74 +53,61 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
     };
   }, [tableData]);
 
-  const testData = useMemo(
-    () => [
-      {
-        category: 'life',
-        title: 'test',
-        address: '대한민국 서울특별시 금천구 독산동',
-        callId: '2yjNgiHI8jmr6EFoUboX',
-        callHost: 'testtest',
-        callReceiveTime: new Date(),
-        callEndTime: 30,
-        deadline: new Date(2022, 9, 8),
-        description: '맛있는 알리오 올리오가 먹고 싶은데 할인 가능할까요~?',
-        callMemberList: [
-          { userId: '11', userPhoto: 'tt' },
-          { userId: '22', userPhoto: 'tt' },
-        ],
-        status: 'proceeding',
-        appealContent: '',
-        appealAt: null,
-      },
-      {
-        category: 'food',
-        title: 'test',
-        address: '대한민국 서울특별시 금천구 독산동',
-        callId: '2yjNgiHI8jmr6EFoUboX',
-        callHost: 'testtest',
-        callReceiveTime: new Date(),
-        callEndTime: 30,
-        deadline: new Date(),
-        description: '-',
-        maxNumOfUser: 3,
-        callMemberList: [
-          { userId: '11', userPhoto: 'tt' },
-          { userId: '22', userPhoto: 'tt' },
-        ],
-        status: 'canceled',
-        appealContent: 'testtest',
-        appealAt: new Date(2022, 9, 7),
-      },
-    ],
-    [],
+  const fetchReceiveCall = useCallback((callData: any) => {
+    if (!callData) return;
+    setInitData(callData);
+  }, []);
+
+  useReactQuery<any>(
+    callKeys.getReceiveCall(currentStoreUser.location),
+    () => callService.getReceiveCall(currentStoreUser.location),
+    (resultData: any) => fetchReceiveCall(resultData),
   );
 
   const filteredData = useMemo(
     () =>
-      testData &&
-      testData
+      initData &&
+      initData
         ?.map((data: any) => {
           if (!data) return null;
-          const {
-            category,
-            title,
-            callReceiveTime,
-            callEndTime,
-            status,
-            appealContent,
-          } = data;
+          const { category, title, createdAt, deadline, status, commentList } =
+            data;
+
+          const now = new Date();
+
+          const callStatus =
+            status === 'proceeding' && deadline <= now ? 'expired' : status;
+
+          const comment = commentList?.find(
+            (commentItem: CommentType) =>
+              commentItem.storeInfo.id === currentStoreUser.id,
+          );
           return {
             ...data,
-            title: callTitleComponent(category, title),
-            callReceiveTime: callReceiveTime
-              ? format(callReceiveTime, 'yyyy년 M월 d일 / a h:mm', {
+            storeInfo: {
+              id: currentStoreUser.id,
+              name: currentStoreUser.name,
+              image: currentStoreUser.image || '',
+              address: currentStoreUser.address,
+              location: {
+                latitude: currentStoreUser.location.latitude,
+                longitude: currentStoreUser.location.longitude,
+              },
+            },
+            callTitle: callTitleComponent(category, title),
+            callReceiveTime: createdAt
+              ? format(createdAt, 'yyyy년 M월 d일 / a h:mm', {
                   locale: ko,
                 })
               : null,
-            callEndTime: callEndTime ? `${callEndTime}분 후` : null,
-            callStatus: callStatusComponent(status),
-            appealStatus: appealStatusComponent(appealContent, status),
+            callEndTime: deadline
+              ? callEndTimeComponent(
+                  differenceInMinutes(deadline, now),
+                  callStatus,
+                )
+              : null,
+            callStatus: callStatusComponent(callStatus),
+            appealStatus: appealStatusComponent(comment, callStatus),
           };
         })
         ?.filter((data: any) => {
@@ -121,10 +119,17 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
         }),
     [
       appealStatusComponent,
+      callEndTimeComponent,
       callStatusComponent,
       callTitleComponent,
+      currentStoreUser.address,
+      currentStoreUser.id,
+      currentStoreUser.image,
+      currentStoreUser.location.latitude,
+      currentStoreUser.location.longitude,
+      currentStoreUser.name,
+      initData,
       search,
-      testData,
     ],
   );
 

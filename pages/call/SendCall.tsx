@@ -1,18 +1,20 @@
-import { format } from 'date-fns';
+import { format, differenceInMinutes } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useMemo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
 import { callKeys } from '@constants/queryKeys';
-import { CallProps } from '@constants/types/call';
+import { CallProps, ConfirmCallParamType } from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
+import { useConfirm } from '@hooks/useConfirm';
+import { useReactMutation } from '@hooks/useReactMutation';
 import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { callService } from '@services/call';
-import { ArrayToString } from '@utils/stringUtils';
 
 const SendCallBlock = styled.main`
   display: flex;
@@ -27,14 +29,17 @@ const TableBlock = styled.div`
 // TODO : getServerSideProps + react-query prefetch+dehydrate + serverside redux store approaching logic add
 const SendCall: NextPage<CallProps> = function SendCall(props) {
   const { columns, search, type } = props;
+  const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
+    ({ storeUser }) => storeUser?.currentStoreUser,
+  );
+  const router = useRouter();
+  const { confirm } = useConfirm();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
   const [initData, setInitData] = useState([]);
   const pageSizeList = [10, 25, 50, 75, 100];
-  const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
-    ({ storeUser }) => storeUser?.currentStoreUser,
-  );
 
   const {
     getFetchedData,
@@ -48,84 +53,125 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
 
   const fetchSendCall = useCallback((callData: any) => {
     if (!callData) return;
-    setInitData((prev: any) => {
-      if (ArrayToString(prev) !== ArrayToString(callData)) {
-        return callData;
-      }
-      return prev;
-    });
+    setInitData(callData);
   }, []);
 
   useReactQuery<any>(
-    callKeys.getStoreCallList(currentStoreUser?.user?.uid),
-    () => callService.getStoreCallList(currentStoreUser?.user?.uid),
-    (resultData: any) => fetchSendCall(resultData),
+    callKeys.getSendCall(currentStoreUser?.id),
+    () => callService.getSendCall(currentStoreUser?.id),
+    (resultData: any) => {
+      fetchSendCall(resultData);
+    },
   );
 
-  // const initData = useMemo(
-  //   () => [
-  //     {
-  //       category: 'life',
-  //       title: 'test',
-  //       address: '대한민국 서울특별시 금천구 독산동',
-  //       callId: '2yjNgiHI8jmr6EFoUboX',
-  //       callSendTime: new Date(),
-  //       callEndTime: 30,
-  //       deadline: new Date(),
-  //       description: '맛있는 알리오 올리오가 먹고 싶은데 할인 가능할까요~?',
-  //       maxNumOfUser: 2,
-  //       requestList: [
-  //         { userId: '11', userPhoto: 'tt' },
-  //         { userId: '22', userPhoto: 'tt' },
-  //       ],
-  //       reward: 0,
-  //       status: 'proceeding',
-  //     },
-  //     {
-  //       category: 'food',
-  //       title: 'test',
-  //       address: '대한민국 서울특별시 금천구 독산동',
-  //       callId: '2yjNgiHI8jmr6EFoUboX',
-  //       callSendTime: new Date(),
-  //       callEndTime: 30,
-  //       deadline: new Date(),
-  //       description: '-',
-  //       maxNumOfUser: 3,
-  //       requestList: [
-  //         { userId: '11', userPhoto: 'tt' },
-  //         { userId: '22', userPhoto: 'tt' },
-  //       ],
-  //       reward: 1,
-  //       status: 'expired',
-  //     },
-  //   ],
-  //   [],
-  // );
+  const { mutate: confirmMutate } = useReactMutation<ConfirmCallParamType>(
+    callKeys.confirmCall,
+    callService.confirmCall,
+    () => {
+      router.reload();
+    },
+    () => {
+      alert('제안을 확정하는 도중 오류가 발생하였습니다.');
+      router.reload();
+    },
+  );
+
+  const { mutate: cancelMutate } = useReactMutation<string>(
+    callKeys.cancelCall,
+    callService.cancelCall,
+    () => {
+      router.reload();
+    },
+    () => {
+      alert('제안을 취소하는 도중 오류가 발생하였습니다.');
+      router.reload();
+    },
+  );
+
+  const { mutate: deleteMutate } = useReactMutation<string>(
+    callKeys.deleteCall,
+    callService.deleteCall,
+    () => {
+      router.reload();
+    },
+    () => {
+      alert('제안을 삭제하는 도중 오류가 발생하였습니다.');
+      router.reload();
+    },
+  );
 
   const filteredData = useMemo(
     () =>
       initData &&
       initData
         ?.map((data: any) => {
-          const { category, title, callEndTime, status, callId, createdAt } =
-            data;
+          const {
+            callHost,
+            category,
+            title,
+            deadline,
+            status,
+            callId,
+            createdAt,
+            isUserMax,
+          } = data;
+
+          const now = new Date();
+          let callStatus = null;
+          if (status === 'proceeding' && deadline <= now) {
+            callStatus = isUserMax ? 'confirmed' : 'expired';
+          } else {
+            callStatus = status;
+          }
+
           return {
             ...data,
-            title: callTitleComponent(category, title),
+            storeInfo: {
+              id: currentStoreUser.id,
+              name: currentStoreUser.name,
+              image: currentStoreUser.image || '',
+              address: currentStoreUser.address,
+              location: {
+                latitude: currentStoreUser.location.latitude,
+                longitude: currentStoreUser.location.longitude,
+              },
+            },
+            callTitle: callTitleComponent(category, title),
             callSendTime: createdAt
               ? format(createdAt, 'yyyy년 M월 d일 / a h:mm', {
                   locale: ko,
                 })
               : null,
-            callEndTime: callEndTime
-              ? callEndTimeComponent(callEndTime, status)
+            callEndTime: deadline
+              ? callEndTimeComponent(
+                  differenceInMinutes(deadline, now),
+                  callStatus,
+                )
               : null,
-            callStatus: callStatusComponent(status),
-            callButton: callButtonComponent(status, callId, currentStoreUser),
+            callStatus: callStatusComponent(callStatus),
+            callButton: callButtonComponent(
+              data,
+              callStatus,
+              () => {
+                confirm('제안을 확정하시겠습니까?', () =>
+                  confirmMutate({
+                    callId,
+                    storeInfo: callHost,
+                  }),
+                );
+              },
+              () => {
+                confirm(
+                  '제안을 취소하시면 불이익이 있을 수 있습니다.\n제안을 취소하시겠습니까?',
+                  () => cancelMutate(callId),
+                );
+              },
+            ),
             deleteButton: callDeleteButtonComponent(
-              status,
-              callId,
-              currentStoreUser?.user?.uid,
+              callStatus === 'proceeding' || callStatus === 'confirmed',
+              () => {
+                confirm('제안을 삭제하시겠습니까?', () => deleteMutate(callId));
+              },
             ),
           };
         })
@@ -140,12 +186,21 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
         }),
     [
       initData,
+      currentStoreUser.id,
+      currentStoreUser.name,
+      currentStoreUser.image,
+      currentStoreUser.address,
+      currentStoreUser.location.latitude,
+      currentStoreUser.location.longitude,
       callTitleComponent,
       callEndTimeComponent,
       callStatusComponent,
       callButtonComponent,
-      currentStoreUser,
       callDeleteButtonComponent,
+      confirm,
+      confirmMutate,
+      cancelMutate,
+      deleteMutate,
       search,
     ],
   );

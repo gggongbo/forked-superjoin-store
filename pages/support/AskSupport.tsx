@@ -52,7 +52,7 @@ const AskSupport: NextPage<AskSupportProps> = function AskSupport({
   );
   const [title, setTitle] = useState<string>();
   const [text, setText] = useState<string>();
-  const confirm = useConfirm();
+  const { confirm } = useConfirm();
 
   const askSubmit = useCallback(() => {
     if (!email || !title?.length || !text?.length) return;

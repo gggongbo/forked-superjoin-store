@@ -1,5 +1,5 @@
-import { addMinutes } from 'date-fns';
 import type { NextPage } from 'next';
+import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -10,11 +10,17 @@ import Header from '@components/basicComponent/Header';
 import InputText from '@components/basicComponent/InputText';
 import SelectBox from '@components/basicComponent/Selectbox';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
+import * as CategoryItemList from '@constants/category';
 import { categoryList } from '@constants/categoryList';
-import type { CreateCallType } from '@constants/types/call';
+import type {
+  CreateCallParamType,
+  CreateCallRouterType,
+} from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
-import { RewardItemType } from '@constants/types/reward';
+import { RewardInfo } from '@constants/types/reward';
 import { callService } from '@services/call';
+import { callKeys } from '~/constants/queryKeys';
+import { useReactMutation } from '~/hooks/useReactMutation';
 
 const CreateCallBlock = styled.main`
   display: flex;
@@ -57,55 +63,76 @@ const buttonStyle = css`
   width: 50%;
 `;
 
-const CreateCall: NextPage = function CreateCall() {
+const noneReward = { id: '0', value: 0, name: '없음' };
+
+const CreateCall: NextPage<WithRouterProps> = function CreateCall({
+  router: routerProps,
+}) {
+  const { query } = routerProps as CreateCallRouterType;
+
   const router = useRouter();
-  const email = useSelector<ReduxStoreType, string | null>(
-    ({ auth }) => auth?.currentUser?.email,
-  );
   const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
     ({ storeUser }) => storeUser.currentStoreUser,
   );
-  const [title, setTitle] = useState<string>();
-  const [category, setCategory] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const [userNum, setUserNum] = useState<number>(0);
-  const [deadline, setDeadline] = useState<Date>();
-  const [reward, setReward] = useState<RewardItemType>();
+
+  const [title, setTitle] = useState<string | undefined>(
+    query?.title || undefined,
+  );
+  const [category, setCategory] = useState<string | undefined>(
+    query?.category || undefined,
+  );
+  const [description, setDescription] = useState<string | undefined>(
+    query?.description || undefined,
+  );
+  const [maxNumOfUser, setMaxNumOfUser] = useState<number | undefined>(
+    query?.maxNumOfUser || undefined,
+  );
+  const [deadline, setDeadline] = useState<number>(0);
+  const [reward, setReward] = useState<RewardInfo | null>(
+    query?.reward ? JSON.parse(query.reward) : undefined,
+  );
+  const { mutate } = useReactMutation<CreateCallParamType>(
+    callKeys.createCall,
+    callService.createCall,
+    () => {
+      router.push('/call');
+    },
+  );
 
   const submit = () => {
     if (
       !title?.length ||
       !category?.length ||
       !description?.length ||
-      userNum < 1 ||
-      userNum > 10 ||
-      !deadline ||
+      !maxNumOfUser ||
+      maxNumOfUser < 1 ||
+      maxNumOfUser > 10 ||
+      deadline < 1 ||
+      deadline > 60 ||
       !reward
     )
       return;
-    const data: CreateCallType = {
+    const params: CreateCallParamType = {
       title,
       category,
       description,
-      userNum,
+      maxNumOfUser,
       deadline,
-      reward,
-      email,
+      reward: reward?.id !== '0' ? reward : null,
+      storeInfo: currentStoreUser,
     };
-    callService
-      .createStoreCall(data, currentStoreUser)
-      .then(() => router.replace('/call', undefined, { shallow: true }));
+    mutate(params);
   };
 
   // TODO: dummy => fetch
   const rewardData = useMemo(
     () => [
-      { id: 1, name: '음료수', value: '음료수' },
-      { id: 2, name: '음료수2', value: '음료수2' },
-      { id: 3, name: '음료수3', value: '음료수3' },
-      { id: 4, name: '음료수4', value: '음료수4' },
-      { id: 5, name: '음료수5', value: '음료수5' },
-      { id: undefined, name: '없음', value: '없음' },
+      { id: 1, name: '음료수' },
+      { id: 2, name: '음료수2' },
+      { id: 3, name: '음료수3' },
+      { id: 4, name: '음료수4' },
+      { id: 5, name: '음료수5' },
+      { id: '0', name: '없음' },
     ],
     [],
   );
@@ -119,6 +146,7 @@ const CreateCall: NextPage = function CreateCall() {
           customStyle={inputTextStyle}
           content={
             <InputText
+              defaultValue={title}
               placeholder="제목을 입력해주세요."
               onChange={e => setTitle(e.target.value)}
             />
@@ -129,6 +157,13 @@ const CreateCall: NextPage = function CreateCall() {
           customStyle={selectBoxStyle}
           content={
             <SelectBox
+              defaultOption={
+                category
+                  ? CategoryItemList[
+                      category.toUpperCase() as keyof typeof CategoryItemList
+                    ]
+                  : undefined
+              }
               optionList={categoryList}
               onChange={e => {
                 setCategory(e.target.selectValue);
@@ -142,6 +177,7 @@ const CreateCall: NextPage = function CreateCall() {
           customStyle={areaStyle}
           content={
             <InputText
+              defaultValue={description}
               height={116}
               isArea
               maxLength={500}
@@ -156,7 +192,8 @@ const CreateCall: NextPage = function CreateCall() {
           content={
             <InputText
               type="number"
-              onChange={e => setUserNum(e.target.value)}
+              defaultValue={maxNumOfUser}
+              onChange={e => setMaxNumOfUser(e.target.value)}
               placeholder="최대 10명"
               range={{ max: 10, min: 1 }}
             />
@@ -169,10 +206,7 @@ const CreateCall: NextPage = function CreateCall() {
           content={
             <InputText
               type="number"
-              onChange={e => {
-                const now = new Date();
-                setDeadline(addMinutes(now, e.target.value));
-              }}
+              onChange={e => setDeadline(e.target.value)}
               placeholder="1 ~ 60분"
               range={{ max: 60, min: 1 }}
             />
@@ -189,9 +223,30 @@ const CreateCall: NextPage = function CreateCall() {
           }}
           content={
             <SelectBox
-              optionList={rewardData}
+              defaultOption={
+                reward
+                  ? {
+                      value: reward.id,
+                      name: reward.name,
+                    }
+                  : noneReward
+              }
+              optionList={rewardData?.map((rewardItem: any) => {
+                return {
+                  value: rewardItem.id,
+                  name: rewardItem.name,
+                };
+              })}
               onChange={e => {
-                setReward(e.target.selectValue);
+                const { selectValue } = e.target;
+                if (!selectValue)
+                  setReward({ id: noneReward.id, name: noneReward.name });
+                else {
+                  const selectedReward = rewardData?.find(
+                    rewardItem => rewardItem.id === selectValue,
+                  );
+                  setReward(selectedReward as RewardInfo);
+                }
               }}
               placeholder="리워드 선택"
             />
@@ -207,9 +262,11 @@ const CreateCall: NextPage = function CreateCall() {
             !title?.length ||
             !category?.length ||
             !description?.length ||
-            userNum < 1 ||
-            userNum > 10 ||
-            !deadline ||
+            !maxNumOfUser ||
+            maxNumOfUser < 1 ||
+            maxNumOfUser > 10 ||
+            deadline < 1 ||
+            deadline > 60 ||
             !reward
           }
           customStyle={buttonStyle}
@@ -219,4 +276,4 @@ const CreateCall: NextPage = function CreateCall() {
   );
 };
 
-export default CreateCall;
+export default withRouter(CreateCall);

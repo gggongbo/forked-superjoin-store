@@ -71,7 +71,7 @@ const buttonStyle = css`
 
 interface RewardItemPropTypes {
   id: string | number;
-  value: string;
+  name: string;
   onUpdateClick: Function;
   onDeleteClick: Function;
 }
@@ -79,7 +79,7 @@ interface RewardItemPropTypes {
 // TODO : 중복 체크, 각 리워드 데이터별로 unique id 필요 / 예외처리 주석 제거
 /* eslint-disable no-unused-vars */
 const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
-  const { id, value, onUpdateClick, onDeleteClick } = props;
+  const { id, name, onUpdateClick, onDeleteClick } = props;
   const [isUpdatedClicked, setUpdatedClicked] = useState<boolean>(false);
   const [updateReward, setUpdateReward] = useState<string>();
 
@@ -87,14 +87,14 @@ const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
     <RewardItemBlock>
       {!isUpdatedClicked ? (
         <TitleBlock
-          title={value}
+          title={name}
           titleStyle={titleStyle}
           icon={{ name: 'ServiceGiftColor', width: 20, height: 20 }}
         />
       ) : (
         <InputTextBlock>
           <InputText
-            defaultValue={value}
+            defaultValue={name}
             onChange={e => setUpdateReward(e.target.value)}
             customStyle={inputStyle}
           />
@@ -121,7 +121,7 @@ const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
               color: 'gray',
               colorIndex: 500,
             }}
-            onClick={() => onDeleteClick}
+            onClick={() => onDeleteClick?.(id)}
             customStyle={buttonStyle}
           />
         </ButtonBlock>
@@ -134,7 +134,7 @@ const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
               height: 20,
               color: 'green',
             }}
-            onClick={() => onUpdateClick}
+            onClick={() => onUpdateClick?.({ id, name: updateReward })}
             customStyle={buttonStyle}
           />
           <IconButton

@@ -1,3 +1,5 @@
+import { LocationType } from '@constants/types/common';
+
 export type CurrentUserType = {
   id: string;
   avatar: string | null;
@@ -14,14 +16,16 @@ export type AuthType = {
 };
 
 export type CurrentStoreUserType = {
-  user: {
-    uid: string;
-  };
-  location: {
-    longitude: number;
-    latitude: number;
-    geohash: string;
-  };
+  id: string;
+  name: string;
+  image: string;
+  category: string;
+  email: string;
+  brandId: string;
+  businessNumber: string;
+  address: string;
+  location: LocationType;
+  disabled: boolean;
 };
 
 export type StoreUserType = {

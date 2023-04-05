@@ -73,7 +73,7 @@ const CategoryTag: FC<CategoryTagProps> = function CategoryTag(props) {
       customStyle={customStyle}
     >
       <CategoryTextBlock fontSize={fontSize}>
-        {categoryInfo.name}
+        {categoryInfo.alias || categoryInfo.name}
       </CategoryTextBlock>
     </CategoryTagBlock>
   );

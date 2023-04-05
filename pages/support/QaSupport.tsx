@@ -1,9 +1,11 @@
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import Accordion from '@components/basicComponent/Accordion';
+import { supportKeys } from '@constants/queryKeys';
 import { SupportType } from '@constants/types/support';
+import { useReactQuery } from '@hooks/useReactQuery';
 import { supportService } from '@services/support';
 
 const AccordionBlock = styled.div`
@@ -15,9 +17,11 @@ const AccordionBlock = styled.div`
 const QaSupport: NextPage = function QaSupport() {
   const [data, setData] = useState<SupportType[]>([]);
 
-  useEffect(() => {
-    supportService.getAllQa().then(qaList => setData(qaList));
-  }, []);
+  useReactQuery<SupportType[]>(
+    supportKeys.getAllQa,
+    () => supportService.getAllQa(),
+    (resultData: SupportType[]) => setData(resultData),
+  );
 
   return (
     <AccordionBlock>
