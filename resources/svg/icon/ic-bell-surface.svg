@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon/ic-bell-surface</title> 
+    <defs>
+        <path d="M17.5 14.167H.833c-1.11 0-1.11-1.667 0-1.667.92 0 1.667-.746 1.667-1.667V6.667a6.667 6.667 0 0 1 13.333 0v4.166c0 .92.747 1.667 1.667 1.667 1.111 0 1.111 1.667 0 1.667zm-6.17 2.918a2.5 2.5 0 0 1-4.326 0 .833.833 0 0 1 .721-1.252h2.883a.833.833 0 0 1 .721 1.252z" id="8oagsrx01a"/>
+    </defs>
+    <g transform="translate(.833 .833)" fill="none" fill-rule="evenodd">
+        <mask id="35fqwlsrub" fill="#000000">
+            <use xlink:href="#8oagsrx01a"/>
+        </mask>
+        <use fill="#000000" fill-rule="nonzero" xlink:href="#8oagsrx01a"/>
+        <g mask="url(#35fqwlsrub)" fill="#000000">
+            <path d="M-.833-.833h20v20h-20z"/>
+        </g>
+    </g>
+</svg>

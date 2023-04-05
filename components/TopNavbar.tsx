@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Divider from '@components/basicComponent/Divider';
 import Oval from '@components/basicComponent/Oval';
 import UserInfo from '@components/UserInfo';
+import UserNotification from '@components/UserNotification';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';
 import logoTitle from '@resources/svg/logo/logo-title.svg';
 
@@ -16,7 +17,7 @@ const NavbarBlock = styled.div`
   min-width: ${({ theme }) => theme.componentSizes.topNavbar.width}px;
   height: ${({ theme }) => theme.componentSizes.topNavbar.height}px;
   top: 0px;
-  padding: 0px 32px;
+  padding: 0px 24px 0px 32px;
   background-color: ${props => props.theme.colors.singletons.defaultBackground};
   -webkit-box-shadow: 0px 1px 3px 0px
     ${props => `${props.theme.colors.singletons.realBlack}20`};
@@ -60,7 +61,7 @@ const TitleOval = styled(Oval)`
   aspect-ratio: 1;
 `;
 
-const UserInfoBlock = styled.div`
+const UserBlock = styled.div`
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -69,10 +70,14 @@ const UserInfoBlock = styled.div`
   height: 100%;
 `;
 
-const VerticalDivider = styled(Divider)`
-  margin-right: 30px;
+const UserNotificationBlock = styled.div`
+  padding: 0px 18px;
+`;
+
+const UserInfoBlock = styled.div`
+  padding-left: 24px;
   @media ${({ theme }) => theme.media.mobile} {
-    margin-right: 5px;
+    padding-left: 5px;
   }
 `;
 
@@ -85,10 +90,16 @@ const TopNavbar: FC = function TopNavbar() {
         <TitleOval width={4} height={4} />
         <TitleText>셀프 관리 서비스</TitleText>
       </TitleBlock>
-      <UserInfoBlock>
-        <VerticalDivider isVertical />
-        <UserInfo />
-      </UserInfoBlock>
+      <UserBlock>
+        <Divider isVertical />
+        <UserNotificationBlock>
+          <UserNotification />
+        </UserNotificationBlock>
+        <Divider isVertical />
+        <UserInfoBlock>
+          <UserInfo />
+        </UserInfoBlock>
+      </UserBlock>
     </NavbarBlock>
   );
 };

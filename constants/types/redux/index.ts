@@ -31,6 +31,8 @@ export type CurrentStoreUserType = {
 export type StoreUserType = {
   storeUser: {
     currentStoreUser: CurrentStoreUserType;
+    notificationVisible: boolean;
+    numOfNotification: number;
   };
 };
 export interface ReduxStoreType extends AuthType, StoreUserType {}

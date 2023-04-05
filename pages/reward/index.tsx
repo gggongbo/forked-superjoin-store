@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
@@ -106,7 +106,13 @@ const Reward: NextPage = function Reward() {
   );
 
   const [newReward, setNewReward] = useState<string>();
-  const [rewardList, setRewardList] = useState<RewardType[]>([]);
+  const [rewardList, setRewardList] = useState<RewardType[]>();
+  const [loading, setLoading] = useState<boolean>();
+
+  useEffect(() => {
+    if (!rewardList) setLoading(true);
+    if (rewardList) setLoading(false);
+  }, [rewardList]);
 
   const { mutate: createMutate } = useReactMutation<string>(
     rewardKeys.createReward,
@@ -200,18 +206,21 @@ const Reward: NextPage = function Reward() {
       <RewardContentBlock>
         <TextBlock>리워드</TextBlock>
         <RewardListBlock>
-          <ListBox
-            data={rewardList}
-            renderItem={renderRewardItem}
-            listEmptyComponent={
-              <EmptyBlock>
-                <EmptyImageBlock />
-                <EmptyTextBlock>
-                  제공할 리워드가 없습니다. 리워드를 추가해보세요!
-                </EmptyTextBlock>
-              </EmptyBlock>
-            }
-          />
+          {!!rewardList && (
+            <ListBox
+              data={rewardList}
+              loading={loading}
+              renderItem={renderRewardItem}
+              listEmptyComponent={
+                <EmptyBlock>
+                  <EmptyImageBlock />
+                  <EmptyTextBlock>
+                    제공할 리워드가 없습니다. 리워드를 추가해보세요!
+                  </EmptyTextBlock>
+                </EmptyBlock>
+              }
+            />
+          )}
         </RewardListBlock>
       </RewardContentBlock>
     </RewardBlock>

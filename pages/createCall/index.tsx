@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
@@ -12,15 +12,17 @@ import SelectBox from '@components/basicComponent/Selectbox';
 import VerticalSubText from '@components/basicComponent/VerticalSubText';
 import * as CategoryItemList from '@constants/category';
 import { categoryList } from '@constants/categoryList';
+import { callKeys, rewardKeys } from '@constants/queryKeys';
 import type {
   CreateCallParamType,
   CreateCallRouterType,
 } from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
-import { RewardInfo } from '@constants/types/reward';
+import { RewardInfo, RewardType } from '@constants/types/reward';
+import { useReactMutation } from '@hooks/useReactMutation';
+import { useReactQuery } from '@hooks/useReactQuery';
 import { callService } from '@services/call';
-import { callKeys } from '~/constants/queryKeys';
-import { useReactMutation } from '~/hooks/useReactMutation';
+import { rewardService } from '@services/reward';
 
 const CreateCallBlock = styled.main`
   display: flex;
@@ -63,7 +65,7 @@ const buttonStyle = css`
   width: 50%;
 `;
 
-const noneReward = { id: '0', value: 0, name: '없음' };
+const noneReward = { id: '0', value: '0', name: '없음' };
 
 const CreateCall: NextPage<WithRouterProps> = function CreateCall({
   router: routerProps,
@@ -88,14 +90,37 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
     query?.maxNumOfUser || undefined,
   );
   const [deadline, setDeadline] = useState<number>(0);
+  const [rewardList, setRewardList] = useState<
+    (RewardInfo & { value: string })[]
+  >([]);
   const [reward, setReward] = useState<RewardInfo | null>(
     query?.reward ? JSON.parse(query.reward) : undefined,
   );
+
   const { mutate } = useReactMutation<CreateCallParamType>(
     callKeys.createCall,
     callService.createCall,
     () => {
       router.push('/call');
+    },
+  );
+
+  useReactQuery<RewardType[]>(
+    rewardKeys.getRewardList,
+    () => rewardService.getRewardList(currentStoreUser.id),
+    (resultData: RewardType[]) => {
+      if (!resultData) return;
+      const rewardDataList = resultData
+        .map(rewardItem => {
+          return {
+            id: rewardItem.id,
+            value: rewardItem.id,
+            name: rewardItem.name,
+          };
+        })
+        .concat(noneReward);
+
+      setRewardList(rewardDataList);
     },
   );
 
@@ -123,19 +148,6 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
     };
     mutate(params);
   };
-
-  // TODO: dummy => fetch
-  const rewardData = useMemo(
-    () => [
-      { id: 1, name: '음료수' },
-      { id: 2, name: '음료수2' },
-      { id: 3, name: '음료수3' },
-      { id: 4, name: '음료수4' },
-      { id: 5, name: '음료수5' },
-      { id: '0', name: '없음' },
-    ],
-    [],
-  );
 
   return (
     <CreateCallBlock>
@@ -229,23 +241,22 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
                       value: reward.id,
                       name: reward.name,
                     }
-                  : noneReward
+                  : undefined
               }
-              optionList={rewardData?.map((rewardItem: any) => {
-                return {
-                  value: rewardItem.id,
-                  name: rewardItem.name,
-                };
-              })}
+              optionList={rewardList}
               onChange={e => {
                 const { selectValue } = e.target;
                 if (!selectValue)
                   setReward({ id: noneReward.id, name: noneReward.name });
                 else {
-                  const selectedReward = rewardData?.find(
+                  const selectedReward = rewardList?.find(
                     rewardItem => rewardItem.id === selectValue,
                   );
-                  setReward(selectedReward as RewardInfo);
+                  if (!selectedReward) return;
+                  setReward({
+                    id: selectedReward.id,
+                    name: selectedReward.name,
+                  });
                 }
               }}
               placeholder="리워드 선택"

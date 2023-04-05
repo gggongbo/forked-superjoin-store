@@ -11,6 +11,7 @@ export const singletons = {
   pink: '#f16ca2',
   enabledGray: '#d9d9d9',
   backgroundGray: '#f9f8f8',
+  statusOrange: '#ffa500',
 };
 
 export const text = {

@@ -49,7 +49,6 @@ const registerCommentCall = async (params: RegisterCommentCallParamType) => {
   await httpsCallable(functions, 'registerCommentCall')(params);
 };
 
-// TODO: functions name change
 const getSendCall = async (storeId: any): Promise<any | null> => {
   const storeCallList: any = await httpsCallable(
     functions,
@@ -66,12 +65,17 @@ const getSendCall = async (storeId: any): Promise<any | null> => {
   });
 };
 
-// TODO: getReciveOffer callHostId보내주고 비교하게해야함
 const getReceiveCall = async (params: LocationType): Promise<any | null> => {
+  if (!params) return null;
+
   const storeCallList: any = await httpsCallable(
     functions,
     'getReceiveCall',
-  )(params);
+  )({
+    ...params,
+    latitude: Number(params.latitude),
+    longitude: Number(params.longitude),
+  });
   if (!storeCallList?.data) return null;
   return storeCallList.data.map((callData: any) => {
     return {

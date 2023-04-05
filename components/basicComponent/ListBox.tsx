@@ -1,13 +1,6 @@
 import React, { FC, ReactNode, useMemo } from 'react';
 import styled, { CSSProp } from 'styled-components';
 
-interface ListBoxPropTypes {
-  data: any[];
-  renderItem: Function;
-  listEmptyComponent?: ReactNode;
-  customStyle?: CSSProp;
-}
-
 const ListBoxBlock = styled.div<{
   customStyle?: CSSProp;
 }>`
@@ -25,8 +18,22 @@ const ListItemBlock = styled.div<{
   ${({ customStyle }) => customStyle};
 `;
 
+interface ListBoxPropTypes {
+  data: any[];
+  loading?: boolean;
+  renderItem: Function;
+  listEmptyComponent?: ReactNode;
+  customStyle?: CSSProp;
+}
+
 const ListBox: FC<ListBoxPropTypes> = function ListBox(props) {
-  const { data, renderItem, listEmptyComponent, customStyle } = props;
+  const {
+    data,
+    loading = false,
+    renderItem,
+    listEmptyComponent,
+    customStyle,
+  } = props;
 
   const dataComponent = useMemo(() => {
     if (!data) return null;
@@ -40,6 +47,7 @@ const ListBox: FC<ListBoxPropTypes> = function ListBox(props) {
     });
   }, [customStyle, data, renderItem]);
 
+  if (loading) return null;
   return (
     <ListBoxBlock customStyle={customStyle}>
       {data?.length > 0 ? dataComponent : listEmptyComponent}
@@ -48,6 +56,7 @@ const ListBox: FC<ListBoxPropTypes> = function ListBox(props) {
 };
 
 ListBox.defaultProps = {
+  loading: false,
   listEmptyComponent: null,
   customStyle: {},
 };
