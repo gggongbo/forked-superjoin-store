@@ -1,8 +1,7 @@
-import { useMutation } from 'react-query';
+import { QueryKey, useMutation } from 'react-query';
 
-// TODO queryKey type add
 const useReactMutation = <T>(
-  queryKey: any,
+  queryKey: QueryKey,
   queryFn: Function,
   onSuccess?: Function,
   onError?: Function,

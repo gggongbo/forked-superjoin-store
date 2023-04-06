@@ -35,9 +35,9 @@ const categoryList: CategoryListType = {
   ...CategoryList,
 };
 
-interface styleListType {
-  [key: string]: any;
-}
+type StyleListType = {
+  [key: string]: { fontSize: number; padding: string };
+};
 
 interface CategoryTagProps {
   customStyle?: CSSProp;
@@ -47,9 +47,8 @@ interface CategoryTagProps {
 
 const CategoryTag: FC<CategoryTagProps> = function CategoryTag(props) {
   const { customStyle, size = 'medium', value = 'etc' } = props;
-  //   const { colors } = useColors();
   const categoryInfo = categoryList[value?.toUpperCase()] || categoryList.ETC;
-  const styleList: styleListType = {
+  const styleList: StyleListType = {
     large: {
       fontSize: 13,
       padding: '3px 8px 3px 8px',

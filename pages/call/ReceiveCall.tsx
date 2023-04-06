@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
 import { callKeys } from '@constants/queryKeys';
-import { CallProps, CommentType } from '@constants/types/call';
+import { CallProps, CallType, CommentType } from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
@@ -32,7 +32,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
-  const [initData, setInitData] = useState([]);
+  const [initData, setInitData] = useState<CallType[]>([]);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
 
@@ -53,7 +53,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
     };
   }, [tableData]);
 
-  const fetchReceiveCall = useCallback((callData: any) => {
+  const fetchReceiveCall = useCallback((callData: CallType[]) => {
     if (!callData) return;
     setInitData(callData);
   }, []);
@@ -70,14 +70,14 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
       refetchOnMount: true,
       refetchOnReconnect: true,
     },
-    (resultData: any) => fetchReceiveCall(resultData),
+    (resultData: CallType[]) => fetchReceiveCall(resultData),
   );
 
   const filteredData = useMemo(
     () =>
       initData &&
       initData
-        ?.map((data: any) => {
+        ?.map((data: CallType) => {
           if (!data) return null;
           const { category, title, createdAt, deadline, status, commentList } =
             data;
@@ -105,13 +105,13 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
             },
             callTitle: callTitleComponent(category, title),
             callReceiveTime: createdAt
-              ? format(createdAt, 'yyyy년 M월 d일 / a h:mm', {
+              ? format(createdAt as Date, 'yyyy년 M월 d일 / a h:mm', {
                   locale: ko,
                 })
               : null,
             callEndTime: deadline
               ? callEndTimeComponent(
-                  differenceInMinutes(deadline, now),
+                  differenceInMinutes(deadline as Date, now),
                   callStatus,
                 )
               : null,

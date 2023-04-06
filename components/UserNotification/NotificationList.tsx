@@ -1,4 +1,11 @@
-import { differenceInMinutes } from 'date-fns';
+import {
+  differenceInCalendarDays,
+  differenceInCalendarMonths,
+  differenceInCalendarWeeks,
+  differenceInCalendarYears,
+  differenceInHours,
+  differenceInMinutes,
+} from 'date-fns';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
@@ -141,14 +148,29 @@ const NotificationList: FC = function NotificationList() {
     updateMutate,
   ]);
 
+  const getFormattedTime = useCallback((now: Date, time: Date) => {
+    const dayDiff = differenceInCalendarDays(now, time);
+    const weekDiff = differenceInCalendarWeeks(now, time);
+    const monthDiff = differenceInCalendarMonths(now, time);
+    const yearDiff = differenceInCalendarYears(now, time);
+    const hourDiff = differenceInHours(now, time);
+    const minuteDiff = differenceInMinutes(now, time);
+
+    if (yearDiff > 0) return `${yearDiff}년 전`;
+    if (monthDiff > 0) return `${monthDiff}달 전`;
+    if (weekDiff > 0) return `${weekDiff}주 전`;
+    if (dayDiff > 0) return `${dayDiff}일 전`;
+    if (hourDiff > 0) return `${hourDiff}시간 전`;
+    return `${minuteDiff}분 전`;
+  }, []);
+
   const renderNotificationItem = useCallback(
     ({ item }: NotificationItemType) => {
       if (!item) return null;
       const { createdAt, type, callInfo } = item;
 
       const now = new Date();
-      // TODO : 방금 전 표시 기준 확인
-      const time = `${differenceInMinutes(now, createdAt as Date)}분 전`;
+      const time = getFormattedTime(now, createdAt as Date);
       let message = '';
 
       switch (type) {
@@ -174,7 +196,7 @@ const NotificationList: FC = function NotificationList() {
         />
       );
     },
-    [],
+    [getFormattedTime],
   );
 
   if (!notificationVisible) return null;

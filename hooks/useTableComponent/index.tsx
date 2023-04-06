@@ -361,7 +361,7 @@ const useTableComponent = () => {
   );
 
   const appealStatusComponent = useCallback(
-    (comment: CommentType, status: string) => {
+    (comment: CommentType | undefined, status: string) => {
       let appealStatus = '';
       let appealStatusName = '';
       if (!comment) {

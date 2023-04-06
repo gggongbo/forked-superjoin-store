@@ -1,8 +1,12 @@
-import { QueryFunction, useQuery, UseQueryOptions } from 'react-query';
+import {
+  QueryFunction,
+  QueryKey,
+  useQuery,
+  UseQueryOptions,
+} from 'react-query';
 
-// TODO queryKey type add
 const useReactQuery = (
-  queryKey: any,
+  queryKey: QueryKey,
   queryFn: QueryFunction,
   option?: Omit<UseQueryOptions, 'onSuccess' | 'onError'>,
   onSuccess?: Function,

@@ -2,8 +2,18 @@ import { NextRouter } from 'next/router';
 
 import { FirebaseTimestamp, StoreType } from '@constants/types/common';
 import { SearchType } from '@constants/types/components';
-import { RewardInfo } from '@constants/types/reward';
+import { RewardInfo, RewardType } from '@constants/types/reward';
 
+export type StoreInfoType = {
+  id: string;
+  name: string;
+  image: string;
+  address: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+};
 export type CallStatusType =
   | 'proceeding'
   | 'confirmed'
@@ -12,16 +22,7 @@ export type CallStatusType =
   | 'visited';
 
 export type CommentType = {
-  storeInfo: {
-    id: string;
-    name: string;
-    image: string;
-    address: string;
-    location: {
-      latitude: number;
-      longitude: number;
-    };
-  };
+  storeInfo: StoreInfoType;
   createdAt: Date | FirebaseTimestamp;
   updatedAt: Date | FirebaseTimestamp;
   comment: string;
@@ -49,6 +50,37 @@ export type CallMemberType = {
   id: string;
   name: string;
   image: string;
+};
+
+export type CallType = {
+  callId: string;
+  title: string;
+  deleted: boolean;
+  callHostId: string;
+  callHost: CallHostType;
+  callHostType: 'store' | 'user';
+  callMemberIdList: string[];
+  callMemberList: CallMemberType[];
+  commentList: CommentType[];
+  requestMemberList: CallMemberType[];
+  requestMemberIdList: string[];
+  createdAt: Date | FirebaseTimestamp;
+  updatedAt: Date | FirebaseTimestamp;
+  deadline: Date | FirebaseTimestamp;
+  address: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+  description: string;
+  category: string;
+  mainCategory: string;
+  visitedNumOfUser: number;
+  maxNumOfUser: number;
+  status: CallStatusType;
+  type: 'store' | 'user';
+  reward: RewardType | null;
+  isUserMax: boolean;
 };
 
 export interface CallProps {

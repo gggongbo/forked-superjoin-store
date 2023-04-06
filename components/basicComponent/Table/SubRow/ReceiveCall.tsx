@@ -8,8 +8,10 @@ import InputText from '@components/basicComponent/InputText';
 import SubText from '@components/basicComponent/SubText';
 import { callKeys } from '@constants/queryKeys';
 import {
+  CallStatusType,
   CommentType,
   RegisterCommentCallParamType,
+  StoreInfoType,
 } from '@constants/types/call';
 import { useReactMutation } from '@hooks/useReactMutation';
 import { callService } from '@services/call';
@@ -64,7 +66,18 @@ const iconButtonStyle = css`
   margin-left: 16px;
 `;
 
-const ReceiveCall: FC<any> = React.memo(function ReceiveCall(props) {
+interface ReceiveCallPropTypes {
+  callId: string;
+  status: CallStatusType;
+  commentList: CommentType[];
+  storeInfo: StoreInfoType;
+  disabled: boolean;
+  buttonDisabled: boolean;
+}
+
+const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
+  props,
+) {
   const { callId, status, commentList, storeInfo, disabled, buttonDisabled } =
     props;
 
@@ -77,13 +90,15 @@ const ReceiveCall: FC<any> = React.memo(function ReceiveCall(props) {
   const [appealContent, setAppealContent] = useState<string>();
   const [appealTime, setAppealTime] = useState<Date>();
 
-  const [appeal] = useState<CommentType>(
+  const [appeal] = useState<CommentType | undefined>(
     commentList?.find(
       (comment: CommentType) => comment.storeInfo.id === storeInfo.id,
     ),
   );
   const [confirmed] = useState<boolean>(
-    (status === 'confirmed' || status === 'visited') && appeal?.confirmed,
+    appeal
+      ? (status === 'confirmed' || status === 'visited') && appeal.confirmed
+      : false,
   );
 
   const { mutate: commentMutate } =
@@ -137,7 +152,7 @@ const ReceiveCall: FC<any> = React.memo(function ReceiveCall(props) {
   return (
     <AppealBoxBlock>
       <SubText
-        title={appealContent || appeal?.comment}
+        title={appealContent || appeal?.comment || ''}
         icon={{
           name: confirmed ? 'SetOk' : 'Check',
           width: 17,
