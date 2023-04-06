@@ -47,9 +47,14 @@ const VisitedCustomer: NextPage<CustomerProps> = function VisitedCustomer({
     [],
   );
 
-  useReactQuery<StoresOfUserType[]>(
+  useReactQuery(
     customerKeys.getVisitedCustomer,
     () => customerService.getVisitedCustomer(),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
     (resultData: StoresOfUserType[]) => {
       fetchVisitedCustomer(resultData);
     },

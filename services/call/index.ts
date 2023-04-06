@@ -65,16 +65,23 @@ const getSendCall = async (storeId: any): Promise<any | null> => {
   });
 };
 
-const getReceiveCall = async (params: LocationType): Promise<any | null> => {
+const getReceiveCall = async (params: {
+  location: LocationType;
+  mainCategory: string;
+}): Promise<any | null> => {
   if (!params) return null;
+
+  const { location, mainCategory } = params;
 
   const storeCallList: any = await httpsCallable(
     functions,
     'getReceiveCall',
   )({
-    ...params,
-    latitude: Number(params.latitude),
-    longitude: Number(params.longitude),
+    location: {
+      latitude: Number(location.latitude),
+      longitude: Number(location.longitude),
+    },
+    mainCategory,
   });
   if (!storeCallList?.data) return null;
   return storeCallList.data.map((callData: any) => {

@@ -46,6 +46,7 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
     isUserMax,
     commentList,
     storeInfo,
+    refetch,
   } = row.original;
 
   const [disabled] = useState<boolean>(
@@ -118,6 +119,7 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
           callMemberList={callMemberList}
           disabled={disabled}
           buttonDisabled={buttonDisabled}
+          refetch={refetch}
         />
       ) : (
         <ReceiveCall

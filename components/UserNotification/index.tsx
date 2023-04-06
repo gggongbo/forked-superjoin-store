@@ -61,7 +61,7 @@ const UserNotification: FC = function UserNotification() {
           );
         }}
       />
-      <BadgeBlock>{numOfNotification}</BadgeBlock>
+      {numOfNotification > 0 && <BadgeBlock>{numOfNotification}</BadgeBlock>}
     </UserNotificationBlock>
   );
 };

@@ -1,27 +1,30 @@
-import { QueryFunction, useQuery } from 'react-query';
+import { QueryFunction, useQuery, UseQueryOptions } from 'react-query';
 
 // TODO queryKey type add
-const useReactQuery = <T>(
+const useReactQuery = (
   queryKey: any,
   queryFn: QueryFunction,
+  option?: Omit<UseQueryOptions, 'onSuccess' | 'onError'>,
   onSuccess?: Function,
   onError?: Function,
 ) => {
-  const { data, isLoading, isError, isSuccess } = useQuery(queryKey, queryFn, {
-    retry: 0,
-    refetchOnWindowFocus: false,
-    refetchOnMount: true,
-    refetchOnReconnect: true,
-    onSuccess(item: T) {
-      onSuccess?.(item);
+  const { data, isLoading, isError, isSuccess, refetch } = useQuery(
+    queryKey,
+    queryFn,
+    {
+      onSuccess(item) {
+        onSuccess?.(item);
+      },
+      onError(error) {
+        onError?.(error);
+        console.log('react-query error : ', error);
+      },
+      ...option,
+      retry: 0,
     },
-    onError(error: Error) {
-      onError?.(error);
-      console.log('react-query error : ', error);
-    },
-  });
+  );
 
-  return { data, isLoading, isError, isSuccess };
+  return { data, isLoading, isError, isSuccess, refetch };
 };
 
 export { useReactQuery };

@@ -29,7 +29,7 @@ const SideNavbar: FC = function SideNavbar() {
   return (
     <NavbarBlock>
       <SubTextLink
-        title="방문 제안 (함께해요)"
+        title="방문 제안 (지금 만나요)"
         icon="UserNow"
         routerName={routerName.CreateCall}
         selectedRouter={selectedRouter}

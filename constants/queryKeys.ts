@@ -2,7 +2,7 @@ import { LocationType } from '@constants/types/common';
 
 const callKeys = {
   createCall: ['createCall'] as const,
-  getSendCall: (storeUserId: string) => ['getSendCall', storeUserId] as const,
+  getSendCall: (storeId: string) => ['getSendCall', storeId] as const,
   getReceiveCall: (params: Omit<LocationType, 'geohash'>) =>
     ['getReceiveCall', params] as const,
   cancelCall: ['cancelCall'] as const,
@@ -30,4 +30,12 @@ const supportKeys = {
   getAllQa: ['getAllQa'] as const,
 };
 
-export { callKeys, customerKeys, rewardKeys, supportKeys };
+const notificationKeys = {
+  updateUnreadNotification: ['updateUnreadNotification'] as const,
+  getUnreadNotificationList: (storeId: string) =>
+    ['getUnreadNotificationList', storeId] as const,
+  getReadNotificationList: (storeId: string) =>
+    ['getReadNotificationList', storeId] as const,
+};
+
+export { callKeys, customerKeys, rewardKeys, supportKeys, notificationKeys };

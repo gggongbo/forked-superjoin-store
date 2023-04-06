@@ -76,7 +76,6 @@ interface RewardItemPropTypes {
   onDeleteClick: Function;
 }
 
-// TODO : 중복 체크, 각 리워드 데이터별로 unique id 필요 / 예외처리 주석 제거
 /* eslint-disable no-unused-vars */
 const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
   const { id, name, onUpdateClick, onDeleteClick } = props;
@@ -134,7 +133,10 @@ const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
               height: 20,
               color: 'green',
             }}
-            onClick={() => onUpdateClick?.({ id, name: updateReward })}
+            onClick={() => {
+              onUpdateClick?.({ id, name: updateReward });
+              setUpdatedClicked(false);
+            }}
             customStyle={buttonStyle}
           />
           <IconButton

@@ -1,5 +1,5 @@
 import { differenceInMinutes } from 'date-fns';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
@@ -7,11 +7,17 @@ import NotificationItem from './NotificationItem';
 
 import Divider from '@components/basicComponent/Divider';
 import ListBox from '@components/basicComponent/ListBox';
+import { notificationKeys } from '@constants/queryKeys';
 import {
   NotificationItemType,
   NotificationType,
-} from '@constants/types/common';
-import { ReduxStoreType } from '@constants/types/redux';
+  UpdateUnreadNotificationParamType,
+} from '@constants/types/notification';
+import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
+import { useReactMutation } from '@hooks/useReactMutation';
+import { useReactQuery } from '@hooks/useReactQuery';
+import { notificationService } from '@services/notification';
+import { storeUserActions } from '@slices/storeUser';
 import { useAppDispatch } from '@store/rootStore';
 
 const NotificationListBlock = styled.div`
@@ -40,14 +46,14 @@ const TextBlock = styled.div`
 `;
 
 const EmptyTextBlock = styled.div`
-  padding: 20px 100px;
+  padding: 20px;
   align-self: center;
   font-size: 14px;
   color: ${({ theme }) => theme.colors.text[300]};
 `;
 
 const CustomDivider = styled(Divider)`
-  border-width: 2px;
+  border-width: 4px;
 `;
 
 const customeListBoxStyle = css`
@@ -55,15 +61,19 @@ const customeListBoxStyle = css`
   display: flex;
 `;
 
-// TODO : 알림 배지 개수 리덕스로 관리 + 새로운 제안, 이전제안 분리
 const NotificationList: FC = function NotificationList() {
   /* eslint-disable no-unused-vars */
   const dispatch = useAppDispatch();
-  const notificationVisible = useSelector<ReduxStoreType, boolean>(
-    ({ storeUser }) => storeUser.notificationVisible,
-  );
+  const { notificationVisible, numOfNotification, currentStoreUser } =
+    useSelector<
+      ReduxStoreType,
+      {
+        notificationVisible: boolean;
+        numOfNotification: number;
+        currentStoreUser: CurrentStoreUserType;
+      }
+    >(({ storeUser }) => storeUser);
 
-  // TODO: store notification fetching
   const [unreadNotificationList, setUnreadNotificationList] = useState<
     NotificationType[]
   >([]);
@@ -71,40 +81,65 @@ const NotificationList: FC = function NotificationList() {
     NotificationType[]
   >([]);
 
-  const testData = useMemo(() => {
-    return [
-      {
-        type: 'confirmed',
-        createdAt: new Date(),
-        unread: true,
-        deleted: false,
-        callInfo: {
-          callId: '1',
-          title: 'test',
-        },
-      },
-      {
-        type: 'canceled',
-        createdAt: new Date(),
-        unread: true,
-        deleted: false,
-        callInfo: {
-          callId: '2',
-          title: 'test2',
-        },
-      },
-      {
-        type: 'needUpdate',
-        createdAt: new Date(),
-        unread: true,
-        deleted: false,
-        callInfo: {
-          callId: '3',
-          title: 'test3',
-        },
-      },
-    ];
-  }, []);
+  const { refetch: unreadRefetch } = useReactQuery(
+    notificationKeys.getUnreadNotificationList(currentStoreUser?.id),
+    () => notificationService.getUnreadNotificationList(currentStoreUser?.id),
+    {
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
+    (resultData: NotificationType[]) => {
+      if (!resultData) return;
+      setUnreadNotificationList(resultData);
+      dispatch(storeUserActions.setNumOfNotification(resultData.length));
+    },
+  );
+
+  const { refetch: readRefetch } = useReactQuery(
+    notificationKeys.getReadNotificationList(currentStoreUser?.id),
+    () => notificationService.getReadNotificationList(currentStoreUser?.id),
+    {
+      refetchOnWindowFocus: true,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
+    (resultData: NotificationType[]) => {
+      if (!resultData) return;
+      setReadNotificationList(resultData);
+    },
+  );
+
+  const { mutate: updateMutate } =
+    useReactMutation<UpdateUnreadNotificationParamType>(
+      notificationKeys.updateUnreadNotification,
+      notificationService.updateUnreadNotification,
+      () => {},
+    );
+
+  useEffect(() => {
+    if (notificationVisible && unreadNotificationList?.length > 0) {
+      updateMutate({
+        storeId: currentStoreUser?.id,
+        notificationIdList: unreadNotificationList.map(
+          (notification: NotificationType) => notification.id,
+        ),
+      });
+      dispatch(storeUserActions.setNumOfNotification(0));
+    } else if (numOfNotification === 0) {
+      unreadRefetch();
+      readRefetch();
+    }
+  }, [
+    currentStoreUser?.id,
+    dispatch,
+    notificationVisible,
+    numOfNotification,
+    readRefetch,
+    unreadNotificationList,
+    unreadRefetch,
+    updateMutate,
+  ]);
 
   const renderNotificationItem = useCallback(
     ({ item }: NotificationItemType) => {
@@ -113,7 +148,7 @@ const NotificationList: FC = function NotificationList() {
 
       const now = new Date();
       // TODO : 방금 전 표시 기준 확인
-      const time = `${differenceInMinutes(now, createdAt)}분 전`;
+      const time = `${differenceInMinutes(now, createdAt as Date)}분 전`;
       let message = '';
 
       switch (type) {
@@ -132,7 +167,7 @@ const NotificationList: FC = function NotificationList() {
 
       return (
         <NotificationItem
-          id={callInfo.callId}
+          callType={callInfo.type}
           type={type}
           time={time}
           message={message}
@@ -148,7 +183,7 @@ const NotificationList: FC = function NotificationList() {
       <TextBlock>새로운 알림</TextBlock>
       <ListBox
         customStyle={customeListBoxStyle}
-        data={testData}
+        data={unreadNotificationList}
         renderItem={renderNotificationItem}
         listEmptyComponent={
           <EmptyTextBlock>새로운 알림이 없습니다.</EmptyTextBlock>
@@ -158,7 +193,7 @@ const NotificationList: FC = function NotificationList() {
       <TextBlock>이전 알림</TextBlock>
       <ListBox
         customStyle={customeListBoxStyle}
-        data={testData}
+        data={readNotificationList}
         renderItem={renderNotificationItem}
         listEmptyComponent={
           <EmptyTextBlock>이전 알림이 없습니다.</EmptyTextBlock>

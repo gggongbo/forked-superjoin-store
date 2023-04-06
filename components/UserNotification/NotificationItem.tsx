@@ -49,7 +49,7 @@ const TimeBlock = styled.div`
 `;
 
 interface NotificationItemProps {
-  id: string;
+  callType: string;
   type: string;
   time: string;
   message: string;
@@ -58,15 +58,16 @@ interface NotificationItemProps {
 const NotificationItem: FC<NotificationItemProps> = function NotificationItem(
   props,
 ) {
-  const { id, type, time, message } = props;
+  const { callType, type, time, message } = props;
   const router = useRouter();
   return (
     <NotificationItemBlock
       onClick={() => {
-        // TODO: noti data unread==false update logic add /paramter :id
-        console.log(id);
         router.push(
-          { pathname: '/call', query: { callType: 'receive' } },
+          {
+            pathname: '/call',
+            query: { callType: callType === 'store' ? 'receive' : 'send' },
+          },
           '/call',
         );
       }}

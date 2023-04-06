@@ -1,6 +1,5 @@
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
@@ -100,29 +99,39 @@ const EmptyTextBlock = styled.div`
 
 const Reward: NextPage = function Reward() {
   const { confirm } = useConfirm();
-  const router = useRouter();
   const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
     ({ storeUser }) => storeUser?.currentStoreUser,
   );
 
   const [newReward, setNewReward] = useState<string>();
   const [rewardList, setRewardList] = useState<RewardType[]>();
-  const [loading, setLoading] = useState<boolean>();
 
-  useEffect(() => {
-    if (!rewardList) setLoading(true);
-    if (rewardList) setLoading(false);
-  }, [rewardList]);
+  const fetchRewardList = useCallback((rewardData: RewardType[]) => {
+    if (!rewardData) return;
+    setRewardList(rewardData);
+  }, []);
+
+  const { refetch } = useReactQuery(
+    rewardKeys.getRewardList,
+    () => rewardService.getRewardList(currentStoreUser.id),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
+    (resultData: RewardType[]) => {
+      fetchRewardList(resultData);
+    },
+  );
 
   const { mutate: createMutate } = useReactMutation<string>(
     rewardKeys.createReward,
     rewardService.createReward,
     () => {
-      router.reload();
+      refetch();
     },
     () => {
       alert('리워드를 추가하는 도중 오류가 발생하였습니다.');
-      router.reload();
     },
   );
 
@@ -130,11 +139,10 @@ const Reward: NextPage = function Reward() {
     rewardKeys.updateReward,
     rewardService.updateReward,
     () => {
-      router.reload();
+      refetch();
     },
     () => {
       alert('리워드를 수정하는 도중 오류가 발생하였습니다.');
-      router.reload();
     },
   );
 
@@ -142,24 +150,10 @@ const Reward: NextPage = function Reward() {
     rewardKeys.deleteReward,
     rewardService.deleteReward,
     () => {
-      router.reload();
+      refetch();
     },
     () => {
       alert('리워드를 삭제하는 도중 오류가 발생하였습니다.');
-      router.reload();
-    },
-  );
-
-  const fetchRewardList = useCallback((rewardData: RewardType[]) => {
-    if (!rewardData) return;
-    setRewardList(rewardData);
-  }, []);
-
-  useReactQuery<RewardType[]>(
-    rewardKeys.getRewardList,
-    () => rewardService.getRewardList(currentStoreUser.id),
-    (resultData: RewardType[]) => {
-      fetchRewardList(resultData);
     },
   );
 
@@ -209,7 +203,6 @@ const Reward: NextPage = function Reward() {
           {!!rewardList && (
             <ListBox
               data={rewardList}
-              loading={loading}
               renderItem={renderRewardItem}
               listEmptyComponent={
                 <EmptyBlock>

@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
 
@@ -139,6 +138,7 @@ const subTextStyle = css`
 const SendCall: FC<any> = React.memo(function SendCall(props) {
   const {
     callId,
+    refetch,
     title,
     reward,
     requestMemberList,
@@ -147,17 +147,14 @@ const SendCall: FC<any> = React.memo(function SendCall(props) {
     buttonDisabled,
   } = props;
 
-  const router = useRouter();
-
   const { mutate: acceptMutate } = useReactMutation<AcceptRequestCallParamType>(
     callKeys.acceptRequestCall,
     callService.acceptRequestCall,
     () => {
-      router.reload();
+      refetch();
     },
     () => {
       alert('제안을 수락하는 도중 오류가 발생하였습니다.');
-      router.reload();
     },
   );
 
@@ -166,11 +163,10 @@ const SendCall: FC<any> = React.memo(function SendCall(props) {
       callKeys.rejectRequestCall,
       callService.rejectRequestCall,
       () => {
-        router.reload();
+        refetch();
       },
       () => {
         alert('제안을 거절하는 도중 오류가 발생하였습니다.');
-        router.reload();
       },
     );
 
