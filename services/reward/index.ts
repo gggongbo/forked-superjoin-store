@@ -9,9 +9,8 @@ import {
   where,
 } from 'firebase/firestore';
 
-// TODO : return Promise<DocumentData>, any 타입 => type 선언해서 변경
 import { FirebaseTimestamp } from '@constants/types/common';
-import { RewardInfo } from '@constants/types/reward';
+import { RewardInfo, RewardType } from '@constants/types/reward';
 import { auth, db } from '@services/app';
 import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
@@ -53,7 +52,7 @@ const deleteReward = async (rewardId: string) => {
   });
 };
 
-const getRewardList = async (storeId: string): Promise<any | null> => {
+const getRewardList = async (storeId: string): Promise<RewardType[] | null> => {
   if (!storeId) return [];
 
   const q = query(
@@ -66,7 +65,7 @@ const getRewardList = async (storeId: string): Promise<any | null> => {
   if (querySnapshot.empty) return [];
 
   return querySnapshot.docs.map((docItem: DocumentData) => {
-    const rewardData = docItem.data();
+    const rewardData: RewardType = docItem.data();
     return {
       ...rewardData,
       updatedAt: firebaseTimestampToDate(

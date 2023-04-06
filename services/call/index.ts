@@ -1,6 +1,5 @@
-import { httpsCallable } from 'firebase/functions';
+import { httpsCallable, HttpsCallableResult } from 'firebase/functions';
 
-// TODO : return Promise<DocumentData>, any 타입 => type 선언해서 변경
 import {
   ConfirmCallParamType,
   CreateCallParamType,
@@ -8,12 +7,12 @@ import {
   AcceptRequestCallParamType,
   RejectRequestCallParamType,
   CommentType,
+  CallType,
 } from '@constants/types/call';
 import { FirebaseTimestamp, LocationType } from '@constants/types/common';
 import { functions } from '@services/app';
 import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
-// TODO : 로직 테스트
 const createCall = async (params: CreateCallParamType) => {
   if (!params || !params.deadline) return;
   await httpsCallable(functions, 'createCall')(params);
@@ -49,18 +48,22 @@ const registerCommentCall = async (params: RegisterCommentCallParamType) => {
   await httpsCallable(functions, 'registerCommentCall')(params);
 };
 
-const getSendCall = async (storeId: any): Promise<any | null> => {
-  const storeCallList: any = await httpsCallable(
+const getSendCall = async (storeId: string): Promise<CallType[] | null> => {
+  const storeCallList = (await httpsCallable(
     functions,
     'getSendCall',
-  )(storeId);
+  )(storeId)) as HttpsCallableResult<CallType[]>;
   if (!storeCallList?.data) return null;
-  return storeCallList.data.map((callData: any) => {
+  return storeCallList.data.map((callData: CallType) => {
     return {
       ...callData,
-      deadline: firebaseTimestampToDate(callData.deadline),
-      updatedAt: firebaseTimestampToDate(callData.updatedAt),
-      createdAt: firebaseTimestampToDate(callData.createdAt),
+      deadline: firebaseTimestampToDate(callData.deadline as FirebaseTimestamp),
+      updatedAt: firebaseTimestampToDate(
+        callData.updatedAt as FirebaseTimestamp,
+      ),
+      createdAt: firebaseTimestampToDate(
+        callData.createdAt as FirebaseTimestamp,
+      ),
     };
   });
 };
@@ -68,12 +71,12 @@ const getSendCall = async (storeId: any): Promise<any | null> => {
 const getReceiveCall = async (params: {
   location: LocationType;
   mainCategory: string;
-}): Promise<any | null> => {
+}): Promise<CallType[] | null> => {
   if (!params) return null;
 
   const { location, mainCategory } = params;
 
-  const storeCallList: any = await httpsCallable(
+  const storeCallList = (await httpsCallable(
     functions,
     'getReceiveCall',
   )({
@@ -82,14 +85,18 @@ const getReceiveCall = async (params: {
       longitude: Number(location.longitude),
     },
     mainCategory,
-  });
+  })) as HttpsCallableResult<CallType[]>;
   if (!storeCallList?.data) return null;
-  return storeCallList.data.map((callData: any) => {
+  return storeCallList.data.map((callData: CallType) => {
     return {
       ...callData,
-      deadline: firebaseTimestampToDate(callData.deadline),
-      updatedAt: firebaseTimestampToDate(callData.updatedAt),
-      createdAt: firebaseTimestampToDate(callData.createdAt),
+      deadline: firebaseTimestampToDate(callData.deadline as FirebaseTimestamp),
+      updatedAt: firebaseTimestampToDate(
+        callData.updatedAt as FirebaseTimestamp,
+      ),
+      createdAt: firebaseTimestampToDate(
+        callData.createdAt as FirebaseTimestamp,
+      ),
       commentList:
         callData.commentList?.length > 0
           ? callData.commentList.map((comment: CommentType) => ({
@@ -106,7 +113,7 @@ const getReceiveCall = async (params: {
                   ),
             }))
           : [],
-    };
+    } as CallType;
   });
 };
 

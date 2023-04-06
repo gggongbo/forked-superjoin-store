@@ -9,11 +9,13 @@ import {
   where,
 } from 'firebase/firestore';
 
-// TODO : return Promise<DocumentData>, any 타입 => type 선언해서 변경
 import { FirebaseTimestamp } from '@constants/types/common';
+import {
+  NotificationType,
+  UpdateUnreadNotificationParamType,
+} from '@constants/types/notification';
 import { db } from '@services/app';
 import { firebaseTimestampToDate } from '@utils/firebaseUtils';
-import { UpdateUnreadNotificationParamType } from '~/constants/types/notification';
 
 const updateUnreadNotification = async (
   params: UpdateUnreadNotificationParamType,
@@ -32,7 +34,8 @@ const updateUnreadNotification = async (
 
 const getUnreadNotificationList = async (
   storeId: string,
-): Promise<any | null> => {
+): Promise<NotificationType[] | null> => {
+  if (!storeId) return null;
   const storeDocRef = doc(db, 'store', storeId);
   const q = query(
     collection(storeDocRef, 'notifications'),
@@ -45,7 +48,7 @@ const getUnreadNotificationList = async (
   if (querySnapshot.empty) return [];
 
   return querySnapshot.docs.map((docItem: DocumentData) => {
-    const notificationData = docItem.data();
+    const notificationData: NotificationType = docItem.data();
     return {
       ...notificationData,
       createdAt: firebaseTimestampToDate(
@@ -57,7 +60,8 @@ const getUnreadNotificationList = async (
 
 const getReadNotificationList = async (
   storeId: string,
-): Promise<any | null> => {
+): Promise<NotificationType[] | null> => {
+  if (!storeId) return null;
   const storeDocRef = doc(db, 'store', storeId);
   const q = query(
     collection(storeDocRef, 'notifications'),
@@ -70,7 +74,7 @@ const getReadNotificationList = async (
   if (querySnapshot.empty) return [];
 
   return querySnapshot.docs.map((docItem: DocumentData) => {
-    const notificationData = docItem.data();
+    const notificationData: NotificationType = docItem.data();
     return {
       ...notificationData,
       createdAt: firebaseTimestampToDate(

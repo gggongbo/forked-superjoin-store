@@ -1,6 +1,5 @@
 import { httpsCallable, HttpsCallableResult } from 'firebase/functions';
 
-// TODO : return Promise<DocumentData>, any 타입 => type 선언해서 변경
 import { FirebaseTimestamp } from '@constants/types/common';
 import {
   CallsOfUserType,
@@ -17,7 +16,7 @@ const updateReservationCustomer = async (
   await httpsCallable(functions, 'updateReservationMember')(params);
 };
 
-const getVisitedCustomer = async (): Promise<any | null> => {
+const getVisitedCustomer = async (): Promise<StoresOfUserType[] | null> => {
   const customerList = (await httpsCallable(
     functions,
     'getVisitedMember',
@@ -28,7 +27,7 @@ const getVisitedCustomer = async (): Promise<any | null> => {
   }));
 };
 
-const getReservedCustomer = async (): Promise<any | null> => {
+const getReservedCustomer = async (): Promise<CallsOfUserType[] | null> => {
   const customerList = (await httpsCallable(
     functions,
     'getVisitedReservationMember',

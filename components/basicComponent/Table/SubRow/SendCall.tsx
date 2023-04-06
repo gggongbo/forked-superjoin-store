@@ -11,6 +11,7 @@ import {
   CallMemberType,
   RejectRequestCallParamType,
 } from '@constants/types/call';
+import { RewardType } from '@constants/types/reward';
 import { useReactMutation } from '@hooks/useReactMutation';
 import { callService } from '@services/call';
 
@@ -135,7 +136,18 @@ const subTextStyle = css`
   margin-top: 6px;
 `;
 
-const SendCall: FC<any> = React.memo(function SendCall(props) {
+interface SendCallPropTypes {
+  callId: string;
+  refetch: Function;
+  title: string;
+  reward: RewardType | null;
+  requestMemberList: CallMemberType[];
+  callMemberList: CallMemberType[];
+  disabled: boolean;
+  buttonDisabled: boolean;
+}
+
+const SendCall: FC<SendCallPropTypes> = React.memo(function SendCall(props) {
   const {
     callId,
     refetch,

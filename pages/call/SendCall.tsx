@@ -7,7 +7,12 @@ import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
 import { callKeys } from '@constants/queryKeys';
-import { CallProps, ConfirmCallParamType } from '@constants/types/call';
+import {
+  CallProps,
+  CallStatusType,
+  CallType,
+  ConfirmCallParamType,
+} from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';
 import { useReactMutation } from '@hooks/useReactMutation';
@@ -36,7 +41,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
-  const [initData, setInitData] = useState([]);
+  const [initData, setInitData] = useState<CallType[]>([]);
   const pageSizeList = [10, 25, 50, 75, 100];
 
   const {
@@ -49,7 +54,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     renderRowSubComponent,
   } = useTableComponent();
 
-  const fetchSendCall = useCallback((callData: any) => {
+  const fetchSendCall = useCallback((callData: CallType[]) => {
     if (!callData) return;
     setInitData(callData);
   }, []);
@@ -62,7 +67,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       refetchOnMount: true,
       refetchOnReconnect: true,
     },
-    (resultData: any) => {
+    (resultData: CallType[]) => {
       fetchSendCall(resultData);
     },
   );
@@ -104,7 +109,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     () =>
       initData &&
       initData
-        ?.map((data: any) => {
+        ?.map((data: CallType) => {
           const {
             callHost,
             category,
@@ -117,7 +122,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
           } = data;
 
           const now = new Date();
-          let callStatus = null;
+          let callStatus: CallStatusType = 'proceeding';
           if (status === 'proceeding' && deadline <= now) {
             callStatus = isUserMax ? 'confirmed' : 'expired';
           } else {
@@ -139,13 +144,13 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
             },
             callTitle: callTitleComponent(category, title),
             callSendTime: createdAt
-              ? format(createdAt, 'yyyy년 M월 d일 / a h:mm', {
+              ? format(createdAt as Date, 'yyyy년 M월 d일 / a h:mm', {
                   locale: ko,
                 })
               : null,
             callEndTime: deadline
               ? callEndTimeComponent(
-                  differenceInMinutes(deadline, now),
+                  differenceInMinutes(deadline as Date, now),
                   callStatus,
                 )
               : null,
