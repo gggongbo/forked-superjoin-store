@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { useEffect, useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
@@ -40,21 +39,7 @@ const ReservedCustomer: NextPage<CustomerProps> = function ReservedCustomer({
   const pageSizeList = [10, 25, 50, 75, 100];
   const { getFetchedData, rewardComponent, visitButtonComponent } =
     useTableComponent();
-  const router = useRouter();
   const { confirm } = useConfirm();
-
-  const { mutate: visitMutate } =
-    useReactMutation<UpdateReservationCustomerParamType>(
-      customerKeys.updateReservationCustomer,
-      customerService.updateReservationCustomer,
-      () => {
-        router.reload();
-      },
-      () => {
-        alert('방문 확인하는 도중 오류가 발생하였습니다.');
-        router.reload();
-      },
-    );
 
   useEffect(() => {
     if (tableData) setIsMounted(true);
@@ -72,13 +57,30 @@ const ReservedCustomer: NextPage<CustomerProps> = function ReservedCustomer({
     [],
   );
 
-  useReactQuery<CallsOfUserType[]>(
+  const { refetch } = useReactQuery(
     customerKeys.getReservedCustomer,
     () => customerService.getReservedCustomer(),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
     (resultData: CallsOfUserType[]) => {
       fetchReservedCustomer(resultData);
     },
   );
+
+  const { mutate: visitMutate } =
+    useReactMutation<UpdateReservationCustomerParamType>(
+      customerKeys.updateReservationCustomer,
+      customerService.updateReservationCustomer,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('방문 확인하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
   const filteredData = useMemo(
     () =>

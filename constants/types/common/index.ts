@@ -27,19 +27,3 @@ export type FirebaseTimestamp = Timestamp & {
   _seconds: number;
   _nanoseconds: number;
 };
-
-export type NotificationType = {
-  type: 'confirmed' | 'canceled' | 'needUpdate';
-  createdAt: Date;
-  unread: boolean;
-  deleted: boolean;
-  callInfo: {
-    callId: string;
-    title: string;
-  };
-};
-
-export type NotificationItemType = {
-  item: NotificationType;
-  index: number;
-};

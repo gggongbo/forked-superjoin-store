@@ -58,9 +58,18 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
     setInitData(callData);
   }, []);
 
-  useReactQuery<any>(
+  useReactQuery(
     callKeys.getReceiveCall(currentStoreUser.location),
-    () => callService.getReceiveCall(currentStoreUser.location),
+    () =>
+      callService.getReceiveCall({
+        location: currentStoreUser.location,
+        mainCategory: currentStoreUser.category,
+      }),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
     (resultData: any) => fetchReceiveCall(resultData),
   );
 

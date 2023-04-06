@@ -17,9 +17,14 @@ const AccordionBlock = styled.div`
 const QaSupport: NextPage = function QaSupport() {
   const [data, setData] = useState<SupportType[]>([]);
 
-  useReactQuery<SupportType[]>(
+  useReactQuery(
     supportKeys.getAllQa,
     () => supportService.getAllQa(),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
     (resultData: SupportType[]) => setData(resultData),
   );
 

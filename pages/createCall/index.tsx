@@ -105,9 +105,14 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
     },
   );
 
-  useReactQuery<RewardType[]>(
+  useReactQuery(
     rewardKeys.getRewardList,
     () => rewardService.getRewardList(currentStoreUser.id),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
     (resultData: RewardType[]) => {
       if (!resultData) return;
       const rewardDataList = resultData
@@ -131,7 +136,7 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
       !description?.length ||
       !maxNumOfUser ||
       maxNumOfUser < 1 ||
-      maxNumOfUser > 10 ||
+      maxNumOfUser > 1000 ||
       deadline < 1 ||
       deadline > 60 ||
       !reward
@@ -206,8 +211,8 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
               type="number"
               defaultValue={maxNumOfUser}
               onChange={e => setMaxNumOfUser(e.target.value)}
-              placeholder="최대 10명"
-              range={{ max: 10, min: 1 }}
+              placeholder="최대 1000명"
+              range={{ max: 1000, min: 1 }}
             />
           }
           rightText="명"
@@ -275,7 +280,7 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
             !description?.length ||
             !maxNumOfUser ||
             maxNumOfUser < 1 ||
-            maxNumOfUser > 10 ||
+            maxNumOfUser > 1000 ||
             deadline < 1 ||
             deadline > 60 ||
             !reward

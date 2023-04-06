@@ -1,7 +1,6 @@
 import { format, differenceInMinutes } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { useMemo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -32,7 +31,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
   const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
     ({ storeUser }) => storeUser?.currentStoreUser,
   );
-  const router = useRouter();
   const { confirm } = useConfirm();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,9 +54,14 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     setInitData(callData);
   }, []);
 
-  useReactQuery<any>(
+  const { refetch } = useReactQuery(
     callKeys.getSendCall(currentStoreUser?.id),
     () => callService.getSendCall(currentStoreUser?.id),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
     (resultData: any) => {
       fetchSendCall(resultData);
     },
@@ -68,11 +71,10 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     callKeys.confirmCall,
     callService.confirmCall,
     () => {
-      router.reload();
+      refetch();
     },
     () => {
       alert('제안을 확정하는 도중 오류가 발생하였습니다.');
-      router.reload();
     },
   );
 
@@ -80,11 +82,10 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     callKeys.cancelCall,
     callService.cancelCall,
     () => {
-      router.reload();
+      refetch();
     },
     () => {
       alert('제안을 취소하는 도중 오류가 발생하였습니다.');
-      router.reload();
     },
   );
 
@@ -92,11 +93,10 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     callKeys.deleteCall,
     callService.deleteCall,
     () => {
-      router.reload();
+      refetch();
     },
     () => {
       alert('제안을 삭제하는 도중 오류가 발생하였습니다.');
-      router.reload();
     },
   );
 
@@ -126,6 +126,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
 
           return {
             ...data,
+            refetch,
             storeInfo: {
               id: currentStoreUser.id,
               name: currentStoreUser.name,
@@ -186,6 +187,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
         }),
     [
       initData,
+      refetch,
       currentStoreUser.id,
       currentStoreUser.name,
       currentStoreUser.image,
