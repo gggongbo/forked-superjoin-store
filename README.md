@@ -91,7 +91,7 @@ yarn deploy
 
 ### **코드 작성시 유의사항**
 
-1. 파일 이름 명명은 auth(Authentication 관련 로직 저장), storeUser(로그인한 업체의 기본 정보 저장)과 같은 케이스를 제외하고, pages 하위 페이지이름(createCall, call, reward, support, customer)에 따라 명명
+1. 파일 이름 명명은 auth(Authentication 관련 로직 저장), storeUser(로그인한 업체의 기본 정보 저장)과 같은 케이스를 제외하고, pages 하위 페이지이름(createCall, call, reward, support, member)에 따라 명명
 2. 타입정의는 constants/types 안에서 진행
 3. pages 하위 폴더에서 ui 관련 로직 작성
 4. services 하위 폴더에서 data + useCase 관련 로직 작성
@@ -112,6 +112,7 @@ yarn deploy
     - Table
     - Button.tsx
     - CattegoryTag.tsx
+    - CheckboxItem.tsx
     - Checkbox.tsx
     - CheckboxText.tsx
     - Divider.tsx
@@ -129,6 +130,7 @@ yarn deploy
     - ListBox.tsx
   - `Icon`
   - `UserInfo` : TopNavbar 오른쪽 업체 프로필 컴포넌트. 로그아웃/비밀번호 초기화 위치
+  - `UserNotification` : 알림 컴포넌트
   - `Layout.tsx` : SideNavbar, TopNavbar, pages 폴더 안에 있는 메인 컴포넌트들을 감싸는 컴포넌트
   - `SideNavbar`.tsx
   - `TopNavbar`.tsx
@@ -136,10 +138,13 @@ yarn deploy
   - `types`
     - category
     - components
-    - customer
+    - member
     - call
+    - reward
+    - notification
     - redux
     - support
+    - common
   - category.ts
   - categoryList.ts
   - router.ts
@@ -156,11 +161,12 @@ yarn deploy
   - `api`
     - auth
     - support
-  - `customer`
+  - `member`
   - `login`
   - `createCall`
   - `call`
   - `reward`
+  - `notification`
   - `support`
   - `\_app.tsx`
   - `\_document.tsx`
@@ -170,6 +176,9 @@ yarn deploy
 - **services**
   - `auth`
   - `call`
+  - `member`
+  - `reward`
+  - `notification`
   - `storeUser`
   - `support`
   - `app.ts`

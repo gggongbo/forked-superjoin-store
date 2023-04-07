@@ -22,7 +22,7 @@ const nextConfig = {
       '/login': { page: '/login' },
       '/createCall': { page: '/createCall' },
       '/call': { page: '/call' },
-      '/customer': { page: '/customer' },
+      '/member': { page: '/member' },
       '/reward': { page: '/reward' },
       '/support': { page: '/support' },
     };

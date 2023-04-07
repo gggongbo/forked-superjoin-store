@@ -2,7 +2,7 @@ const router = {
   Login: '/login',
   CreateCall: '/createCall',
   Call: '/call',
-  Customer: '/customer',
+  Member: '/member',
   Reward: '/reward',
   Support: '/support',
 };

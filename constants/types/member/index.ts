@@ -5,12 +5,12 @@ import { FirebaseTimestamp } from '@constants/types/common';
 import { SearchType } from '@constants/types/components';
 import { RewardInfo } from '@constants/types/reward';
 
-export interface CustomerProps {
+export interface MemberProps {
   search?: SearchType;
   columns: any;
 }
 
-export type UpdateReservationCustomerParamType = {
+export type UpdateReservationMemberParamType = {
   callId: string | undefined;
   userId: string | undefined;
 };
@@ -36,8 +36,8 @@ export type StoresOfUserType = {
   userInfo: CallMemberType;
 };
 
-export type CustomerRouterType = NextRouter & {
+export type MemberRouterType = NextRouter & {
   query: {
-    customerType: 'visited' | 'reserved';
+    memberType: 'visited' | 'reserved';
   };
 };

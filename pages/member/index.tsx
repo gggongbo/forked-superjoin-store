@@ -3,17 +3,17 @@ import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import ReservedCustomer from './ReservedCustomer';
-import VisitedCustomer from './VisitedCustomer';
+import ReservedMember from './ReservedMember';
+import VisitedMember from './VisitedMember';
 
 import Divider from '@components/basicComponent/Divider';
 import Header from '@components/basicComponent/Header';
 import SelectInputText from '@components/basicComponent/SelectInputText';
 import * as Columns from '@constants/tableColumns';
 import { SearchType } from '@constants/types/components';
-import { CustomerRouterType } from '@constants/types/customer';
+import { MemberRouterType } from '@constants/types/member';
 
-const CustomerBlock = styled.main`
+const MemberBlock = styled.main`
   min-width: ${({ theme }) => theme.componentSizes.table.width}px;
   display: flex;
   flex-direction: column;
@@ -26,13 +26,13 @@ const HeaderBlock = styled.div`
   align-items: center;
 `;
 
-const HeaderText = styled.div<{ customerType: string; defaultValue: string }>`
+const HeaderText = styled.div<{ memberType: string; defaultValue: string }>`
   display: flex;
   font-size: 24px;
   letter-spacing: -0.55px;
-  font-weight: ${props => props.customerType === props.defaultValue && 500};
+  font-weight: ${props => props.memberType === props.defaultValue && 500};
   color: ${props =>
-    props.customerType === props.defaultValue
+    props.memberType === props.defaultValue
       ? props.theme.colors.text[600]
       : props.theme.colors.text[200]};
 `;
@@ -54,19 +54,19 @@ const optionList = [
   { name: '닉네임', value: 'nickname' },
 ];
 
-const Customer: NextPage<WithRouterProps> = function Customer({
+const Member: NextPage<WithRouterProps> = function Member({
   router: routerProps,
 }) {
-  const { query } = routerProps as CustomerRouterType;
-  const [customerType, setCustomerType] = useState<'visited' | 'reserved'>(
-    query?.customerType || 'visited',
+  const { query } = routerProps as MemberRouterType;
+  const [memberType, setMemberType] = useState<'visited' | 'reserved'>(
+    query?.memberType || 'visited',
   );
   const [input, setInput] = useState<SearchType>();
   const [search, setSearch] = useState<SearchType>();
 
   useEffect(() => {
     setSearch(undefined);
-  }, [customerType]);
+  }, [memberType]);
 
   const handleInputChange = useCallback((e: any) => {
     setInput(e.target.valueObject);
@@ -76,8 +76,8 @@ const Customer: NextPage<WithRouterProps> = function Customer({
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setCustomerType('visited')}
-          customerType={customerType}
+          onClick={() => setMemberType('visited')}
+          memberType={memberType}
           defaultValue="visited"
         >
           방문 고객 관리
@@ -85,21 +85,21 @@ const Customer: NextPage<WithRouterProps> = function Customer({
         <HeaderDivider isVertical />
       </HeaderBlock>
     );
-  }, [customerType]);
+  }, [memberType]);
 
   const headertitleComponent = useMemo(() => {
     return (
       <HeaderBlock>
         <HeaderText
-          onClick={() => setCustomerType('reserved')}
-          customerType={customerType}
+          onClick={() => setMemberType('reserved')}
+          memberType={memberType}
           defaultValue="reserved"
         >
           방문 예약 고객 관리
         </HeaderText>
       </HeaderBlock>
     );
-  }, [customerType]);
+  }, [memberType]);
 
   const headerRightComponent = useMemo(() => {
     return (
@@ -116,19 +116,19 @@ const Customer: NextPage<WithRouterProps> = function Customer({
   }, [input, handleInputChange]);
 
   return (
-    <CustomerBlock>
+    <MemberBlock>
       <Header
         titleComponent={headertitleComponent}
         leftComponent={headerLeftComponent}
         rightComponent={headerRightComponent}
       />
-      {customerType === 'visited' ? (
-        <VisitedCustomer columns={Columns.VisitedCustomer} search={search} />
+      {memberType === 'visited' ? (
+        <VisitedMember columns={Columns.VisitedMember} search={search} />
       ) : (
-        <ReservedCustomer columns={Columns.ReservedCustomer} search={search} />
+        <ReservedMember columns={Columns.ReservedMember} search={search} />
       )}
-    </CustomerBlock>
+    </MemberBlock>
   );
 };
 
-export default withRouter(Customer);
+export default withRouter(Member);

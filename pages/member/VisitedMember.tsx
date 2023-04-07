@@ -3,13 +3,13 @@ import { useEffect, useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
-import { customerKeys } from '@constants/queryKeys';
-import { CustomerProps, StoresOfUserType } from '@constants/types/customer';
+import { memberKeys } from '@constants/queryKeys';
+import { MemberProps, StoresOfUserType } from '@constants/types/member';
 import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { customerService } from '@services/customer';
+import { memberService } from '@services/member';
 
-const VisitedCustomerBlock = styled.main`
+const VisitedMemberBlock = styled.main`
   display: flex;
   flex-direction: column;
 `;
@@ -19,7 +19,7 @@ const TableBlock = styled.div`
   width: 100%;
 `;
 
-const VisitedCustomer: NextPage<CustomerProps> = function VisitedCustomer({
+const VisitedMember: NextPage<MemberProps> = function VisitedMember({
   columns,
   search,
 }) {
@@ -39,24 +39,21 @@ const VisitedCustomer: NextPage<CustomerProps> = function VisitedCustomer({
     };
   }, [tableData]);
 
-  const fetchVisitedCustomer = useCallback(
-    (customerData: StoresOfUserType[]) => {
-      if (!customerData) return;
-      setInitData(customerData!);
-    },
-    [],
-  );
+  const fetchVisitedMember = useCallback((memberData: StoresOfUserType[]) => {
+    if (!memberData) return;
+    setInitData(memberData!);
+  }, []);
 
   useReactQuery(
-    customerKeys.getVisitedCustomer,
-    () => customerService.getVisitedCustomer(),
+    memberKeys.getVisitedMember,
+    () => memberService.getVisitedMember(),
     {
       refetchOnWindowFocus: false,
       refetchOnMount: true,
       refetchOnReconnect: true,
     },
     (resultData: StoresOfUserType[]) => {
-      fetchVisitedCustomer(resultData);
+      fetchVisitedMember(resultData);
     },
   );
 
@@ -75,12 +72,12 @@ const VisitedCustomer: NextPage<CustomerProps> = function VisitedCustomer({
           } = data;
           return {
             ...data,
-            customerId: userInfo.id,
-            customerName: userInfo.name,
-            customerNumOfConfirm: `${numOfConfirm || 0}회`,
-            customerNumOfCancel: `${numOfCancel || 0}회`,
-            customerNumOfVisit: `${numOfVisit || 0}회`,
-            customerNumOfReward: numOfRewardComponent(
+            memberId: userInfo.id,
+            memberName: userInfo.name,
+            memberNumOfConfirm: `${numOfConfirm || 0}회`,
+            memberNumOfCancel: `${numOfCancel || 0}회`,
+            memberNumOfVisit: `${numOfVisit || 0}회`,
+            memberNumOfReward: numOfRewardComponent(
               rewardList?.length > 0,
               rewardList?.length > 0 ? rewardList.length : 0,
             ),
@@ -112,7 +109,7 @@ const VisitedCustomer: NextPage<CustomerProps> = function VisitedCustomer({
   );
 
   return (
-    <VisitedCustomerBlock>
+    <VisitedMemberBlock>
       {isMounted && (
         <TableBlock>
           <Table
@@ -125,12 +122,12 @@ const VisitedCustomer: NextPage<CustomerProps> = function VisitedCustomer({
           />
         </TableBlock>
       )}
-    </VisitedCustomerBlock>
+    </VisitedMemberBlock>
   );
 };
 
-VisitedCustomer.defaultProps = {
+VisitedMember.defaultProps = {
   search: { type: '', value: '' },
 };
 
-export default VisitedCustomer;
+export default VisitedMember;
