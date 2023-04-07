@@ -13,10 +13,10 @@ const callKeys = {
   registerCommentCall: ['registerCommentCall'] as const,
 };
 
-const customerKeys = {
-  updateReservationCustomer: ['updateReservationCustomer'] as const,
-  getVisitedCustomer: ['getVisitedCustomer'] as const,
-  getReservedCustomer: ['getReservedCustomer'] as const,
+const memberKeys = {
+  updateReservationMember: ['updateReservationMember'] as const,
+  getVisitedMember: ['getVisitedMember'] as const,
+  getReservedMember: ['getReservedMember'] as const,
 };
 
 const rewardKeys = {
@@ -38,4 +38,4 @@ const notificationKeys = {
     ['getReadNotificationList', storeId] as const,
 };
 
-export { callKeys, customerKeys, rewardKeys, supportKeys, notificationKeys };
+export { callKeys, memberKeys, rewardKeys, supportKeys, notificationKeys };

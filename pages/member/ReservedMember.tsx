@@ -5,19 +5,19 @@ import { useEffect, useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
-import { customerKeys } from '@constants/queryKeys';
+import { memberKeys } from '@constants/queryKeys';
 import {
   CallsOfUserType,
-  CustomerProps,
-  UpdateReservationCustomerParamType,
-} from '@constants/types/customer';
+  MemberProps,
+  UpdateReservationMemberParamType,
+} from '@constants/types/member';
 import { useConfirm } from '@hooks/useConfirm';
 import { useReactMutation } from '@hooks/useReactMutation';
 import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
-import { customerService } from '@services/customer';
+import { memberService } from '@services/member';
 
-const ReservedCustomerBlock = styled.main`
+const ReservedMemberBlock = styled.main`
   display: flex;
   flex-direction: column;
 `;
@@ -27,7 +27,7 @@ const TableBlock = styled.div`
   width: 100%;
 `;
 
-const ReservedCustomer: NextPage<CustomerProps> = function ReservedCustomer({
+const ReservedMember: NextPage<MemberProps> = function ReservedMember({
   columns,
   search,
 }) {
@@ -49,31 +49,28 @@ const ReservedCustomer: NextPage<CustomerProps> = function ReservedCustomer({
     };
   }, [tableData]);
 
-  const fetchReservedCustomer = useCallback(
-    (customerData: CallsOfUserType[]) => {
-      if (!customerData) return;
-      setInitData(customerData!);
-    },
-    [],
-  );
+  const fetchReservedMember = useCallback((memberData: CallsOfUserType[]) => {
+    if (!memberData) return;
+    setInitData(memberData!);
+  }, []);
 
   const { refetch } = useReactQuery(
-    customerKeys.getReservedCustomer,
-    () => customerService.getReservedCustomer(),
+    memberKeys.getReservedMember,
+    () => memberService.getReservedMember(),
     {
       refetchOnWindowFocus: false,
       refetchOnMount: true,
       refetchOnReconnect: true,
     },
     (resultData: CallsOfUserType[]) => {
-      fetchReservedCustomer(resultData);
+      fetchReservedMember(resultData);
     },
   );
 
   const { mutate: visitMutate } =
-    useReactMutation<UpdateReservationCustomerParamType>(
-      customerKeys.updateReservationCustomer,
-      customerService.updateReservationCustomer,
+    useReactMutation<UpdateReservationMemberParamType>(
+      memberKeys.updateReservationMember,
+      memberService.updateReservationMember,
       () => {
         refetch();
       },
@@ -91,8 +88,8 @@ const ReservedCustomer: NextPage<CustomerProps> = function ReservedCustomer({
           const { userInfo, callInfo, deadline, reward, canceledAt } = data;
           return {
             ...data,
-            customerId: userInfo.id,
-            customerName: userInfo.name,
+            memberId: userInfo.id,
+            memberName: userInfo.name,
             callTitle: callInfo.title,
             reserveTime: deadline
               ? format(deadline as Date, 'yyyy년 M월 d일 / a h:mm', {
@@ -148,7 +145,7 @@ const ReservedCustomer: NextPage<CustomerProps> = function ReservedCustomer({
   );
 
   return (
-    <ReservedCustomerBlock>
+    <ReservedMemberBlock>
       {isMounted && (
         <TableBlock>
           <Table
@@ -161,12 +158,12 @@ const ReservedCustomer: NextPage<CustomerProps> = function ReservedCustomer({
           />
         </TableBlock>
       )}
-    </ReservedCustomerBlock>
+    </ReservedMemberBlock>
   );
 };
 
-ReservedCustomer.defaultProps = {
+ReservedMember.defaultProps = {
   search: { type: '', value: '' },
 };
 
-export default ReservedCustomer;
+export default ReservedMember;

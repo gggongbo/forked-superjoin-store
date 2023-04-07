@@ -43,7 +43,7 @@ const SideNavbar: FC = function SideNavbar() {
       <SubTextLink
         title="고객 관리"
         icon="UserList"
-        routerName={routerName.Customer}
+        routerName={routerName.Member}
         selectedRouter={selectedRouter}
       />
       <SubTextLink

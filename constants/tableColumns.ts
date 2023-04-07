@@ -83,37 +83,37 @@ const ReceiveCall = [
   },
 ];
 
-const VisitedCustomer = [
+const VisitedMember = [
   {
-    accessor: 'customerId',
+    accessor: 'memberId',
     Header: 'ID',
   },
   {
-    accessor: 'customerName',
+    accessor: 'memberName',
     Header: '닉네임',
     width: 250,
     disableSortBy: true,
   },
   {
-    accessor: 'customerNumOfConfirm',
+    accessor: 'memberNumOfConfirm',
     Header: '제안 보낸 횟수',
     width: 200,
     disableSortBy: true,
   },
   {
-    accessor: 'customerNumOfCancel',
+    accessor: 'memberNumOfCancel',
     Header: '방문 취소 횟수',
     width: 200,
     disableSortBy: true,
   },
   {
-    accessor: 'customerNumOfVisit',
+    accessor: 'memberNumOfVisit',
     Header: '방문 확정 횟수',
     width: 200,
     disableSortBy: true,
   },
   {
-    accessor: 'customerNumOfReward',
+    accessor: 'memberNumOfReward',
     Header: '지급 리워드 횟수',
     width: 250,
     Filter: SelectColumnFilter,
@@ -122,13 +122,13 @@ const VisitedCustomer = [
   },
 ];
 
-const ReservedCustomer = [
+const ReservedMember = [
   {
-    accessor: 'customerId',
+    accessor: 'memberId',
     Header: 'ID',
   },
   {
-    accessor: 'customerName',
+    accessor: 'memberName',
     Header: '닉네임',
     width: 250,
     disableSortBy: true,
@@ -162,4 +162,4 @@ const ReservedCustomer = [
   },
 ];
 
-export { SendCall, ReceiveCall, VisitedCustomer, ReservedCustomer };
+export { SendCall, ReceiveCall, VisitedMember, ReservedMember };
