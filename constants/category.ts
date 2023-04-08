@@ -49,6 +49,13 @@ const IMPROVEMENT = {
   icon: 'Improvement',
   value: 'improvement',
 };
+const BEAUTY = {
+  name: '미용',
+  alias: '미용',
+  color: category.beauty,
+  icon: 'Beauty',
+  value: 'beauty',
+};
 const ETC = {
   name: '기타',
   alias: '기타',
@@ -57,4 +64,4 @@ const ETC = {
   value: 'etc',
 };
 
-export { SPORTS, ART, HOBBY, FOOD, CREATIVE, TRIP, IMPROVEMENT, ETC };
+export { SPORTS, ART, HOBBY, FOOD, CREATIVE, TRIP, IMPROVEMENT, BEAUTY, ETC };

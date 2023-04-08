@@ -59,5 +59,6 @@ export const category = {
   creative: '#FF8C00',
   trip: '#4169E1',
   improvement: '#27AFCF',
+  beauty: '#7364DD',
   etc: '#778899',
 };
