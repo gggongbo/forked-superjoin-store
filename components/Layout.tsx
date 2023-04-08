@@ -56,7 +56,7 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
     { autoLogin: boolean; currentUser: CurrentUserType }
   >(({ auth }) => auth);
   const { windowSize } = useWindowSize();
-  const { getToken } = usePushNotification();
+  const { getToken, onMessage } = usePushNotification();
 
   useLayoutEffect(() => {
     const sessionStart = Boolean(sessionStorage.getItem('sessionStart'));
@@ -69,17 +69,23 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
   }, [autoLogin]);
 
   useLayoutEffect(() => {
-    (async () => {
-      if (!currentUser?.id) return;
-      const token = await getToken();
-      if (token) {
-        storeUserService.updatePushToken(currentUser.id, token);
-        return;
-      }
-      // TODO: push notification permission 허용해야 한다는 안내 표시
-      console.log('push notification permission 없어영');
-    })();
-  }, [currentUser, getToken]);
+    let subscriber: (() => void) | null = null;
+    if (currentUser?.id) {
+      (async () => {
+        const token = await getToken();
+        if (token) {
+          storeUserService.updatePushToken(currentUser.id, token);
+        } else {
+          // TODO: push notification permission 허용해야 한다는 안내 표시
+          console.log('need push notification permission');
+        }
+      })();
+      subscriber = onMessage();
+    }
+    return () => {
+      subscriber?.();
+    };
+  }, [currentUser, getToken, onMessage]);
 
   return (
     <LayoutBlock>
