@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
-    "deploy-first": "next lint && next build && firebase experiments:enable webframeworks && firebase init hosting && firebase deploy",
-    "deploy": "next lint && next build && firebase deploy"
+    "deploy-first": "next lint && next build && firebase experiments:enable webframeworks && firebase init hosting && firebase deploy --only hosting",
+    "deploy": "next lint && next build && firebase deploy --only hosting"
   },
   "engines": {
     "node": "18"

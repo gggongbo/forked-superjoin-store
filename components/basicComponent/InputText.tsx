@@ -121,7 +121,7 @@ const InputTextArea = styled.textarea<{
 interface InputTextProps {
   type?: string;
   defaultValue?: string | number | undefined;
-  valueType?: string | undefined;
+  valueType?: string | string[] | undefined;
   width?: number;
   height?: number;
   isArea?: boolean;

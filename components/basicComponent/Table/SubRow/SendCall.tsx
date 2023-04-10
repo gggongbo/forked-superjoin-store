@@ -68,10 +68,20 @@ const MemberPhotoBlock = styled.div<{
   background-image: url(${({ userPhoto }) => userPhoto});
   background-position: center;
   background-size: cover;
+  opacity: ${({ disabled }) => (disabled ? 0.4 : 1)};
+`;
+
+const NonPhotoBlock = styled.div<{ disabled: boolean }>`
+  width: 22px;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  margin-left: 8px;
+  margin-right: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${({ disabled, theme }) =>
-    disabled
-      ? `${theme.colors.singletons.pink}40`
-      : theme.colors.singletons.pink}; //test setting
+    disabled ? `${theme.colors.gray[200]}40` : theme.colors.gray[200]};
 `;
 
 const MemberTextBlock = styled.div<{ disabled: boolean }>`
@@ -222,10 +232,23 @@ const SendCall: FC<SendCallPropTypes> = React.memo(function SendCall(props) {
                   }
                 }}
               />
-              <MemberPhotoBlock
-                userPhoto={requestMember.image}
-                disabled={buttonDisabled}
-              />
+              {requestMember?.image ? (
+                <MemberPhotoBlock
+                  userPhoto={requestMember.image}
+                  disabled={buttonDisabled}
+                />
+              ) : (
+                <NonPhotoBlock disabled={buttonDisabled}>
+                  <Icon
+                    name="User"
+                    width={16}
+                    height={16}
+                    color="gray"
+                    colorIndex={400}
+                    opacity={buttonDisabled ? 40 : undefined}
+                  />
+                </NonPhotoBlock>
+              )}
               <MemberTextBlock disabled={buttonDisabled}>
                 {requestMember.name}
               </MemberTextBlock>
@@ -236,10 +259,23 @@ const SendCall: FC<SendCallPropTypes> = React.memo(function SendCall(props) {
               <CallMemberIconBlock>
                 <Icon width={20} height={20} name="CircleCheck" color="green" />
               </CallMemberIconBlock>
-              <MemberPhotoBlock
-                userPhoto={callMember.image}
-                disabled={disabled}
-              />
+              {callMember?.image ? (
+                <MemberPhotoBlock
+                  userPhoto={callMember.image}
+                  disabled={disabled}
+                />
+              ) : (
+                <NonPhotoBlock disabled={disabled}>
+                  <Icon
+                    name="User"
+                    width={16}
+                    height={16}
+                    color="gray"
+                    colorIndex={400}
+                    opacity={disabled ? 40 : undefined}
+                  />
+                </NonPhotoBlock>
+              )}
               <MemberTextBlock disabled={disabled}>
                 {callMember.name}
               </MemberTextBlock>

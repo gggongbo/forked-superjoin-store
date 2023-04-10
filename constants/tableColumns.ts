@@ -17,7 +17,7 @@ const SendCall = [
   {
     accessor: 'callEndTime',
     Header: '제안 마감 시간',
-    width: 150,
+    width: 120,
     disableSortBy: true,
   },
   {
@@ -51,24 +51,24 @@ const ReceiveCall = [
   {
     accessor: 'callSendUser',
     Header: '제안 보낸 사람',
-    width: 240,
+    width: 200,
     disableSortBy: true,
   },
   {
     accessor: 'callReceiveTime',
     Header: '제안 받은 날짜 / 시간',
-    width: 240,
+    width: 250,
   },
   {
     accessor: 'callEndTime',
     Header: '제안 마감 시간',
-    width: 160,
+    width: 120,
     disableSortBy: true,
   },
   {
     accessor: 'callStatus',
     Header: '제안 상태',
-    width: 200,
+    width: 150,
     Filter: SelectColumnFilter,
     filter: FilterIncludes,
     disableSortBy: true,
@@ -76,7 +76,7 @@ const ReceiveCall = [
   {
     accessor: 'appealStatus',
     Header: '어필 여부',
-    width: 180,
+    width: 200,
     Filter: SelectColumnFilter,
     filter: FilterIncludes,
     disableSortBy: true,
@@ -91,7 +91,7 @@ const VisitedMember = [
   {
     accessor: 'memberName',
     Header: '닉네임',
-    width: 250,
+    width: 200,
     disableSortBy: true,
   },
   {
@@ -115,7 +115,7 @@ const VisitedMember = [
   {
     accessor: 'memberNumOfReward',
     Header: '지급 리워드 횟수',
-    width: 250,
+    width: 200,
     Filter: SelectColumnFilter,
     filter: FilterIncludes,
     disableSortBy: true,
@@ -130,13 +130,13 @@ const ReservedMember = [
   {
     accessor: 'memberName',
     Header: '닉네임',
-    width: 250,
+    width: 200,
     disableSortBy: true,
   },
   {
     accessor: 'callTitle',
     Header: '제안 제목',
-    width: 250,
+    width: 200,
     disableSortBy: true,
   },
   {

@@ -55,7 +55,7 @@ const HeaderRightBlock = styled.div`
 
 const optionList = [
   { name: '제목', value: 'title' },
-  { name: '제안 보낸 사람', value: 'callSendUser' },
+  { name: '제안 보낸 사람', value: ['callHost', 'name'] },
 ];
 
 const Call: NextPage<WithRouterProps> = function Call({ router: routerProps }) {

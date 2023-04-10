@@ -5,7 +5,12 @@ import styled, { css } from 'styled-components';
 import { CategoryTag } from '@components/basicComponent/CategoryTag';
 import { SubRow } from '@components/basicComponent/Table/SubRow';
 import Icon from '@components/Icon';
-import { CallStatusType, CommentType } from '@constants/types/call';
+import {
+  CallHostType,
+  CallStatusType,
+  CallType,
+  CommentType,
+} from '@constants/types/call';
 import { OptionType, SubRowProps } from '@constants/types/components';
 import { RewardInfo } from '@constants/types/reward';
 import {
@@ -15,15 +20,22 @@ import {
   text as TextColors,
 } from '@styles/theme/colors';
 
-const CatetgoryBlock = styled.div`
+const CallCategoryTitleBlock = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
+  padding-right: 20px;
 `;
 
-const CategoryTextBlock = styled.div`
+const TitleTextBlock = styled.div`
+  flex: 1;
   margin-left: 8px;
   font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
 `;
 
 const CallStatusBlock = styled.div<{
@@ -50,6 +62,7 @@ const CallStatusTextBlock = styled.div<{ color?: string }>`
 `;
 
 const CallEndTimeBlock = styled.div<{ disabled: boolean }>`
+  width: 100%;
   font-size: 14px;
   color: ${({ disabled, theme }) =>
     disabled ? theme.colors.text[200] : theme.colors.text[600]};
@@ -57,8 +70,8 @@ const CallEndTimeBlock = styled.div<{ disabled: boolean }>`
 
 const CallButtonBlock = styled.div`
   display: flex;
-  width: 100%;
   flex-direction: row;
+  width: 100%;
 `;
 
 const ReCallButtonBlock = styled.div`
@@ -94,12 +107,12 @@ const CancelButtonBlock = styled.button`
   font-weight: 500;
 `;
 
-const ConfirmButtonBlock = styled.button`
+const ConfirmButtonBlock = styled.button<{ disabled: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: ${({ disabled }) => (disabled ? 'auto' : 'pointer')};
   background-color: ${({ theme }) => theme.colors.singletons.green};
   color: ${({ theme }) => theme.colors.singletons.white};
   padding: 6px 12px 4px 12px;
@@ -128,10 +141,15 @@ const deleteButtonIconStyle = css`
 const RewardBlock = styled.div<{ option?: OptionType }>`
   display: flex;
   flex-direction: row;
+  width: 100%;
 `;
 
 const RewardTextBlock = styled.div<{ rewardStatus?: boolean }>`
-  margin-left: 8px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
   color: ${({ rewardStatus = true, theme }) =>
     rewardStatus ? theme.colors.text[600] : theme.colors.text[200]};
 `;
@@ -170,6 +188,64 @@ const CanceledVisitButtonBlock = styled.div`
   color: ${({ theme }) => theme.colors.singletons.black};
 `;
 
+const CallHostInfoBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const CallHostImageBlock = styled.div<{
+  userPhoto: string;
+}>`
+  width: 22px;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  margin-right: 8px;
+  background-image: url(${({ userPhoto }) => userPhoto});
+  background-position: center;
+  background-size: cover;
+`;
+
+const NonImageBlock = styled.div`
+  width: 22px;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  margin-right: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.colors.gray[200]};
+`;
+
+const CallHostNameBlock = styled.div`
+  flex: 1;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+`;
+
+const TextInfoBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TextInfoTextBlock = styled.div<{ fontWeight?: string }>`
+  flex: 1;
+  font-size: 14px;
+  font-weight: ${({ fontWeight }) => (!fontWeight ? 'normal' : fontWeight)};
+  white-space: nowrap;
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+`;
+
 const useTableComponent = () => {
   const fetchIdRef = useRef(0);
 
@@ -189,14 +265,17 @@ const useTableComponent = () => {
     [],
   );
 
-  const callTitleComponent = useCallback((category: string, title: string) => {
-    return (
-      <CatetgoryBlock>
-        <CategoryTag value={category} />
-        <CategoryTextBlock>{title}</CategoryTextBlock>
-      </CatetgoryBlock>
-    );
-  }, []);
+  const callCategoryTitleComponent = useCallback(
+    (title: string, category: string) => {
+      return (
+        <CallCategoryTitleBlock>
+          <CategoryTag value={category} />
+          <TitleTextBlock>{title}</TitleTextBlock>
+        </CallCategoryTitleBlock>
+      );
+    },
+    [],
+  );
 
   /* eslint-disable prefer-destructuring */
   const callStatusComponent = useCallback((callStatus: string) => {
@@ -264,11 +343,12 @@ const useTableComponent = () => {
 
   const callButtonComponent = useCallback(
     (
-      callData: any,
+      callData: CallType,
       callStatus: CallStatusType,
       onConfirmClick?: () => void,
       onCancelClick?: () => void,
     ) => {
+      const confirmDisabled = callData?.callMemberList?.length < 1;
       return (
         <CallButtonBlock>
           {callStatus !== 'confirmed' && callStatus !== 'proceeding' && (
@@ -291,8 +371,14 @@ const useTableComponent = () => {
               </Link>
             </ReCallButtonBlock>
           )}
-          {callStatus === 'proceeding' && (
-            <ConfirmButtonBlock onClick={onConfirmClick}>
+          {callStatus === 'proceeding' && !confirmDisabled && (
+            <ConfirmButtonBlock
+              disabled={confirmDisabled}
+              onClick={() => {
+                if (confirmDisabled) return;
+                onConfirmClick?.();
+              }}
+            >
               지금 확정
             </ConfirmButtonBlock>
           )}
@@ -402,13 +488,42 @@ const useTableComponent = () => {
     [],
   );
 
+  const callHostInfoComponent = useCallback((callHost: CallHostType) => {
+    return (
+      <CallHostInfoBlock>
+        {callHost?.image ? (
+          <CallHostImageBlock userPhoto={callHost.image} />
+        ) : (
+          <NonImageBlock>
+            <Icon
+              name="User"
+              width={16}
+              height={16}
+              color="gray"
+              colorIndex={400}
+            />
+          </NonImageBlock>
+        )}
+        <CallHostNameBlock>{callHost.name}</CallHostNameBlock>
+      </CallHostInfoBlock>
+    );
+  }, []);
+
+  const textInfoComponent = useCallback((infoText: string) => {
+    return (
+      <TextInfoBlock>
+        <TextInfoTextBlock>{infoText}</TextInfoTextBlock>
+      </TextInfoBlock>
+    );
+  }, []);
+
   const renderRowSubComponent = useCallback(({ row, type }: SubRowProps) => {
     return <SubRow row={row} type={type} />;
   }, []);
 
   return {
     getFetchedData,
-    callTitleComponent,
+    callCategoryTitleComponent,
     callStatusComponent,
     callEndTimeComponent,
     callButtonComponent,
@@ -418,6 +533,8 @@ const useTableComponent = () => {
     appealStatusComponent,
     visitButtonComponent,
     renderRowSubComponent,
+    callHostInfoComponent,
+    textInfoComponent,
   };
 };
 

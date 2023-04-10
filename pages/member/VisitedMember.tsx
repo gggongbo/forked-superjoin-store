@@ -29,7 +29,8 @@ const VisitedMember: NextPage<MemberProps> = function VisitedMember({
   const [loading, setLoading] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
-  const { getFetchedData, numOfRewardComponent } = useTableComponent();
+  const { getFetchedData, numOfRewardComponent, textInfoComponent } =
+    useTableComponent();
 
   useEffect(() => {
     if (tableData) setIsMounted(true);
@@ -72,8 +73,8 @@ const VisitedMember: NextPage<MemberProps> = function VisitedMember({
           } = data;
           return {
             ...data,
-            memberId: userInfo.id,
-            memberName: userInfo.name,
+            memberId: textInfoComponent(userInfo.id),
+            memberName: textInfoComponent(userInfo.name),
             memberNumOfConfirm: `${numOfConfirm || 0}회`,
             memberNumOfCancel: `${numOfCancel || 0}회`,
             memberNumOfVisit: `${numOfVisit || 0}회`,
@@ -90,7 +91,7 @@ const VisitedMember: NextPage<MemberProps> = function VisitedMember({
           const dataValue = data[searchType];
           return searchValue?.toString() === dataValue?.toString();
         }),
-    [initData, numOfRewardComponent, search],
+    [initData, numOfRewardComponent, search, textInfoComponent],
   );
 
   const fetchData = useCallback(

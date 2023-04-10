@@ -6,6 +6,12 @@ export type OptionType = {
   value: string | number;
 };
 
+export type InputOptionType = {
+  id?: string | number;
+  name: string | number;
+  value: string | string[] | number;
+};
+
 export type IconType = {
   name: string;
   width: number;
