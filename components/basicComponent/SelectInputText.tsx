@@ -1,10 +1,10 @@
-import { debounce } from 'lodash';
+import _, { debounce } from 'lodash';
 import { FC, useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 
 import SelectBox from '@components/basicComponent/Selectbox';
 import Icon from '@components/Icon';
-import { OptionType } from '@constants/types/components';
+import { InputOptionType } from '@constants/types/components';
 
 // todo: border entire wrap
 const SelectInputBlock = styled.div`
@@ -43,7 +43,7 @@ const InputTextfield = styled.input`
 `;
 
 interface SelectInputTextProps {
-  optionList: OptionType[];
+  optionList: InputOptionType[];
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
   // eslint-disable-next-line no-unused-vars
@@ -89,7 +89,14 @@ const SelectInputText: FC<SelectInputTextProps> = function InputText(props) {
       onMouseDown={handleSelectInputBox}
     >
       <SelectBox
-        optionList={optionList}
+        optionList={optionList?.map(option => {
+          return {
+            ...option,
+            value: !_.isArray(option.value)
+              ? option.value
+              : JSON.stringify(option.value),
+          };
+        })}
         width={133}
         borderRadius="6px 0px 0px 6px"
         onChange={e => {

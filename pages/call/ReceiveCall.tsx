@@ -1,6 +1,5 @@
 import { differenceInMinutes, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import _ from 'lodash';
 import type { NextPage } from 'next';
 import { useMemo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -133,13 +132,15 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
         })
         ?.filter((data: any) => {
           if (!search || !search?.type || !search.value) return true;
-          const searchType = !_.isArray(search?.type)
-            ? search?.type || ''
-            : search?.type[0];
+          const searchType =
+            search?.type?.indexOf('[') < 0 && search?.type?.indexOf(']') < 0
+              ? search?.type || ''
+              : JSON.parse(search?.type)[0];
           const searchValue = search?.value || '';
-          const dataValue = !_.isArray(search?.type)
-            ? data[searchType]
-            : data[searchType][search?.type[1]];
+          const dataValue =
+            search?.type?.indexOf('[') < 0 && search?.type?.indexOf(']') < 0
+              ? data[searchType]
+              : data[searchType][JSON.parse(search?.type)[1]];
           return searchValue?.toString() === dataValue?.toString();
         }),
     [
