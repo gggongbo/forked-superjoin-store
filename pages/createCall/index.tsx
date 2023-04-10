@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
@@ -129,7 +129,7 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
     },
   );
 
-  const submit = () => {
+  const submit = useCallback(() => {
     if (
       !title?.length ||
       !category?.length ||
@@ -139,7 +139,8 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
       maxNumOfUser > 1000 ||
       deadline < 1 ||
       deadline > 60 ||
-      !reward
+      !reward ||
+      !currentStoreUser
     )
       return;
     const params: CreateCallParamType = {
@@ -152,7 +153,16 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
       storeInfo: currentStoreUser,
     };
     mutate(params);
-  };
+  }, [
+    category,
+    currentStoreUser,
+    deadline,
+    description,
+    maxNumOfUser,
+    mutate,
+    reward,
+    title,
+  ]);
 
   return (
     <CreateCallBlock>

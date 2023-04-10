@@ -47,7 +47,9 @@ interface CategoryTagProps {
 
 const CategoryTag: FC<CategoryTagProps> = function CategoryTag(props) {
   const { customStyle, size = 'medium', value = 'etc' } = props;
-  const categoryInfo = categoryList[value?.toUpperCase()] || categoryList.ETC;
+  const categoryValue = value?.indexOf('.') > -1 ? value.split('.')[0] : value;
+  const categoryInfo =
+    categoryList[categoryValue.toUpperCase()] || categoryList.ETC;
   const styleList: StyleListType = {
     large: {
       fontSize: 13,

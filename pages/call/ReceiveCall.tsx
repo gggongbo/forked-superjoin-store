@@ -1,7 +1,8 @@
 import { differenceInMinutes, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import _ from 'lodash';
 import type { NextPage } from 'next';
-import { useEffect, useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -33,25 +34,17 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
   const [initData, setInitData] = useState<CallType[]>([]);
-  const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
 
   const {
     getFetchedData,
-    callTitleComponent,
+    callCategoryTitleComponent,
+    callHostInfoComponent,
     callEndTimeComponent,
     callStatusComponent,
     appealStatusComponent,
     renderRowSubComponent,
   } = useTableComponent();
-
-  useEffect(() => {
-    if (tableData) setIsMounted(true);
-
-    return () => {
-      setIsMounted(false);
-    };
-  }, [tableData]);
 
   const fetchReceiveCall = useCallback((callData: CallType[]) => {
     if (!callData) return;
@@ -59,12 +52,19 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
   }, []);
 
   useReactQuery(
-    callKeys.getReceiveCall(currentStoreUser.location),
-    () =>
-      callService.getReceiveCall({
-        location: currentStoreUser.location,
-        mainCategory: currentStoreUser.category,
-      }),
+    callKeys.getReceiveCall(currentStoreUser?.location),
+    () => {
+      if (
+        !currentStoreUser ||
+        !currentStoreUser?.location ||
+        !currentStoreUser?.category
+      )
+        return null;
+      return callService.getReceiveCall({
+        location: currentStoreUser?.location,
+        mainCategory: currentStoreUser?.category,
+      });
+    },
     {
       refetchOnWindowFocus: false,
       refetchOnMount: true,
@@ -79,8 +79,16 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
       initData
         ?.map((data: CallType) => {
           if (!data) return null;
-          const { category, title, createdAt, deadline, status, commentList } =
-            data;
+          const {
+            callHost,
+            category,
+            mainCategory,
+            title,
+            createdAt,
+            deadline,
+            status,
+            commentList,
+          } = data;
 
           const now = new Date();
 
@@ -89,21 +97,25 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
 
           const comment = commentList?.find(
             (commentItem: CommentType) =>
-              commentItem.storeInfo.id === currentStoreUser.id,
+              commentItem.storeInfo.id === currentStoreUser?.id,
           );
           return {
             ...data,
             storeInfo: {
-              id: currentStoreUser.id,
-              name: currentStoreUser.name,
-              image: currentStoreUser.image || '',
-              address: currentStoreUser.address,
+              id: currentStoreUser?.id,
+              name: currentStoreUser?.name,
+              image: currentStoreUser?.image || '',
+              address: currentStoreUser?.address,
               location: {
-                latitude: currentStoreUser.location.latitude,
-                longitude: currentStoreUser.location.longitude,
+                latitude: currentStoreUser?.location.latitude,
+                longitude: currentStoreUser?.location.longitude,
               },
             },
-            callTitle: callTitleComponent(category, title),
+            callTitle: callCategoryTitleComponent(
+              title,
+              mainCategory || category,
+            ),
+            callSendUser: callHostInfoComponent(callHost),
             callReceiveTime: createdAt
               ? format(createdAt as Date, 'yyyy년 M월 d일 / a h:mm', {
                   locale: ko,
@@ -121,23 +133,28 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
         })
         ?.filter((data: any) => {
           if (!search || !search?.type || !search.value) return true;
-          const searchType = search?.type || '';
+          const searchType = !_.isArray(search?.type)
+            ? search?.type || ''
+            : search?.type[0];
           const searchValue = search?.value || '';
-          const dataValue = data[searchType];
+          const dataValue = !_.isArray(search?.type)
+            ? data[searchType]
+            : data[searchType][search?.type[1]];
           return searchValue?.toString() === dataValue?.toString();
         }),
     [
-      appealStatusComponent,
+      initData,
+      currentStoreUser?.id,
+      currentStoreUser?.name,
+      currentStoreUser?.image,
+      currentStoreUser?.address,
+      currentStoreUser?.location.latitude,
+      currentStoreUser?.location.longitude,
+      callCategoryTitleComponent,
+      callHostInfoComponent,
       callEndTimeComponent,
       callStatusComponent,
-      callTitleComponent,
-      currentStoreUser.address,
-      currentStoreUser.id,
-      currentStoreUser.image,
-      currentStoreUser.location.latitude,
-      currentStoreUser.location.longitude,
-      currentStoreUser.name,
-      initData,
+      appealStatusComponent,
       search,
     ],
   );
@@ -159,7 +176,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
 
   return (
     <RecieveCallBlock>
-      {isMounted && (
+      {!!initData && (
         <TableBlock>
           <Table
             columns={columns}

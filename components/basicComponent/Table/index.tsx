@@ -114,6 +114,8 @@ const BodyBlock = styled.tbody``;
 const BodyRowBlock = styled.tr<{ type?: string }>`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  overflow: hidden;
 `;
 
 const BodyColumnBlock = styled.td<{ width?: string | number; flex: boolean }>`
@@ -380,14 +382,17 @@ const Table: FC<TableProps> = function Table(props) {
               <IconButton
                 icon={{ name: 'ChevronLeft', width: 18, height: 18 }}
                 onClick={() => setTablePageIndex(prev => (prev ? prev - 1 : 0))}
-                disabled={tablePageIndex === 0}
+                disabled={!pageOptions?.length || tablePageIndex === 0}
               />
               <IconButton
                 icon={{ name: 'ChevronRight', width: 18, height: 18 }}
                 onClick={() =>
                   setTablePageIndex(prev => (prev ? prev + 1 : pageIndex + 1))
                 }
-                disabled={tablePageIndex === pageOptions.length - 1}
+                disabled={
+                  !pageOptions?.length ||
+                  tablePageIndex === pageOptions.length - 1
+                }
               />
             </PaginationBlock>
           )}

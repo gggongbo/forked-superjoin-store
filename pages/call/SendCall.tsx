@@ -46,7 +46,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
 
   const {
     getFetchedData,
-    callTitleComponent,
+    callCategoryTitleComponent,
     callStatusComponent,
     callEndTimeComponent,
     callButtonComponent,
@@ -61,7 +61,10 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
 
   const { refetch } = useReactQuery(
     callKeys.getSendCall(currentStoreUser?.id),
-    () => callService.getSendCall(currentStoreUser?.id),
+    () => {
+      if (!currentStoreUser || !currentStoreUser?.id) return null;
+      return callService.getSendCall(currentStoreUser?.id);
+    },
     {
       refetchOnWindowFocus: false,
       refetchOnMount: true,
@@ -113,6 +116,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
           const {
             callHost,
             category,
+            mainCategory,
             title,
             deadline,
             status,
@@ -133,16 +137,19 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
             ...data,
             refetch,
             storeInfo: {
-              id: currentStoreUser.id,
-              name: currentStoreUser.name,
-              image: currentStoreUser.image || '',
-              address: currentStoreUser.address,
+              id: currentStoreUser?.id,
+              name: currentStoreUser?.name,
+              image: currentStoreUser?.image || '',
+              address: currentStoreUser?.address,
               location: {
-                latitude: currentStoreUser.location.latitude,
-                longitude: currentStoreUser.location.longitude,
+                latitude: currentStoreUser?.location.latitude,
+                longitude: currentStoreUser?.location.longitude,
               },
             },
-            callTitle: callTitleComponent(category, title),
+            callTitle: callCategoryTitleComponent(
+              title,
+              mainCategory || category,
+            ),
             callSendTime: createdAt
               ? format(createdAt as Date, 'yyyy년 M월 d일 / a h:mm', {
                   locale: ko,
@@ -193,13 +200,13 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     [
       initData,
       refetch,
-      currentStoreUser.id,
-      currentStoreUser.name,
-      currentStoreUser.image,
-      currentStoreUser.address,
-      currentStoreUser.location.latitude,
-      currentStoreUser.location.longitude,
-      callTitleComponent,
+      currentStoreUser?.id,
+      currentStoreUser?.name,
+      currentStoreUser?.image,
+      currentStoreUser?.address,
+      currentStoreUser?.location.latitude,
+      currentStoreUser?.location.longitude,
+      callCategoryTitleComponent,
       callEndTimeComponent,
       callStatusComponent,
       callButtonComponent,
@@ -229,7 +236,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
 
   return (
     <SendCallBlock>
-      {!initData ? null : (
+      {!!initData && (
         <TableBlock>
           <Table
             columns={columns}

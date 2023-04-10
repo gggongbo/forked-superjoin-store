@@ -63,7 +63,7 @@ const ColoredIcon = styled.div<{
   mask: url(${props => Icons[props.name]?.src});
   mask-repeat: no-repeat;
   mask-position: center;
-  mask-size: auto;
+  mask-size: cover;
   ${iconStyle};
 `;
 

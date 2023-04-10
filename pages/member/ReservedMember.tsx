@@ -37,8 +37,12 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
   const [loading, setLoading] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
-  const { getFetchedData, rewardComponent, visitButtonComponent } =
-    useTableComponent();
+  const {
+    getFetchedData,
+    textInfoComponent,
+    rewardComponent,
+    visitButtonComponent,
+  } = useTableComponent();
   const { confirm } = useConfirm();
 
   useEffect(() => {
@@ -88,9 +92,9 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
           const { userInfo, callInfo, deadline, reward, canceledAt } = data;
           return {
             ...data,
-            memberId: userInfo.id,
-            memberName: userInfo.name,
-            callTitle: callInfo.title,
+            memberId: textInfoComponent(userInfo.id),
+            memberName: textInfoComponent(userInfo.name),
+            callTitle: textInfoComponent(callInfo.title),
             reserveTime: deadline
               ? format(deadline as Date, 'yyyy년 M월 d일 / a h:mm', {
                   locale: ko,
@@ -124,6 +128,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
       initData,
       rewardComponent,
       search,
+      textInfoComponent,
       visitButtonComponent,
       visitMutate,
     ],

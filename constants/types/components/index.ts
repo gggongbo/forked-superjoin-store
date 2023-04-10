@@ -3,7 +3,7 @@ import { Row } from 'react-table';
 export type OptionType = {
   id?: string | number;
   name: string | number;
-  value: string | number;
+  value: string | string[] | number;
 };
 
 export type IconType = {
