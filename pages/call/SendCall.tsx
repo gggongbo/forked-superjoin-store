@@ -84,9 +84,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       () => {
         refetch();
       },
-      () => {
-        alert('제안을 확정하는 도중 오류가 발생하였습니다.');
-      },
     );
 
   const { mutate: cancelMutate, isLoading: isCancelLoading } =
@@ -95,9 +92,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       callService.cancelCall,
       () => {
         refetch();
-      },
-      () => {
-        alert('제안을 취소하는 도중 오류가 발생하였습니다.');
       },
     );
 
@@ -108,9 +102,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       () => {
         refetch();
       },
-      () => {
-        alert('제안을 삭제하는 도중 오류가 발생하였습니다.');
-      },
     );
 
   const { mutate: acceptMutate, isLoading: isAcceptLoading } =
@@ -120,9 +111,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       () => {
         refetch();
       },
-      () => {
-        alert('제안을 수락하는 도중 오류가 발생하였습니다.');
-      },
     );
 
   const { mutate: rejectMutate, isLoading: isRejectLoading } =
@@ -131,9 +119,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       callService.rejectRequestCall,
       () => {
         refetch();
-      },
-      () => {
-        alert('제안을 거절하는 도중 오류가 발생하였습니다.');
       },
     );
 
@@ -240,7 +225,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
           const searchType = search?.type || '';
           const searchValue = search?.value || '';
           const dataValue = filterData[searchType];
-          return searchValue?.toString() === dataValue?.toString();
+          return dataValue?.toString()?.includes(searchValue?.toString());
         }),
     [
       acceptMutate,

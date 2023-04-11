@@ -57,11 +57,12 @@ const ContentBlock = styled.div`
   background-color: ${({ theme }) => theme.colors.gray[200]};
 `;
 
-const ContentText = styled.pre`
+const ContentText = styled.div`
   font-family: 'Noto Sans KR';
   font-size: 14px;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text[400]};
+  white-space: pre-wrap;
 `;
 
 const ArrowBlock = styled.div<{ contentVisible: boolean }>`

@@ -85,9 +85,6 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
       () => {
         refetch();
       },
-      () => {
-        alert('어필하는 도중 오류가 발생하였습니다.');
-      },
     );
 
   const filteredData = useMemo(
@@ -161,7 +158,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
             search?.type?.indexOf('[') < 0 && search?.type?.indexOf(']') < 0
               ? data[searchType]
               : data[searchType][JSON.parse(search?.type)[1]];
-          return searchValue?.toString() === dataValue?.toString();
+          return dataValue?.toString()?.includes(searchValue?.toString());
         }),
     [
       initData,

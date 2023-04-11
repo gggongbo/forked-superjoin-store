@@ -1,5 +1,6 @@
 import { httpsCallable, HttpsCallableResult } from 'firebase/functions';
 
+import errorMessage from '@constants/errorMessage';
 import {
   ConfirmCallParamType,
   CreateCallParamType,
@@ -15,37 +16,109 @@ import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
 const createCall = async (params: CreateCallParamType) => {
   if (!params || !params.deadline) return;
-  await httpsCallable(functions, 'createCall')(params);
+  try {
+    await httpsCallable(functions, 'createCall')(params);
+  } catch (error: any) {
+    alert('제안을 생성하는 도중 오류가 발생하였습니다.');
+  }
 };
 
 const confirmCall = async (params: ConfirmCallParamType) => {
   if (!params) return;
-  await httpsCallable(functions, 'updateCallConfirmed')(params);
+  try {
+    await httpsCallable(functions, 'updateCallConfirmed')(params);
+  } catch (error: any) {
+    if (
+      error?.message === errorMessage.firebase.internal['already-confirmed']
+    ) {
+      alert('이미 확정되었습니다.');
+    } else if (
+      error?.message === errorMessage.firebase.internal['invalid-status']
+    ) {
+      alert('제안 상태가 바뀌어 확정이 불가합니다.');
+    } else {
+      alert('제안을 확정하는 도중 오류가 발생하였습니다.');
+    }
+  }
 };
 
 const cancelCall = async (callId: string) => {
   if (!callId) return;
-  await httpsCallable(functions, 'cancelCall')(callId);
+  try {
+    await httpsCallable(functions, 'cancelCall')(callId);
+  } catch (error: any) {
+    if (error?.message === errorMessage.firebase.internal['already-canceled']) {
+      alert('이미 취소되었습니다.');
+    } else if (
+      error?.message === errorMessage.firebase.internal['invalid-status']
+    ) {
+      alert('제안 상태가 바뀌어 취소가 불가합니다.');
+    } else {
+      alert('제안을 취소하는 도중 오류가 발생하였습니다.');
+    }
+  }
 };
 
 const deleteCall = async (callId: string) => {
   if (!callId) return;
-  await httpsCallable(functions, 'deleteCall')(callId);
+  try {
+    await httpsCallable(functions, 'deleteCall')(callId);
+  } catch (error: any) {
+    if (error?.message === errorMessage.firebase.internal['already-deleted']) {
+      alert('이미 삭제되었습니다.');
+    } else if (
+      error?.message === errorMessage.firebase.internal['invalid-status']
+    ) {
+      alert('제안 상태가 바뀌어 삭제가 불가합니다.');
+    } else {
+      alert('제안을 삭제하는 도중 오류가 발생하였습니다.');
+    }
+  }
 };
 
 const acceptRequestCall = async (params: AcceptRequestCallParamType) => {
   if (!params) return;
-  await httpsCallable(functions, 'acceptRequestCall')(params);
+  try {
+    await httpsCallable(functions, 'acceptRequestCall')(params);
+  } catch (error: any) {
+    if (
+      error?.message === errorMessage.firebase.internal['exceeded-num-of-user']
+    ) {
+      alert('모집 인원이 초과되어 더 이상 수락할 수 없습니다.');
+    } else if (
+      error?.message === errorMessage.firebase.internal['invalid-status']
+    ) {
+      alert('제안 상태가 바뀌어 참여 수락이 불가합니다.');
+    } else {
+      alert('참여 수락하는 도중 오류가 발생하였습니다.');
+    }
+  }
 };
 
 const rejectRequestCall = async (params: RejectRequestCallParamType) => {
   if (!params) return;
-  await httpsCallable(functions, 'rejectRequestCall')(params);
+  try {
+    await httpsCallable(functions, 'rejectRequestCall')(params);
+  } catch (error: any) {
+    if (error?.message === errorMessage.firebase.internal['invalid-status']) {
+      alert('제안 상태가 바뀌어 참여 거절이 불가합니다.');
+    } else {
+      alert('참여 거절하는 도중 오류가 발생하였습니다.');
+    }
+  }
 };
 
 const registerCommentCall = async (params: RegisterCommentCallParamType) => {
   if (!params) return;
-  await httpsCallable(functions, 'registerCommentCall')(params);
+  try {
+    await httpsCallable(functions, 'registerCommentCall')(params);
+  } catch (error: any) {
+    if (error?.message === errorMessage.firebase.internal['invalid-status']) {
+      alert('제안 상태가 바뀌어 어필이 불가합니다.');
+    } else {
+      alert('어필하는 도중 오류가 발생하였습니다.');
+    }
+  }
 };
 
 const getSendCall = async (storeId: string): Promise<CallType[] | null> => {

@@ -189,7 +189,9 @@ const SendCall: FC<SendCallPropTypes> = React.memo(function SendCall(props) {
       )}
       <MemberListBlock>
         <RequestTextBlock disabled={disabled}>
-          {`참여 신청 인원 (${requestMemberList?.length})`}
+          {`참여 신청 멤버 (${
+            requestMemberList?.length || 0 + (callMemberList?.length || 0)
+          })`}
         </RequestTextBlock>
         <MemberBlock>
           {requestMemberList?.map((requestMember: CallMemberType) => (

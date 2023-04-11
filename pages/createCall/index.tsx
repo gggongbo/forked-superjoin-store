@@ -104,9 +104,6 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
       () => {
         router.push('/call');
       },
-      () => {
-        alert('제안을 생성하는 도중 오류가 발생하였습니다.');
-      },
     );
 
   const { isLoading: isRewardLoading } = useReactQuery(

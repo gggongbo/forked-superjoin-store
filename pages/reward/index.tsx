@@ -131,9 +131,6 @@ const Reward: NextPage = function Reward() {
       () => {
         refetch();
       },
-      () => {
-        alert('리워드를 추가하는 도중 오류가 발생하였습니다.');
-      },
     );
 
   const { mutate: updateMutate, isLoading: isUpdateLoading } =
@@ -143,9 +140,6 @@ const Reward: NextPage = function Reward() {
       () => {
         refetch();
       },
-      () => {
-        alert('리워드를 수정하는 도중 오류가 발생하였습니다.');
-      },
     );
 
   const { mutate: deleteMutate, isLoading: isDeleteLoading } =
@@ -154,9 +148,6 @@ const Reward: NextPage = function Reward() {
       rewardService.deleteReward,
       () => {
         refetch();
-      },
-      () => {
-        alert('리워드를 삭제하는 도중 오류가 발생하였습니다.');
       },
     );
 
@@ -194,6 +185,7 @@ const Reward: NextPage = function Reward() {
         <InputTextBlock>
           <InputText
             placeholder="제공할 리워드를 입력해주세요. (10자)"
+            maxLength={10}
             onChange={e => setNewReward(e.target.value)}
             customStyle={inputStyle}
           />

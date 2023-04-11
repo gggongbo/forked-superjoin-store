@@ -86,10 +86,16 @@ const VisitedMember: NextPage<MemberProps> = function VisitedMember({
         })
         ?.filter((data: any) => {
           if (!search || !search?.type || !search.value) return true;
-          const searchType = search?.type || '';
+          const searchType =
+            search?.type?.indexOf('[') < 0 && search?.type?.indexOf(']') < 0
+              ? search?.type || ''
+              : JSON.parse(search?.type)[0];
           const searchValue = search?.value || '';
-          const dataValue = data[searchType];
-          return searchValue?.toString() === dataValue?.toString();
+          const dataValue =
+            search?.type?.indexOf('[') < 0 && search?.type?.indexOf(']') < 0
+              ? data[searchType]
+              : data[searchType][JSON.parse(search?.type)[1]];
+          return dataValue?.toString()?.includes(searchValue?.toString());
         }),
     [initData, numOfRewardComponent, search, textInfoComponent],
   );
