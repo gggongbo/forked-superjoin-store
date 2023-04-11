@@ -58,7 +58,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
     setInitData(memberData!);
   }, []);
 
-  const { refetch } = useReactQuery(
+  const { refetch, isLoading: isGetLoading } = useReactQuery(
     memberKeys.getReservedMember,
     () => memberService.getReservedMember(),
     {
@@ -71,7 +71,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
     },
   );
 
-  const { mutate: visitMutate } =
+  const { mutate: visitMutate, isLoading: isVisitLoading } =
     useReactMutation<UpdateReservationMemberParamType>(
       memberKeys.updateReservationMember,
       memberService.updateReservationMember,
@@ -103,8 +103,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
             reward: rewardComponent(!!reward, reward),
             visit: visitButtonComponent(
               canceledAt !== 'none',
-              callInfo.id,
-              userInfo.id,
+              isVisitLoading,
               () => {
                 confirm('방문 확인하시겠습니까?', () =>
                   visitMutate({
@@ -126,6 +125,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
     [
       confirm,
       initData,
+      isVisitLoading,
       rewardComponent,
       search,
       textInfoComponent,
@@ -156,7 +156,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
           <Table
             columns={columns}
             data={tableData}
-            loading={loading}
+            loading={loading || isGetLoading}
             fetchData={fetchData}
             pageSizeList={pageSizeList}
             pageCount={pageCount}

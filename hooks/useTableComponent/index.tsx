@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import { useCallback, useRef } from 'react';
+import { ClipLoader } from 'react-spinners';
 import styled, { css } from 'styled-components';
 
+import Button from '@components/basicComponent/Button';
 import { CategoryTag } from '@components/basicComponent/CategoryTag';
 import { SubRow } from '@components/basicComponent/Table/SubRow';
 import Icon from '@components/Icon';
@@ -68,7 +70,7 @@ const CallEndTimeBlock = styled.div<{ disabled: boolean }>`
     disabled ? theme.colors.text[200] : theme.colors.text[600]};
 `;
 
-const CallButtonBlock = styled.div`
+const CallButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -83,44 +85,45 @@ const ReCallButtonBlock = styled.div`
   cursor: pointer;
   background-color: ${({ theme }) => theme.colors.singletons.black};
   color: ${({ theme }) => theme.colors.singletons.white};
-  padding: 4px 12px;
+  width: 80px;
+  padding: 4px 0px;
   line-height: 1.5;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   margin-right: 8px;
+
+  :hover {
+    background-color: ${({ theme }) => `${theme.colors.singletons.black}50`};
+  }
 `;
 
-const CancelButtonBlock = styled.button`
+const CallButtonBlock = styled.div`
+  cursor: pointer;
+  margin-right: 8px;
+`;
+
+const callButtonStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   text-align: center;
-  cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.gray[300]};
-  color: ${({ theme }) => theme.colors.singletons.black};
-  padding: 6px 12px 4px 12px;
+  padding: 6px 0px 4px 0px;
+`;
+
+const confirmButtonTextStyle = css`
+  color: ${({ theme }) => theme.colors.singletons.white};
   line-height: 1.5;
-  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
 `;
 
-const ConfirmButtonBlock = styled.button<{ disabled: boolean }>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  cursor: ${({ disabled }) => (disabled ? 'auto' : 'pointer')};
-  background-color: ${({ theme }) => theme.colors.singletons.green};
-  color: ${({ theme }) => theme.colors.singletons.white};
-  padding: 6px 12px 4px 12px;
+const cancelButtonTextStyle = css`
+  color: ${({ theme }) => theme.colors.singletons.black};
   line-height: 1.5;
-  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  margin-right: 8px;
 `;
 
 const DeleteButtonBlock = styled.button<{ disabled: boolean }>`
@@ -165,18 +168,22 @@ const AppealStatusBlock = styled.div<{
     disabled ? `${theme.colors.text[600]}40` : theme.colors.text[600]};
 `;
 
-const VisitButtonBlock = styled.button`
+const VisitButtonBlock = styled.div`
+  cursor: pointer;
+`;
+
+const visitButtonStyle = css`
   display: flex;
-  flex: 0.4;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.singletons.black};
+  text-align: center;
+  padding: 6px 12px 4px 12px;
+`;
+
+const visitButtonTextStyle = css`
   color: ${({ theme }) => theme.colors.singletons.white};
-  padding: 4px 12px;
   line-height: 1.5;
-  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
 `;
@@ -246,6 +253,13 @@ const TextInfoTextBlock = styled.div<{ fontWeight?: string }>`
   text-overflow: ellipsis;
 `;
 
+const LoadingBlock = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0px;
+`;
+
 const useTableComponent = () => {
   const fetchIdRef = useRef(0);
 
@@ -298,6 +312,12 @@ const useTableComponent = () => {
         color = singletons.green;
         text = '제안 확정';
         break;
+      case 'visited':
+        icon = 'CircleCheck';
+        backgroundColor = `${GreenColors[400]}18`;
+        color = singletons.green;
+        text = '방문 확정';
+        break;
       case 'expired':
         icon = 'ClockDone';
         backgroundColor = GrayColors[300];
@@ -345,67 +365,104 @@ const useTableComponent = () => {
     (
       callData: CallType,
       callStatus: CallStatusType,
+      loading: boolean,
       onConfirmClick?: () => void,
       onCancelClick?: () => void,
     ) => {
       const confirmDisabled = callData?.callMemberList?.length < 1;
       return (
-        <CallButtonBlock>
+        <CallButtonContainer>
           {callStatus !== 'confirmed' && callStatus !== 'proceeding' && (
             <ReCallButtonBlock>
-              <Link
-                href={{
-                  pathname: '/createCall',
-                  query: {
-                    title: callData.title,
-                    category: callData.category,
-                    description: callData.description,
-                    maxNumOfUser: callData.maxNumOfUser,
-                    reward: JSON.stringify(callData.reward),
-                  },
-                }}
-                as="/createCall"
-                shallow
-              >
-                다시 제안
-              </Link>
+              {!loading ? (
+                <Link
+                  href={{
+                    pathname: '/createCall',
+                    query: {
+                      title: callData.title,
+                      category: callData.category,
+                      description: callData.description,
+                      maxNumOfUser: callData.maxNumOfUser,
+                      reward: JSON.stringify(callData.reward),
+                    },
+                  }}
+                  as="/createCall"
+                  shallow
+                >
+                  다시 제안
+                </Link>
+              ) : (
+                <LoadingBlock>
+                  <ClipLoader color={singletons.white} size={14} />
+                </LoadingBlock>
+              )}
             </ReCallButtonBlock>
           )}
           {callStatus === 'proceeding' && !confirmDisabled && (
-            <ConfirmButtonBlock
-              disabled={confirmDisabled}
-              onClick={() => {
-                if (confirmDisabled) return;
-                onConfirmClick?.();
-              }}
-            >
-              지금 확정
-            </ConfirmButtonBlock>
+            <CallButtonBlock>
+              <Button
+                text="지금 확정"
+                width={80}
+                color="green"
+                loading={loading}
+                disabled={confirmDisabled || loading}
+                onClick={() => {
+                  if (confirmDisabled) return;
+                  onConfirmClick?.();
+                }}
+                customStyle={callButtonStyle}
+                textStyle={confirmButtonTextStyle}
+              />
+            </CallButtonBlock>
           )}
           {(callStatus === 'confirmed' || callStatus === 'proceeding') && (
-            <CancelButtonBlock onClick={onCancelClick}>
-              제안 취소
-            </CancelButtonBlock>
+            <CallButtonBlock>
+              <Button
+                text="제안 취소"
+                width={80}
+                color="gray"
+                colorIndex={300}
+                loading={loading}
+                disabled={loading}
+                onClick={() => {
+                  onCancelClick?.();
+                }}
+                customStyle={callButtonStyle}
+                textStyle={cancelButtonTextStyle}
+              />
+            </CallButtonBlock>
           )}
-        </CallButtonBlock>
+        </CallButtonContainer>
       );
     },
     [],
   );
 
   const callDeleteButtonComponent = useCallback(
-    (disabled: boolean, onDeleteClick: () => void) => {
+    (disabled: boolean, loading: boolean, onDeleteClick: () => void) => {
       const color = disabled ? GrayColors[300] : GrayColors[500];
       return (
-        <DeleteButtonBlock disabled={disabled} onClick={onDeleteClick}>
-          <Icon
-            name="Trash"
-            width={18}
-            height={18}
-            color={color}
-            disabled={disabled}
-            customStyle={deleteButtonIconStyle}
-          />
+        <DeleteButtonBlock
+          disabled={disabled}
+          onClick={() => {
+            if (disabled) return;
+            onDeleteClick?.();
+          }}
+        >
+          {!loading ? (
+            <Icon
+              name="Trash"
+              width={18}
+              height={18}
+              color={color}
+              disabled={disabled}
+              customStyle={deleteButtonIconStyle}
+            />
+          ) : (
+            <LoadingBlock>
+              <ClipLoader color={GrayColors[500]} size={14} />
+            </LoadingBlock>
+          )}
         </DeleteButtonBlock>
       );
     },
@@ -475,15 +532,23 @@ const useTableComponent = () => {
   );
 
   const visitButtonComponent = useCallback(
-    (
-      canceled: boolean,
-      callId: string,
-      userId: string,
-      onVisitClick?: () => void,
-    ) => {
+    (canceled: boolean, loading: boolean, onVisitClick?: () => void) => {
       if (canceled)
         return <CanceledVisitButtonBlock>취소됨</CanceledVisitButtonBlock>;
-      return <VisitButtonBlock onClick={onVisitClick}>확인</VisitButtonBlock>;
+      return (
+        <VisitButtonBlock>
+          <Button
+            text="확인"
+            width={80}
+            color="black"
+            loading={loading}
+            disabled={loading}
+            onClick={onVisitClick}
+            customStyle={visitButtonStyle}
+            textStyle={visitButtonTextStyle}
+          />
+        </VisitButtonBlock>
+      );
     },
     [],
   );

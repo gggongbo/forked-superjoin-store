@@ -7,8 +7,14 @@ import styled from 'styled-components';
 
 import Table from '@components/basicComponent/Table';
 import { callKeys } from '@constants/queryKeys';
-import { CallProps, CallType, CommentType } from '@constants/types/call';
+import {
+  CallProps,
+  CallType,
+  CommentType,
+  RegisterCommentCallParamType,
+} from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
+import { useReactMutation } from '@hooks/useReactMutation';
 import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { callService } from '@services/call';
@@ -50,7 +56,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
     setInitData(callData);
   }, []);
 
-  useReactQuery(
+  const { refetch, isLoading: isGetLoading } = useReactQuery(
     callKeys.getReceiveCall(currentStoreUser?.location),
     () => {
       if (
@@ -71,6 +77,18 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
     },
     (resultData: CallType[]) => fetchReceiveCall(resultData),
   );
+
+  const { mutate: commentMutate, isLoading: isCommentLoading } =
+    useReactMutation<RegisterCommentCallParamType>(
+      callKeys.registerCommentCall,
+      callService.registerCommentCall,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('어필하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
   const filteredData = useMemo(
     () =>
@@ -100,6 +118,8 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
           );
           return {
             ...data,
+            commentMutate,
+            isCommentLoading,
             storeInfo: {
               id: currentStoreUser?.id,
               name: currentStoreUser?.name,
@@ -145,6 +165,8 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
         }),
     [
       initData,
+      commentMutate,
+      isCommentLoading,
       currentStoreUser?.id,
       currentStoreUser?.name,
       currentStoreUser?.image,
@@ -185,7 +207,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
             expandEnable
             renderRowSubComponent={renderRowSubComponent}
             fetchData={fetchData}
-            loading={loading}
+            loading={loading || isGetLoading}
             pageSizeList={pageSizeList}
             pageCount={pageCount}
             type={type}

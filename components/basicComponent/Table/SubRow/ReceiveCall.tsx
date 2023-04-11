@@ -6,15 +6,11 @@ import Button from '@components/basicComponent/Button';
 import IconButton from '@components/basicComponent/IconButton';
 import InputText from '@components/basicComponent/InputText';
 import SubText from '@components/basicComponent/SubText';
-import { callKeys } from '@constants/queryKeys';
 import {
   CallStatusType,
   CommentType,
-  RegisterCommentCallParamType,
   StoreInfoType,
 } from '@constants/types/call';
-import { useReactMutation } from '@hooks/useReactMutation';
-import { callService } from '@services/call';
 import { singletons } from '@styles/theme/colors';
 
 const AppealBoxBlock = styled.div`
@@ -73,13 +69,23 @@ interface ReceiveCallPropTypes {
   storeInfo: StoreInfoType;
   disabled: boolean;
   buttonDisabled: boolean;
+  commentMutate: Function;
+  loading: boolean;
 }
 
 const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
   props,
 ) {
-  const { callId, status, commentList, storeInfo, disabled, buttonDisabled } =
-    props;
+  const {
+    callId,
+    status,
+    commentList,
+    storeInfo,
+    disabled,
+    buttonDisabled,
+    commentMutate,
+    loading,
+  } = props;
 
   const [inputContent, setInputContent] = useState<string>();
   const [editable, setEditable] = useState<boolean>(
@@ -87,8 +93,6 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
       (comment: CommentType) => comment?.storeInfo?.id === storeInfo.id,
     ) < 0,
   );
-  const [appealContent, setAppealContent] = useState<string>();
-  const [appealTime, setAppealTime] = useState<Date>();
 
   const [appeal] = useState<CommentType | undefined>(
     commentList?.find(
@@ -101,21 +105,11 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
       : false,
   );
 
-  const { mutate: commentMutate } =
-    useReactMutation<RegisterCommentCallParamType>(
-      callKeys.registerCommentCall,
-      callService.registerCommentCall,
-      () => {},
-      () => {
-        alert('어필하는 도중 오류가 발생하였습니다.');
-      },
-    );
-
   if (editable)
     return (
       <AppealBoxBlock>
         <InputText
-          defaultValue={appealContent || appeal?.comment || inputContent}
+          defaultValue={appeal?.comment || inputContent}
           width={720}
           placeholder="어필 할 내용을 입력해주세요."
           disabled={buttonDisabled}
@@ -126,9 +120,6 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
         <ButtonWrapper
           onClick={() => {
             if (inputContent) {
-              const now = new Date();
-              setAppealContent(inputContent);
-              setAppealTime(now);
               setEditable(false);
               const commentInfo = {
                 storeInfo,
@@ -143,7 +134,8 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
             color="green"
             width={52}
             type="submit"
-            disabled={buttonDisabled}
+            disabled={buttonDisabled || loading}
+            loading={loading}
           />
           {!buttonDisabled && <ButtonBackgroundBlock />}
         </ButtonWrapper>
@@ -152,7 +144,7 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
   return (
     <AppealBoxBlock>
       <SubText
-        title={appealContent || appeal?.comment || ''}
+        title={appeal?.comment || ''}
         icon={{
           name: confirmed ? 'SetOk' : 'Check',
           width: 17,
@@ -166,9 +158,7 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
       {!!appeal && (
         <AppealTimeBlock disabled={disabled}>
           {format(
-            appealTime ||
-              (appeal?.updatedAt as Date) ||
-              (appeal?.createdAt as Date),
+            (appeal?.updatedAt as Date) || (appeal?.createdAt as Date),
             'h:mm',
           )}
         </AppealTimeBlock>

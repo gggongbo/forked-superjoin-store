@@ -97,15 +97,20 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
     query?.reward ? JSON.parse(query.reward) : undefined,
   );
 
-  const { mutate } = useReactMutation<CreateCallParamType>(
-    callKeys.createCall,
-    callService.createCall,
-    () => {
-      router.push('/call');
-    },
-  );
+  const { isLoading: isCreateLoading, mutate } =
+    useReactMutation<CreateCallParamType>(
+      callKeys.createCall,
+      callService.createCall,
+      () => {
+        router.push('/call');
+      },
+      () => {
+        alert('제안을 생성하는 도중 오류가 발생하였습니다.');
+        router.reload();
+      },
+    );
 
-  useReactQuery(
+  const { isLoading: isRewardLoading } = useReactQuery(
     rewardKeys.getRewardList,
     () => rewardService.getRewardList(currentStoreUser.id),
     {
@@ -284,7 +289,10 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
           text="제안 보내기"
           type="submit"
           onClick={submit}
+          loading={isCreateLoading || isRewardLoading}
           disabled={
+            isCreateLoading ||
+            isRewardLoading ||
             !title?.length ||
             !category?.length ||
             !description?.length ||

@@ -46,7 +46,15 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
     isUserMax,
     commentList,
     storeInfo,
-    refetch,
+    acceptMutate,
+    rejectMutate,
+    commentMutate,
+    isConfirmLoading,
+    isCancelLoading,
+    isDeleteLoading,
+    isAcceptLoading,
+    isRejectLoading,
+    isCommentLoading,
   } = row.original;
 
   const [disabled] = useState<boolean>(
@@ -119,7 +127,15 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
           callMemberList={callMemberList}
           disabled={disabled}
           buttonDisabled={buttonDisabled}
-          refetch={refetch}
+          acceptMutate={acceptMutate}
+          rejectMutate={rejectMutate}
+          loading={
+            isAcceptLoading ||
+            isRejectLoading ||
+            isConfirmLoading ||
+            isCancelLoading ||
+            isDeleteLoading
+          }
         />
       ) : (
         <ReceiveCall
@@ -129,6 +145,8 @@ const SubRow: FC<SubRowProps> = function SubRow({ row, type }) {
           storeInfo={storeInfo}
           disabled={disabled}
           buttonDisabled={buttonDisabled}
+          commentMutate={commentMutate}
+          loading={isCommentLoading}
         />
       )}
     </SubRowBlock>

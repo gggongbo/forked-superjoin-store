@@ -1,9 +1,11 @@
 import React, { FC, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import styled, { css } from 'styled-components';
 
 import IconButton from '@components/basicComponent/IconButton';
 import InputText from '@components/basicComponent/InputText';
 import SubText from '@components/basicComponent/SubText';
+import { singletons } from '@styles/theme/colors';
 
 const RewardItemBlock = styled.div`
   display: flex;
@@ -42,6 +44,13 @@ const UpdateButtonBlock = styled.div`
   margin-left: 8px;
 `;
 
+const LoadingBlock = styled.div`
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const inputStyle = css`
   background-color: ${({ theme }) => theme.colors.singletons.white};
   border-color: ${({ theme }) => theme.colors.green[600]};
@@ -72,13 +81,14 @@ const buttonStyle = css`
 interface RewardItemPropTypes {
   id: string | number;
   name: string;
+  loading?: boolean;
   onUpdateClick: Function;
   onDeleteClick: Function;
 }
 
 /* eslint-disable no-unused-vars */
 const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
-  const { id, name, onUpdateClick, onDeleteClick } = props;
+  const { id, name, loading = false, onUpdateClick, onDeleteClick } = props;
   const [isUpdatedClicked, setUpdatedClicked] = useState<boolean>(false);
   const [updateReward, setUpdateReward] = useState<string>();
 
@@ -101,61 +111,81 @@ const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
       )}
       {!isUpdatedClicked ? (
         <ButtonBlock>
-          <IconButton
-            icon={{
-              name: 'Edit',
-              width: 20,
-              height: 20,
-              color: 'gray',
-              colorIndex: 500,
-            }}
-            onClick={() => setUpdatedClicked(!isUpdatedClicked)}
-            customStyle={buttonStyle}
-          />
-          <IconButton
-            icon={{
-              name: 'Trash',
-              width: 20,
-              height: 20,
-              color: 'gray',
-              colorIndex: 500,
-            }}
-            onClick={() => onDeleteClick?.(id)}
-            customStyle={buttonStyle}
-          />
+          {!loading ? (
+            <>
+              <IconButton
+                icon={{
+                  name: 'Edit',
+                  width: 20,
+                  height: 20,
+                  color: 'gray',
+                  colorIndex: 500,
+                }}
+                onClick={() => setUpdatedClicked(!isUpdatedClicked)}
+                customStyle={buttonStyle}
+              />
+              <IconButton
+                icon={{
+                  name: 'Trash',
+                  width: 20,
+                  height: 20,
+                  color: 'gray',
+                  colorIndex: 500,
+                }}
+                disabled={loading}
+                onClick={() => onDeleteClick?.(id)}
+                customStyle={buttonStyle}
+              />
+            </>
+          ) : (
+            <LoadingBlock>
+              <ClipLoader />
+            </LoadingBlock>
+          )}
         </ButtonBlock>
       ) : (
         <UpdateButtonBlock>
-          <IconButton
-            icon={{
-              name: 'Check',
-              width: 20,
-              height: 20,
-              color: 'green',
-            }}
-            onClick={() => {
-              onUpdateClick?.({ id, name: updateReward });
-              setUpdatedClicked(false);
-            }}
-            customStyle={buttonStyle}
-          />
-          <IconButton
-            icon={{
-              name: 'Close',
-              width: 20,
-              height: 20,
-              color: 'gray',
-              colorIndex: 500,
-            }}
-            onClick={() => setUpdatedClicked(false)}
-            customStyle={buttonStyle}
-          />
+          {!loading ? (
+            <>
+              <IconButton
+                icon={{
+                  name: 'Check',
+                  width: 20,
+                  height: 20,
+                  color: 'green',
+                }}
+                disabled={loading}
+                onClick={() => {
+                  onUpdateClick?.({ id, name: updateReward });
+                  setUpdatedClicked(false);
+                }}
+                customStyle={buttonStyle}
+              />
+              <IconButton
+                icon={{
+                  name: 'Close',
+                  width: 20,
+                  height: 20,
+                  color: 'gray',
+                  colorIndex: 500,
+                }}
+                onClick={() => setUpdatedClicked(false)}
+                customStyle={buttonStyle}
+              />
+            </>
+          ) : (
+            <LoadingBlock>
+              <ClipLoader size={20} color={singletons.green} />
+            </LoadingBlock>
+          )}
         </UpdateButtonBlock>
       )}
     </RewardItemBlock>
   );
 };
 
-RewardItem.defaultProps = {};
+RewardItem.defaultProps = {
+  loading: false,
+};
 
 export default RewardItem;
