@@ -50,8 +50,8 @@ const HeaderRightBlock = styled.div`
 `;
 
 const optionList = [
-  { name: 'ID', value: 'id' },
-  { name: '닉네임', value: 'nickname' },
+  { name: 'ID', value: ['userInfo', 'id'] },
+  { name: '닉네임', value: ['userInfo', 'name'] },
 ];
 
 const Member: NextPage<WithRouterProps> = function Member({

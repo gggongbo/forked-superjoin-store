@@ -112,13 +112,14 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
           defaultValue={appeal?.comment || inputContent}
           width={720}
           placeholder="어필 할 내용을 입력해주세요."
-          disabled={buttonDisabled}
+          disabled={buttonDisabled || loading}
           onChange={e => {
             setInputContent(e.target.value);
           }}
         />
         <ButtonWrapper
           onClick={() => {
+            if (buttonDisabled || loading) return;
             if (inputContent) {
               setEditable(false);
               const commentInfo = {
@@ -137,7 +138,7 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
             disabled={buttonDisabled || loading}
             loading={loading}
           />
-          {!buttonDisabled && <ButtonBackgroundBlock />}
+          {!buttonDisabled && !loading && <ButtonBackgroundBlock />}
         </ButtonWrapper>
       </AppealBoxBlock>
     );
@@ -163,7 +164,7 @@ const ReceiveCall: FC<ReceiveCallPropTypes> = React.memo(function ReceiveCall(
           )}
         </AppealTimeBlock>
       )}
-      {!confirmed && !buttonDisabled && (
+      {!confirmed && !buttonDisabled && !loading && (
         <IconButton
           width={34}
           icon={{ name: 'Edit', width: 18, height: 18 }}

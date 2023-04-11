@@ -15,41 +15,50 @@ import { auth, db } from '@services/app';
 import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
 const createReward = async (rewardName: string) => {
-  if (!rewardName) return null;
+  if (!rewardName) return;
   const rewardDocId = doc(collection(db, 'reward')).id;
   const storeId = auth.currentUser?.uid;
   const now = new Date();
-
-  return setDoc(doc(db, 'reward', rewardDocId), {
-    id: rewardDocId,
-    name: rewardName,
-    storeId,
-    deleted: false,
-    createdAt: now,
-    updatedAt: now,
-  });
+  try {
+    await setDoc(doc(db, 'reward', rewardDocId), {
+      id: rewardDocId,
+      name: rewardName,
+      storeId,
+      deleted: false,
+      createdAt: now,
+      updatedAt: now,
+    });
+  } catch (error: any) {
+    alert('리워드를 추가하는 도중 오류가 발생하였습니다.');
+  }
 };
 
 const updateReward = async (reward: RewardInfo) => {
-  if (!reward) return null;
+  if (!reward || !reward?.id || !reward?.name) return;
 
   const now = new Date();
-
-  return updateDoc(doc(db, 'reward', reward.id), {
-    name: reward.name,
-    updatedAt: now,
-  });
+  try {
+    await updateDoc(doc(db, 'reward', reward.id), {
+      name: reward.name,
+      updatedAt: now,
+    });
+  } catch (error: any) {
+    alert('리워드를 수정하는 도중 오류가 발생하였습니다.');
+  }
 };
 
 const deleteReward = async (rewardId: string) => {
-  if (!rewardId) return null;
+  if (!rewardId) return;
 
   const now = new Date();
-
-  return updateDoc(doc(db, 'reward', rewardId), {
-    deleted: true,
-    updatedAt: now,
-  });
+  try {
+    await updateDoc(doc(db, 'reward', rewardId), {
+      deleted: true,
+      updatedAt: now,
+    });
+  } catch (error: any) {
+    alert('리워드를 삭제하는 도중 오류가 발생하였습니다.');
+  }
 };
 
 const getRewardList = async (storeId: string): Promise<RewardType[] | null> => {

@@ -104,6 +104,7 @@ const RewardItem: FC<RewardItemPropTypes> = function RewardItem(props) {
         <InputTextBlock>
           <InputText
             defaultValue={name}
+            maxLength={10}
             onChange={e => setUpdateReward(e.target.value)}
             customStyle={inputStyle}
           />

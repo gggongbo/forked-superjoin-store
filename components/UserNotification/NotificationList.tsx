@@ -13,6 +13,7 @@ import styled, { css } from 'styled-components';
 import NotificationItem from './NotificationItem';
 
 import Divider from '@components/basicComponent/Divider';
+import IconButton from '@components/basicComponent/IconButton';
 import ListBox from '@components/basicComponent/ListBox';
 import { notificationKeys } from '@constants/queryKeys';
 import {
@@ -29,7 +30,7 @@ import { useAppDispatch } from '@store/rootStore';
 
 const NotificationListBlock = styled.div`
   display: flex;
-  flex: 1;
+  width: 375px;
   flex-direction: column;
   height: 90vh;
   background-color: ${({ theme }) => theme.colors.singletons.defaultBackground};
@@ -45,7 +46,21 @@ const NotificationListBlock = styled.div`
   z-index: 999;
 `;
 
-const TextBlock = styled.div`
+const UnreadTitleBlock = styled.div`
+  padding: 20px 20px 8px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const UnreadTextBlock = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.text[400]};
+`;
+
+const ReadTextBlock = styled.div`
   padding: 20px 20px 8px 20px;
   font-size: 14px;
   font-weight: 500;
@@ -53,7 +68,7 @@ const TextBlock = styled.div`
 `;
 
 const EmptyTextBlock = styled.div`
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   align-self: center;
   font-size: 14px;
   color: ${({ theme }) => theme.colors.text[300]};
@@ -68,6 +83,9 @@ const customeListBoxStyle = css`
   display: flex;
 `;
 
+const closeButtonStyle = css`
+  border-width: 0px;
+`;
 const NotificationList: FC = function NotificationList() {
   /* eslint-disable no-unused-vars */
   const dispatch = useAppDispatch();
@@ -202,7 +220,16 @@ const NotificationList: FC = function NotificationList() {
   if (!notificationVisible) return null;
   return (
     <NotificationListBlock>
-      <TextBlock>새로운 알림</TextBlock>
+      <UnreadTitleBlock>
+        <UnreadTextBlock>새로운 알림</UnreadTextBlock>
+        <IconButton
+          icon={{ name: 'Close', width: 16, height: 16 }}
+          customStyle={closeButtonStyle}
+          onClick={() => {
+            dispatch(storeUserActions.setNotificationVisible(false));
+          }}
+        />
+      </UnreadTitleBlock>
       <ListBox
         customStyle={customeListBoxStyle}
         data={unreadNotificationList}
@@ -212,7 +239,7 @@ const NotificationList: FC = function NotificationList() {
         }
       />
       <CustomDivider isVertical={false} />
-      <TextBlock>이전 알림</TextBlock>
+      <ReadTextBlock>이전 알림</ReadTextBlock>
       <ListBox
         customStyle={customeListBoxStyle}
         data={readNotificationList}
