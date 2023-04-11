@@ -111,7 +111,7 @@ const Reward: NextPage = function Reward() {
     setRewardList(rewardData);
   }, []);
 
-  const { refetch } = useReactQuery(
+  const { refetch, isLoading: isGetLoading } = useReactQuery(
     rewardKeys.getRewardList,
     () => rewardService.getRewardList(currentStoreUser.id),
     {
@@ -124,38 +124,41 @@ const Reward: NextPage = function Reward() {
     },
   );
 
-  const { mutate: createMutate } = useReactMutation<string>(
-    rewardKeys.createReward,
-    rewardService.createReward,
-    () => {
-      refetch();
-    },
-    () => {
-      alert('리워드를 추가하는 도중 오류가 발생하였습니다.');
-    },
-  );
+  const { mutate: createMutate, isLoading: isCreateLoading } =
+    useReactMutation<string>(
+      rewardKeys.createReward,
+      rewardService.createReward,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('리워드를 추가하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
-  const { mutate: updateMutate } = useReactMutation<RewardInfo>(
-    rewardKeys.updateReward,
-    rewardService.updateReward,
-    () => {
-      refetch();
-    },
-    () => {
-      alert('리워드를 수정하는 도중 오류가 발생하였습니다.');
-    },
-  );
+  const { mutate: updateMutate, isLoading: isUpdateLoading } =
+    useReactMutation<RewardInfo>(
+      rewardKeys.updateReward,
+      rewardService.updateReward,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('리워드를 수정하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
-  const { mutate: deleteMutate } = useReactMutation<string>(
-    rewardKeys.deleteReward,
-    rewardService.deleteReward,
-    () => {
-      refetch();
-    },
-    () => {
-      alert('리워드를 삭제하는 도중 오류가 발생하였습니다.');
-    },
-  );
+  const { mutate: deleteMutate, isLoading: isDeleteLoading } =
+    useReactMutation<string>(
+      rewardKeys.deleteReward,
+      rewardService.deleteReward,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('리워드를 삭제하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
   const renderRewardItem = useCallback(
     ({ item }: RewardItemType) => {
@@ -164,6 +167,7 @@ const Reward: NextPage = function Reward() {
         <RewardItem
           id={item.id}
           name={item.name}
+          loading={isUpdateLoading || isDeleteLoading || isCreateLoading}
           onUpdateClick={(rewardInfo: RewardInfo) => {
             updateMutate(rewardInfo);
           }}
@@ -173,7 +177,14 @@ const Reward: NextPage = function Reward() {
         />
       );
     },
-    [confirm, deleteMutate, updateMutate],
+    [
+      confirm,
+      deleteMutate,
+      isCreateLoading,
+      isDeleteLoading,
+      isUpdateLoading,
+      updateMutate,
+    ],
   );
 
   return (
@@ -191,6 +202,8 @@ const Reward: NextPage = function Reward() {
           width={90}
           text="추가"
           color="green"
+          disabled={isCreateLoading || isUpdateLoading || isDeleteLoading}
+          loading={isCreateLoading || isUpdateLoading || isDeleteLoading}
           onClick={() => {
             if (!newReward) return;
             createMutate(newReward);
@@ -204,6 +217,7 @@ const Reward: NextPage = function Reward() {
             <ListBox
               data={rewardList}
               renderItem={renderRewardItem}
+              loading={isGetLoading}
               listEmptyComponent={
                 <EmptyBlock>
                   <EmptyImageBlock />

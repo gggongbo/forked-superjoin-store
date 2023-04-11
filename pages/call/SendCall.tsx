@@ -8,10 +8,12 @@ import styled from 'styled-components';
 import Table from '@components/basicComponent/Table';
 import { callKeys } from '@constants/queryKeys';
 import {
+  AcceptRequestCallParamType,
   CallProps,
   CallStatusType,
   CallType,
   ConfirmCallParamType,
+  RejectRequestCallParamType,
 } from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';
@@ -59,7 +61,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     setInitData(callData);
   }, []);
 
-  const { refetch } = useReactQuery(
+  const { refetch, isLoading: isGetLoading } = useReactQuery(
     callKeys.getSendCall(currentStoreUser?.id),
     () => {
       if (!currentStoreUser || !currentStoreUser?.id) return null;
@@ -75,38 +77,65 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     },
   );
 
-  const { mutate: confirmMutate } = useReactMutation<ConfirmCallParamType>(
-    callKeys.confirmCall,
-    callService.confirmCall,
-    () => {
-      refetch();
-    },
-    () => {
-      alert('제안을 확정하는 도중 오류가 발생하였습니다.');
-    },
-  );
+  const { mutate: confirmMutate, isLoading: isConfirmLoading } =
+    useReactMutation<ConfirmCallParamType>(
+      callKeys.confirmCall,
+      callService.confirmCall,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('제안을 확정하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
-  const { mutate: cancelMutate } = useReactMutation<string>(
-    callKeys.cancelCall,
-    callService.cancelCall,
-    () => {
-      refetch();
-    },
-    () => {
-      alert('제안을 취소하는 도중 오류가 발생하였습니다.');
-    },
-  );
+  const { mutate: cancelMutate, isLoading: isCancelLoading } =
+    useReactMutation<string>(
+      callKeys.cancelCall,
+      callService.cancelCall,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('제안을 취소하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
-  const { mutate: deleteMutate } = useReactMutation<string>(
-    callKeys.deleteCall,
-    callService.deleteCall,
-    () => {
-      refetch();
-    },
-    () => {
-      alert('제안을 삭제하는 도중 오류가 발생하였습니다.');
-    },
-  );
+  const { mutate: deleteMutate, isLoading: isDeleteLoading } =
+    useReactMutation<string>(
+      callKeys.deleteCall,
+      callService.deleteCall,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('제안을 삭제하는 도중 오류가 발생하였습니다.');
+      },
+    );
+
+  const { mutate: acceptMutate, isLoading: isAcceptLoading } =
+    useReactMutation<AcceptRequestCallParamType>(
+      callKeys.acceptRequestCall,
+      callService.acceptRequestCall,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('제안을 수락하는 도중 오류가 발생하였습니다.');
+      },
+    );
+
+  const { mutate: rejectMutate, isLoading: isRejectLoading } =
+    useReactMutation<RejectRequestCallParamType>(
+      callKeys.rejectRequestCall,
+      callService.rejectRequestCall,
+      () => {
+        refetch();
+      },
+      () => {
+        alert('제안을 거절하는 도중 오류가 발생하였습니다.');
+      },
+    );
 
   const filteredData = useMemo(
     () =>
@@ -135,7 +164,13 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
 
           return {
             ...data,
-            refetch,
+            acceptMutate,
+            rejectMutate,
+            isConfirmLoading,
+            isCancelLoading,
+            isDeleteLoading,
+            isAcceptLoading,
+            isRejectLoading,
             storeInfo: {
               id: currentStoreUser?.id,
               name: currentStoreUser?.name,
@@ -165,6 +200,11 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
             callButton: callButtonComponent(
               data,
               callStatus,
+              isConfirmLoading ||
+                isCancelLoading ||
+                isDeleteLoading ||
+                isAcceptLoading ||
+                isRejectLoading,
               () => {
                 confirm('제안을 확정하시겠습니까?', () =>
                   confirmMutate({
@@ -182,6 +222,11 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
             ),
             deleteButton: callDeleteButtonComponent(
               callStatus === 'proceeding' || callStatus === 'confirmed',
+              isConfirmLoading ||
+                isCancelLoading ||
+                isDeleteLoading ||
+                isAcceptLoading ||
+                isRejectLoading,
               () => {
                 confirm('제안을 삭제하시겠습니까?', () => deleteMutate(callId));
               },
@@ -198,23 +243,29 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
           return searchValue?.toString() === dataValue?.toString();
         }),
     [
-      initData,
-      refetch,
-      currentStoreUser?.id,
-      currentStoreUser?.name,
-      currentStoreUser?.image,
-      currentStoreUser?.address,
-      currentStoreUser?.location.latitude,
-      currentStoreUser?.location.longitude,
+      acceptMutate,
+      callButtonComponent,
       callCategoryTitleComponent,
+      callDeleteButtonComponent,
       callEndTimeComponent,
       callStatusComponent,
-      callButtonComponent,
-      callDeleteButtonComponent,
+      cancelMutate,
       confirm,
       confirmMutate,
-      cancelMutate,
+      currentStoreUser?.address,
+      currentStoreUser?.id,
+      currentStoreUser?.image,
+      currentStoreUser?.location.latitude,
+      currentStoreUser?.location.longitude,
+      currentStoreUser?.name,
       deleteMutate,
+      initData,
+      isAcceptLoading,
+      isCancelLoading,
+      isConfirmLoading,
+      isDeleteLoading,
+      isRejectLoading,
+      rejectMutate,
       search,
     ],
   );
@@ -244,7 +295,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
             expandEnable
             renderRowSubComponent={renderRowSubComponent}
             fetchData={fetchData}
-            loading={loading}
+            loading={loading || isGetLoading}
             pageSizeList={pageSizeList}
             pageCount={pageCount}
             type={type}

@@ -45,7 +45,7 @@ const VisitedMember: NextPage<MemberProps> = function VisitedMember({
     setInitData(memberData!);
   }, []);
 
-  useReactQuery(
+  const { isLoading } = useReactQuery(
     memberKeys.getVisitedMember,
     () => memberService.getVisitedMember(),
     {
@@ -116,7 +116,7 @@ const VisitedMember: NextPage<MemberProps> = function VisitedMember({
           <Table
             columns={columns}
             data={tableData}
-            loading={loading}
+            loading={loading || isLoading}
             fetchData={fetchData}
             pageSizeList={pageSizeList}
             pageCount={pageCount}

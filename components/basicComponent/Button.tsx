@@ -1,7 +1,9 @@
 import { FC } from 'react';
+import { ClipLoader } from 'react-spinners';
 import styled, { CSSProp } from 'styled-components';
 
 import { ButtonType } from '@constants/types/components';
+import { singletons } from '@styles/theme/colors';
 
 const ButtonBlock = styled.button<{
   width: number;
@@ -44,6 +46,13 @@ const ButtonText = styled.div<{ textStyle?: CSSProp; disabled?: boolean }>`
   ${({ textStyle }) => textStyle};
 `;
 
+const LoadingBlock = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0px;
+`;
+
 interface ButtonProps {
   width?: number;
   text?: string | undefined;
@@ -54,6 +63,7 @@ interface ButtonProps {
   customStyle?: CSSProp;
   textStyle?: CSSProp;
   disabled?: boolean;
+  loading?: boolean;
   // eslint-disable-next-line no-unused-vars
   onClick?: (e: any) => void;
 }
@@ -69,8 +79,10 @@ const Button: FC<ButtonProps> = function Button(props) {
     textStyle,
     type = 'button',
     onClick,
+    loading = false,
     disabled,
   } = props;
+
   return (
     <ButtonBlock
       width={width}
@@ -82,9 +94,15 @@ const Button: FC<ButtonProps> = function Button(props) {
       onClick={onClick}
       disabled={disabled}
     >
-      <ButtonText textStyle={textStyle} disabled={disabled}>
-        {text}
-      </ButtonText>
+      {!loading ? (
+        <ButtonText textStyle={textStyle} disabled={disabled}>
+          {text}
+        </ButtonText>
+      ) : (
+        <LoadingBlock>
+          <ClipLoader color={singletons.white} size={14} />
+        </LoadingBlock>
+      )}
     </ButtonBlock>
   );
 };
@@ -99,6 +117,7 @@ Button.defaultProps = {
   onClick: () => {},
   customStyle: {},
   textStyle: {},
+  loading: false,
   disabled: false,
 };
 

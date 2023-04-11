@@ -1,19 +1,13 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
 
+import Button from '@components/basicComponent/Button';
 import CheckboxItem from '@components/basicComponent/CheckboxItem';
 import Divider from '@components/basicComponent/Divider';
 import SubText from '@components/basicComponent/SubText';
 import Icon from '@components/Icon';
-import { callKeys } from '@constants/queryKeys';
-import {
-  AcceptRequestCallParamType,
-  CallMemberType,
-  RejectRequestCallParamType,
-} from '@constants/types/call';
+import { CallMemberType } from '@constants/types/call';
 import { RewardType } from '@constants/types/reward';
-import { useReactMutation } from '@hooks/useReactMutation';
-import { callService } from '@services/call';
 
 const RewardAndMemberBlock = styled.div`
   display: flex;
@@ -105,39 +99,40 @@ const CallMemberIconBlock = styled.li`
   align-items: center;
 `;
 
-const RequestAcceptButton = styled.button`
+const acceptButtonStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   text-align: center;
   cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.singletons.black};
-  color: ${({ theme }) => theme.colors.singletons.white};
-  width: 80px;
   padding-top: 5px;
   padding-bottom: 5px;
-  line-height: 1.5;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
   margin-right: 8px;
 `;
 
-const RequestRejectButton = styled.button`
+const acceptButtonTextStyle = css`
+  color: ${({ theme }) => theme.colors.singletons.white};
+  line-height: 1.5;
+  font-size: 14px;
+  font-weight: 500;
+`;
+
+const rejectButtonStyle = css`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   text-align: center;
   cursor: pointer;
-  background-color: ${({ theme }) => theme.colors.gray[300]};
-  color: ${({ theme }) => theme.colors.singletons.black};
-  width: 80px;
   padding-top: 5px;
   padding-bottom: 5px;
+  margin-right: 8px;
+`;
+
+const rejectButtonTextStyle = css`
+  color: ${({ theme }) => theme.colors.singletons.black};
   line-height: 1.5;
-  border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
 `;
@@ -148,49 +143,30 @@ const subTextStyle = css`
 
 interface SendCallPropTypes {
   callId: string;
-  refetch: Function;
   title: string;
   reward: RewardType | null;
   requestMemberList: CallMemberType[];
   callMemberList: CallMemberType[];
   disabled: boolean;
   buttonDisabled: boolean;
+  acceptMutate: Function;
+  rejectMutate: Function;
+  loading: boolean;
 }
 
 const SendCall: FC<SendCallPropTypes> = React.memo(function SendCall(props) {
   const {
     callId,
-    refetch,
     title,
     reward,
     requestMemberList,
     callMemberList,
     disabled,
     buttonDisabled,
+    acceptMutate,
+    rejectMutate,
+    loading,
   } = props;
-
-  const { mutate: acceptMutate } = useReactMutation<AcceptRequestCallParamType>(
-    callKeys.acceptRequestCall,
-    callService.acceptRequestCall,
-    () => {
-      refetch();
-    },
-    () => {
-      alert('제안을 수락하는 도중 오류가 발생하였습니다.');
-    },
-  );
-
-  const { mutate: rejesctMutate } =
-    useReactMutation<RejectRequestCallParamType>(
-      callKeys.rejectRequestCall,
-      callService.rejectRequestCall,
-      () => {
-        refetch();
-      },
-      () => {
-        alert('제안을 거절하는 도중 오류가 발생하였습니다.');
-      },
-    );
 
   const memberList: CallMemberType[] = [];
 
@@ -284,26 +260,37 @@ const SendCall: FC<SendCallPropTypes> = React.memo(function SendCall(props) {
           {requestMemberList?.length > 0 && !buttonDisabled && (
             <>
               <MemberDivider isVertical />
-              <RequestAcceptButton
+              <Button
+                text="수락"
+                width={80}
+                color="black"
+                loading={loading}
+                disabled={loading}
                 onClick={() => {
                   acceptMutate({
                     callInfo: { callId, title },
                     targetMemberList: memberList,
                   });
                 }}
-              >
-                수락
-              </RequestAcceptButton>
-              <RequestRejectButton
+                customStyle={acceptButtonStyle}
+                textStyle={acceptButtonTextStyle}
+              />
+              <Button
+                text="거절"
+                width={80}
+                color="gray"
+                colorIndex={300}
+                loading={loading}
+                disabled={loading}
                 onClick={() => {
-                  rejesctMutate({
+                  rejectMutate({
                     callId,
                     targetMemberIdList: memberList.map(member => member.id),
                   });
                 }}
-              >
-                거절
-              </RequestRejectButton>
+                customStyle={rejectButtonStyle}
+                textStyle={rejectButtonTextStyle}
+              />
             </>
           )}
         </MemberBlock>
