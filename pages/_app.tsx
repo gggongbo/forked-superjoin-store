@@ -6,6 +6,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { ThemeProvider } from 'styled-components';
 
 import '@styles/globals.css';
+import ErrorBoundary from '@components/ErrorBoundary';
+import Error from '@components/ErrorBoundary/Error';
 import Layout from '@components/Layout';
 import { authService } from '@services/auth';
 import store, { persistor } from '@store/rootStore';
@@ -24,10 +26,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
             <ThemeProvider theme={theme}>
-              <Layout>
-                {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-                <Component {...pageProps} />
-              </Layout>
+              <ErrorBoundary fallback={<Error />}>
+                <Layout>
+                  {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+                  <Component {...pageProps} />
+                </Layout>
+              </ErrorBoundary>
             </ThemeProvider>
           </Hydrate>
         </QueryClientProvider>
