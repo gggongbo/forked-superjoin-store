@@ -32,6 +32,7 @@ export { default as Bell } from '@resources/svg/icon/ic-bell.svg';
 export { default as BellSurface } from '@resources/svg/icon/ic-bell-surface.svg';
 export { default as UserV } from '@resources/svg/icon/ic-user-v.svg';
 export { default as User } from '@resources/svg/icon/ic-user.svg';
+export { default as Warning } from '@resources/svg/icon/ic-warning.svg';
 
 export { default as MarkPointGray } from '@resources/svg/icon/mark-point-gray.svg';
 export { default as MarkPointYellow } from '@resources/svg/icon/mark-point-yellow.svg';
