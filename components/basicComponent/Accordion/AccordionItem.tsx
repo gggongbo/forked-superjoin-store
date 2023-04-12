@@ -35,12 +35,13 @@ const TitleBlock = styled.div`
   align-items: center;
 `;
 
-const Title = styled.pre`
+const Title = styled.div`
   font-family: 'Noto Sans KR';
   font-size: 15px;
   font-weight: 500;
   text-align: center;
   margin-left: 11px;
+  white-space: pre-wrap;
 `;
 
 const AccordionItemContent = styled.div<{ visible: boolean }>`

@@ -30,6 +30,7 @@ import { useAppDispatch } from '@store/rootStore';
 
 const NotificationListBlock = styled.div`
   display: flex;
+  overflow-y: auto;
   width: 375px;
   flex-direction: column;
   height: 90vh;

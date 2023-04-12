@@ -5,9 +5,6 @@ const ListBoxBlock = styled.div<{
   customStyle?: CSSProp;
 }>`
   width: 100%;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
   ${({ customStyle }) => customStyle};
 `;
 
