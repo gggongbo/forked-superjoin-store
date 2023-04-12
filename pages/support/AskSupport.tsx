@@ -56,15 +56,18 @@ const AskSupport: NextPage<AskSupportProps> = function AskSupport({
 
   const askSubmit = useCallback(() => {
     if (!email || !title?.length || !text?.length) return;
-    confirm('문의하기 전송', () => {
-      fetch('/api/support/askSupport', {
-        method: 'POST',
-        body: JSON.stringify({ email, title, text }),
-      }).then(() => {
-        alert('문의가 완료되었습니다.');
-        supportType('qa');
-      });
-    });
+    confirm(
+      '문의하신 내용은 인증하신 이메일로 답변을 보내드립니다. 문의하시겠습니까?',
+      () => {
+        fetch('/api/support/askSupport', {
+          method: 'POST',
+          body: JSON.stringify({ email, title, text }),
+        }).then(() => {
+          alert('문의가 완료되었습니다.');
+          supportType('qa');
+        });
+      },
+    );
   }, [confirm, email, supportType, text, title]);
 
   return (
