@@ -160,7 +160,15 @@ const Reward: NextPage = function Reward() {
           name={item.name}
           loading={isUpdateLoading || isDeleteLoading || isCreateLoading}
           onUpdateClick={(rewardInfo: RewardInfo) => {
-            updateMutate(rewardInfo);
+            if (
+              !rewardInfo ||
+              !rewardInfo?.name?.length ||
+              rewardInfo?.name?.length > 10
+            ) {
+              alert('입력한 리워드를 확인해주세요.');
+            } else {
+              updateMutate(rewardInfo);
+            }
           }}
           onDeleteClick={(rewardId: string) => {
             confirm('리워드를 삭제하시겠습니까?', () => deleteMutate(rewardId));
@@ -197,8 +205,11 @@ const Reward: NextPage = function Reward() {
           disabled={isCreateLoading || isUpdateLoading || isDeleteLoading}
           loading={isCreateLoading || isUpdateLoading || isDeleteLoading}
           onClick={() => {
-            if (!newReward) return;
-            createMutate(newReward);
+            if (!newReward || !newReward?.length || newReward?.length > 10) {
+              alert('입력한 리워드를 확인해주세요.');
+            } else {
+              createMutate(newReward);
+            }
           }}
         />
       </RewardInputBlock>
