@@ -1,4 +1,4 @@
-import { differenceInMinutes, format } from 'date-fns';
+import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import type { NextPage } from 'next';
 import { useMemo, useCallback, useState } from 'react';
@@ -138,10 +138,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
                 })
               : null,
             callEndTime: deadline
-              ? callEndTimeComponent(
-                  differenceInMinutes(deadline as Date, now),
-                  callStatus,
-                )
+              ? callEndTimeComponent(deadline as Date, now, callStatus)
               : null,
             callStatus: callStatusComponent(callStatus),
             appealStatus: appealStatusComponent(comment, callStatus),

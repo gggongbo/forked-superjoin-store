@@ -21,6 +21,7 @@ import {
   gray as GrayColors,
   text as TextColors,
 } from '@styles/theme/colors';
+import { getFormattedTime } from '@utils/dateUtils';
 
 const CallCategoryTitleBlock = styled.div`
   display: flex;
@@ -346,17 +347,15 @@ const useTableComponent = () => {
   }, []);
 
   const callEndTimeComponent = useCallback(
-    (callEndTime: number, callStatus: string) => {
-      const disabled = callStatus !== 'proceeding' || callEndTime < 0;
-      if (typeof callEndTime === 'number') {
-        const postFix = callEndTime > 0 ? '후' : '전';
-        return (
-          <CallEndTimeBlock disabled={disabled}>
-            {`${Math.abs(callEndTime) + 1} 분 ${postFix}`}
-          </CallEndTimeBlock>
-        );
-      }
-      return callEndTime;
+    (callDeadline: Date, nowTime: Date, callStatus: string) => {
+      if (!callDeadline) return null;
+
+      const disabled = callStatus !== 'proceeding' || callDeadline <= nowTime;
+      const callEndTime = getFormattedTime(nowTime, callDeadline);
+
+      return (
+        <CallEndTimeBlock disabled={disabled}>{callEndTime}</CallEndTimeBlock>
+      );
     },
     [],
   );

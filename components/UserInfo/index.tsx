@@ -133,7 +133,7 @@ const UserInfo: FC = function UserInfo() {
           />
           <SubTextButton
             title="비밀번호 초기화"
-            icon={{ name: 'Out', width: 18, height: 18 }}
+            icon={{ name: 'Warning', width: 18, height: 18 }}
             onClick={onUpdatePassword}
           />
         </UserBlock>
