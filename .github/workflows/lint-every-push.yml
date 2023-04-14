@@ -1,14 +1,14 @@
-# lint-every-commit.yml
+# lint-every-push.yml
 
-name: 'lint-every-commit'
+name: 'lint-every-push'
 
 # workflow를 동작하게하는 trigger
-# repository에 commit 이벤트가 발생할 때마다 실행
-on: commit
+# repository에 push 이벤트가 발생할 때마다 실행
+on: push
 
 jobs:
   test:
-    name: Lint Every Commit
+    name: Lint Every Push
     runs-on: ubuntu-latest
 
     steps:
