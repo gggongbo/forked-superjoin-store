@@ -3,6 +3,7 @@ import {
   FilterIncludes,
 } from '@components/basicComponent/Table/Filter';
 
+// 데이터-테이블 매핑 설정, 최소한 필요한 width 지정, 필터링/소트 가능여부 설정 가능
 const SendCall = [
   {
     accessor: 'callTitle',

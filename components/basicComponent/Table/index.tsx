@@ -54,22 +54,31 @@ const HeadRowBlock = styled.tr`
   flex-direction: row;
 `;
 const HeadColumnBlock = styled.th<{ width?: string | number; flex: boolean }>`
-  display: flex;
+  display: inline-flex;
   flex: ${({ flex }) => (flex ? 1 : 'none')};
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   width: ${({ width }) => width}px;
   padding: 12px 0px 12px 20px;
-  align-items: center;
   font-size: 14px;
   font-weight: normal;
   color: ${({ theme }) => theme.colors.text[400]};
 `;
 
 const HeadColumnContentBlock = styled.div`
-  display: flex;
-  flex: 1;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
+`;
+
+const HeadColumnRenderBlock = styled.div`
+  display: inline-flex;
+  flex: 1;
+  flex-direction: row;
+  white-space: nowrap;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
 `;
 
 const HeadColumnTooltipBlock = styled.div`
@@ -260,7 +269,9 @@ const Table: FC<TableProps> = function Table(props) {
                         key={index}
                       >
                         <HeadColumnContentBlock>
-                          {column.render('Header')}
+                          <HeadColumnRenderBlock>
+                            {column.render('Header')}
+                          </HeadColumnRenderBlock>
                           {columns[index]?.tooltip ? (
                             <HeadColumnTooltipBlock
                               data-tooltip-id={`head-column-tooltip${index}`}
@@ -317,7 +328,6 @@ const Table: FC<TableProps> = function Table(props) {
                             {...cell.getCellProps()}
                             width={cell.column.width}
                             flex={index === 0}
-                            /* eslint-disable-next-line react/no-array-index-key */
                             key={index}
                           >
                             {index === 0 && expandEnable && (
