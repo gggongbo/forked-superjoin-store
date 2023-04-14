@@ -107,7 +107,7 @@ yarn deploy
 ## **Code Structure**
 
 - **components**
-  - `basicComponent`
+  - `BasicComponent`
     - Accordion
     - Table
     - Button.tsx
@@ -129,6 +129,8 @@ yarn deploy
     - VerticalSubText.tsx
     - ListBox.tsx
   - `Icon`
+  - `ErrorBoundary` : 에러 바운더리 관련 클래스, 컴포넌트 위치
+  - `MediaComponent`: Mobile,PC 컴포넌트를 감쌀 수 있는 상위 컴포넌트 위치
   - `UserInfo` : TopNavbar 오른쪽 업체 프로필 컴포넌트. 로그아웃/비밀번호 초기화 위치
   - `UserNotification` : 알림 컴포넌트
   - `Layout.tsx` : SideNavbar, TopNavbar, pages 폴더 안에 있는 메인 컴포넌트들을 감싸는 컴포넌트
@@ -147,16 +149,21 @@ yarn deploy
     - common
   - category.ts
   - categoryList.ts
+  - errorMessage.ts
   - router.ts
   - tableColumns.ts
   - queryKeys.ts
 - **contexts**
 - **hooks**
-  - useTableComponent.ts
+  - useReactMutation
+  - useReactQuery
+  - useTableComponent
   - useConfirm.ts
   - useInClick.ts
   - useTheme.ts
-  - useReactQuery.ts
+  - usePushNotification.ts
+  - useWindowSize.ts
+  - useMobile.ts
 - **pages**
   - `api`
     - auth

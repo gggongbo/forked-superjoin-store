@@ -9,9 +9,9 @@ import {
 import { Tooltip } from 'react-tooltip';
 import styled, { css } from 'styled-components';
 
-import Divider from '@components/basicComponent/Divider';
-import IconButton from '@components/basicComponent/IconButton';
-import SelectBox from '@components/basicComponent/Selectbox';
+import Divider from '@components/BasicComponent/Divider';
+import IconButton from '@components/BasicComponent/IconButton';
+import SelectBox from '@components/BasicComponent/Selectbox';
 import Icon from '@components/Icon';
 import { useWindowSize } from '@hooks/useWindowSize';
 import { componentSizes } from '@styles/theme/media';

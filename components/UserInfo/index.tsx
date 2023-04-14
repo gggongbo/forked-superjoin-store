@@ -3,7 +3,7 @@ import { FC, useState, useCallback, useRef, useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import SubTextButton from '@components/basicComponent/SubTextButton';
+import SubTextButton from '@components/BasicComponent/SubTextButton';
 import Icon from '@components/Icon';
 import { CurrentUserType, ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';

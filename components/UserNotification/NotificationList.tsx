@@ -4,9 +4,9 @@ import styled, { css } from 'styled-components';
 
 import NotificationItem from './NotificationItem';
 
-import Divider from '@components/basicComponent/Divider';
-import IconButton from '@components/basicComponent/IconButton';
-import ListBox from '@components/basicComponent/ListBox';
+import Divider from '@components/BasicComponent/Divider';
+import IconButton from '@components/BasicComponent/IconButton';
+import ListBox from '@components/BasicComponent/ListBox';
 import { notificationKeys } from '@constants/queryKeys';
 import {
   NotificationItemType,

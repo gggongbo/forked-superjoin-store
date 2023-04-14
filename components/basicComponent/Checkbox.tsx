@@ -9,7 +9,7 @@ import {
 } from 'react';
 import styled, { css } from 'styled-components';
 
-import Oval from '@components/basicComponent/Oval';
+import Oval from '@components/BasicComponent/Oval';
 import Icon from '@components/Icon';
 import { OptionType } from '@constants/types/components';
 import { useInClick } from '@hooks/useInClick';

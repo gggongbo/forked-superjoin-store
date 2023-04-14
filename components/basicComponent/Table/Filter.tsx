@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { Row, FilterValue, Column, IdType } from 'react-table';
 
-import Checkbox from '@components/basicComponent/Checkbox';
+import Checkbox from '@components/BasicComponent/Checkbox';
 import { OptionType } from '@constants/types/components';
 
 interface SelectColumnFilterProps {
@@ -13,7 +13,7 @@ interface SelectColumnFilterProps {
   };
 }
 
-// 로우 핉터링 로직
+// 로우 필터링 로직
 const FilterIncludes = (
   rows: Row[],
   id: IdType<any>,

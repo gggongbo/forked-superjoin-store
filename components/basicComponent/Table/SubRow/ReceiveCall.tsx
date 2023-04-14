@@ -2,10 +2,10 @@ import { format } from 'date-fns';
 import React, { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
 
-import Button from '@components/basicComponent/Button';
-import IconButton from '@components/basicComponent/IconButton';
-import InputText from '@components/basicComponent/InputText';
-import SubText from '@components/basicComponent/SubText';
+import Button from '@components/BasicComponent/Button';
+import IconButton from '@components/BasicComponent/IconButton';
+import InputText from '@components/BasicComponent/InputText';
+import SubText from '@components/BasicComponent/SubText';
 import {
   CallStatusType,
   CommentType,

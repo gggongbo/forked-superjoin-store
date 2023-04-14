@@ -6,7 +6,7 @@ import styled, { css } from 'styled-components';
 import { ReceiveCall } from './ReceiveCall';
 import { SendCall } from './SendCall';
 
-import SubText from '@components/basicComponent/SubText';
+import SubText from '@components/BasicComponent/SubText';
 import { SubRowProps } from '@constants/types/components';
 
 const SubRowBlock = styled.div`

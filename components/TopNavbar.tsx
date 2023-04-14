@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import styled from 'styled-components';
 
-import Divider from '@components/basicComponent/Divider';
-import Oval from '@components/basicComponent/Oval';
+import Divider from '@components/BasicComponent/Divider';
+import Oval from '@components/BasicComponent/Oval';
 import UserInfo from '@components/UserInfo';
 import UserNotification from '@components/UserNotification';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';

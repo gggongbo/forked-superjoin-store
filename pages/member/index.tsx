@@ -6,9 +6,9 @@ import styled from 'styled-components';
 import ReservedMember from './ReservedMember';
 import VisitedMember from './VisitedMember';
 
-import Divider from '@components/basicComponent/Divider';
-import Header from '@components/basicComponent/Header';
-import SelectInputText from '@components/basicComponent/SelectInputText';
+import Divider from '@components/BasicComponent/Divider';
+import Header from '@components/BasicComponent/Header';
+import SelectInputText from '@components/BasicComponent/SelectInputText';
 import * as Columns from '@constants/tableColumns';
 import { SearchType } from '@constants/types/components';
 import { MemberRouterType } from '@constants/types/member';

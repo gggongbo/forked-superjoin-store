@@ -2,9 +2,9 @@ import React, { FC, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import styled, { css } from 'styled-components';
 
-import IconButton from '@components/basicComponent/IconButton';
-import InputText from '@components/basicComponent/InputText';
-import SubText from '@components/basicComponent/SubText';
+import IconButton from '@components/BasicComponent/IconButton';
+import InputText from '@components/BasicComponent/InputText';
+import SubText from '@components/BasicComponent/SubText';
 import { singletons } from '@styles/theme/colors';
 
 const RewardItemBlock = styled.div`

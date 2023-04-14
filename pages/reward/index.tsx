@@ -5,10 +5,10 @@ import styled, { css } from 'styled-components';
 
 import RewardItem from './RewardItem';
 
-import Button from '@components/basicComponent/Button';
-import Header from '@components/basicComponent/Header';
-import InputText from '@components/basicComponent/InputText';
-import ListBox from '@components/basicComponent/ListBox';
+import Button from '@components/BasicComponent/Button';
+import Header from '@components/BasicComponent/Header';
+import InputText from '@components/BasicComponent/InputText';
+import ListBox from '@components/BasicComponent/ListBox';
 import { rewardKeys } from '@constants/queryKeys';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import {
