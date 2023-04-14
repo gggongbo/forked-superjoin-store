@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
 
-import Button from '@components/basicComponent/Button';
-import CheckboxItem from '@components/basicComponent/CheckboxItem';
-import Divider from '@components/basicComponent/Divider';
-import SubText from '@components/basicComponent/SubText';
+import Button from '@components/BasicComponent/Button';
+import CheckboxItem from '@components/BasicComponent/CheckboxItem';
+import Divider from '@components/BasicComponent/Divider';
+import SubText from '@components/BasicComponent/SubText';
 import Icon from '@components/Icon';
 import { CallMemberType } from '@constants/types/call';
 import { RewardType } from '@constants/types/reward';

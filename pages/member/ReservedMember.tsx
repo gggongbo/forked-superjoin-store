@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 import { useEffect, useMemo, useCallback, useState } from 'react';
 import styled from 'styled-components';
 
-import Table from '@components/basicComponent/Table';
+import Table from '@components/BasicComponent/Table';
 import { memberKeys } from '@constants/queryKeys';
 import {
   CallsOfUserType,

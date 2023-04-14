@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import SubTextLink from '@components/basicComponent/SubTextLink';
+import SubTextLink from '@components/BasicComponent/SubTextLink';
 import routerName from '@constants/router';
 
 const NavbarBlock = styled.div<{ selectedMenu?: string }>`

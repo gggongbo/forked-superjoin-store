@@ -3,8 +3,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 
-import Button from '@components/basicComponent/Button';
-import Oval from '@components/basicComponent/Oval';
+import Button from '@components/BasicComponent/Button';
+import Oval from '@components/BasicComponent/Oval';
 import logoIcon from '@resources/svg/logo/logo-icon.svg';
 import logoTitle from '@resources/svg/logo/logo-title.svg';
 import { authService } from '@services/auth';

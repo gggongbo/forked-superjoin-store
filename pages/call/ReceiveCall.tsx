@@ -5,7 +5,7 @@ import { useMemo, useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import Table from '@components/basicComponent/Table';
+import Table from '@components/BasicComponent/Table';
 import { callKeys } from '@constants/queryKeys';
 import {
   CallProps,

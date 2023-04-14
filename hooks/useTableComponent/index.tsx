@@ -3,9 +3,9 @@ import { useCallback, useRef } from 'react';
 import { ClipLoader } from 'react-spinners';
 import styled, { css } from 'styled-components';
 
-import Button from '@components/basicComponent/Button';
-import { CategoryTag } from '@components/basicComponent/CategoryTag';
-import { SubRow } from '@components/basicComponent/Table/SubRow';
+import Button from '@components/BasicComponent/Button';
+import { CategoryTag } from '@components/BasicComponent/CategoryTag';
+import { SubRow } from '@components/BasicComponent/Table/SubRow';
 import Icon from '@components/Icon';
 import {
   CallHostType,

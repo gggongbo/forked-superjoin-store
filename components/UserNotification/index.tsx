@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
-import IconButton from '@components/basicComponent/IconButton';
+import IconButton from '@components/BasicComponent/IconButton';
 import { ReduxStoreType } from '@constants/types/redux';
 import { storeUserActions } from '@slices/storeUser';
 import { useAppDispatch } from '@store/rootStore';

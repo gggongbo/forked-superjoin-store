@@ -2,7 +2,7 @@ import _, { debounce } from 'lodash';
 import { FC, useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 
-import SelectBox from '@components/basicComponent/Selectbox';
+import SelectBox from '@components/BasicComponent/Selectbox';
 import Icon from '@components/Icon';
 import { InputOptionType } from '@constants/types/components';
 

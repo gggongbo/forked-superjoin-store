@@ -11,8 +11,8 @@ export const media = {
 };
 
 export const componentSizes = {
-  table: { width: 1000 },
-  topNavbar: { width: 1300, height: 72 },
+  table: { width: 0 },
+  topNavbar: { width: 0, height: 72 },
   sideNavbar: { width: 312 },
   pagePadding: 24,
 };

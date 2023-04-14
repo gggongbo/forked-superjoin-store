@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import AskSupport from './AskSupport';
 import QaSupport from './QaSupport';
 
-import Divider from '@components/basicComponent/Divider';
-import Header from '@components/basicComponent/Header';
+import Divider from '@components/BasicComponent/Divider';
+import Header from '@components/BasicComponent/Header';
 
 const SupportBlock = styled.main`
   display: flex;

@@ -9,10 +9,10 @@ import {
 import { useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 
-import Button from '@components/basicComponent/Button';
-import InfoText from '@components/basicComponent/InfoText';
-import InputText from '@components/basicComponent/InputText';
-import VerticalSubText from '@components/basicComponent/VerticalSubText';
+import Button from '@components/BasicComponent/Button';
+import InfoText from '@components/BasicComponent/InfoText';
+import InputText from '@components/BasicComponent/InputText';
+import VerticalSubText from '@components/BasicComponent/VerticalSubText';
 import { ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';
 

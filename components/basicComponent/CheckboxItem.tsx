@@ -1,7 +1,7 @@
 import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
 
-import Oval from '@components/basicComponent/Oval';
+import Oval from '@components/BasicComponent/Oval';
 import Icon from '@components/Icon';
 
 const CheckboxItemBlock = styled.li`

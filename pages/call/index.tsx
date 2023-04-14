@@ -6,10 +6,10 @@ import styled from 'styled-components';
 import ReceiveCall from './ReceiveCall';
 import SendCall from './SendCall';
 
-import Divider from '@components/basicComponent/Divider';
-import Header from '@components/basicComponent/Header';
-import InputText from '@components/basicComponent/InputText';
-import SelectInputText from '@components/basicComponent/SelectInputText';
+import Divider from '@components/BasicComponent/Divider';
+import Header from '@components/BasicComponent/Header';
+import InputText from '@components/BasicComponent/InputText';
+import SelectInputText from '@components/BasicComponent/SelectInputText';
 import Icon from '@components/Icon';
 import * as Columns from '@constants/tableColumns';
 import { CallRouterType } from '@constants/types/call';

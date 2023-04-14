@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import Accordion from '@components/basicComponent/Accordion';
+import Accordion from '@components/BasicComponent/Accordion';
 import { supportKeys } from '@constants/queryKeys';
 import { SupportType } from '@constants/types/support';
 import { useReactQuery } from '@hooks/useReactQuery';

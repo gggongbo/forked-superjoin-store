@@ -3,12 +3,12 @@ import { useRouter } from 'next/router';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 
-import Button from '@components/basicComponent/Button';
-import CheckboxText from '@components/basicComponent/CheckboxText';
-import Divider from '@components/basicComponent/Divider';
-import InputText from '@components/basicComponent/InputText';
-import Oval from '@components/basicComponent/Oval';
-import VerticalSubText from '@components/basicComponent/VerticalSubText';
+import Button from '@components/BasicComponent/Button';
+import CheckboxText from '@components/BasicComponent/CheckboxText';
+import Divider from '@components/BasicComponent/Divider';
+import InputText from '@components/BasicComponent/InputText';
+import Oval from '@components/BasicComponent/Oval';
+import VerticalSubText from '@components/BasicComponent/VerticalSubText';
 import Icon from '@components/Icon';
 import { CurrentStoreUserType } from '@constants/types/redux';
 import loginBg from '@resources/svg/img/img-login-bg.svg';
