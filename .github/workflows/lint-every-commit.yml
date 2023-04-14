@@ -1,0 +1,22 @@
+# lint-every-commit.yml
+
+name: 'lint-every-commit'
+
+# workflow를 동작하게하는 trigger
+# repository에 commit 이벤트가 발생할 때마다 실행
+on: commit
+
+jobs:
+  test:
+    name: Lint Every Commit
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ secrets.NODE_VERSION }}
+
+      - run: yarn lint
