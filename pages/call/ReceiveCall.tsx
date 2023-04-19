@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import type { NextPage } from 'next';
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, FC } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -15,7 +14,6 @@ import {
 } from '@constants/types/call';
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useReactMutation } from '@hooks/useReactMutation';
-import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { callService } from '@services/call';
 
@@ -29,8 +27,8 @@ const TableBlock = styled.main`
   width: 100%;
 `;
 
-const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
-  const { columns, search, type } = props;
+const ReceiveCall: FC<CallProps> = function ReceiveCall(props) {
+  const { columns, search, type, initialData, fetching, refetch } = props;
   const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
     ({ storeUser }) => storeUser?.currentStoreUser,
   );
@@ -38,7 +36,6 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
-  const [initData, setInitData] = useState<CallType[]>([]);
   const pageSizeList = [10, 25, 50, 75, 100];
 
   const {
@@ -51,46 +48,19 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
     renderRowSubComponent,
   } = useTableComponent();
 
-  const fetchReceiveCall = useCallback((callData: CallType[]) => {
-    if (!callData) return;
-    setInitData(callData);
-  }, []);
-
-  const { refetch, isLoading: isGetLoading } = useReactQuery(
-    callKeys.getReceiveCall(currentStoreUser?.location),
-    () => {
-      if (
-        !currentStoreUser ||
-        !currentStoreUser?.location ||
-        !currentStoreUser?.category
-      )
-        return null;
-      return callService.getReceiveCall({
-        location: currentStoreUser?.location,
-        mainCategory: currentStoreUser?.category,
-      });
-    },
-    {
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-      refetchOnReconnect: true,
-    },
-    (resultData: CallType[]) => fetchReceiveCall(resultData),
-  );
-
   const { mutate: commentMutate, isLoading: isCommentLoading } =
     useReactMutation<RegisterCommentCallParamType>(
       callKeys.registerCommentCall,
       callService.registerCommentCall,
       () => {
-        refetch();
+        refetch?.();
       },
     );
 
   const filteredData = useMemo(
     () =>
-      initData &&
-      initData
+      initialData &&
+      initialData
         ?.map((data: CallType) => {
           if (!data) return null;
           const {
@@ -158,20 +128,20 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
           return dataValue?.toString()?.includes(searchValue?.toString());
         }),
     [
-      initData,
+      appealStatusComponent,
+      callCategoryTitleComponent,
+      callEndTimeComponent,
+      callHostInfoComponent,
+      callStatusComponent,
       commentMutate,
-      isCommentLoading,
-      currentStoreUser?.id,
-      currentStoreUser?.name,
-      currentStoreUser?.image,
       currentStoreUser?.address,
+      currentStoreUser?.id,
+      currentStoreUser?.image,
       currentStoreUser?.location.latitude,
       currentStoreUser?.location.longitude,
-      callCategoryTitleComponent,
-      callHostInfoComponent,
-      callEndTimeComponent,
-      callStatusComponent,
-      appealStatusComponent,
+      currentStoreUser?.name,
+      initialData,
+      isCommentLoading,
       search,
     ],
   );
@@ -193,7 +163,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
 
   return (
     <RecieveCallBlock>
-      {!!initData && (
+      {!!initialData && (
         <TableBlock>
           <Table
             columns={columns}
@@ -201,7 +171,7 @@ const ReceiveCall: NextPage<CallProps> = function ReceiveCall(props) {
             expandEnable
             renderRowSubComponent={renderRowSubComponent}
             fetchData={fetchData}
-            loading={loading || isGetLoading}
+            loading={loading || fetching}
             pageSizeList={pageSizeList}
             pageCount={pageCount}
             type={type}

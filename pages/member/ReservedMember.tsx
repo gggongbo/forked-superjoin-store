@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import type { NextPage } from 'next';
-import { useEffect, useMemo, useCallback, useState } from 'react';
+import { useEffect, useMemo, useCallback, useState, FC } from 'react';
 import styled from 'styled-components';
 
 import Table from '@components/BasicComponent/Table';
@@ -13,7 +12,6 @@ import {
 } from '@constants/types/member';
 import { useConfirm } from '@hooks/useConfirm';
 import { useReactMutation } from '@hooks/useReactMutation';
-import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { memberService } from '@services/member';
 
@@ -27,13 +25,15 @@ const TableBlock = styled.div`
   width: 100%;
 `;
 
-const ReservedMember: NextPage<MemberProps> = function ReservedMember({
+const ReservedMember: FC<MemberProps> = function ReservedMember({
   columns,
   search,
+  initialData,
+  fetching,
+  refetch,
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
-  const [initData, setInitData] = useState<CallsOfUserType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const pageSizeList = [10, 25, 50, 75, 100];
@@ -53,37 +53,19 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
     };
   }, [tableData]);
 
-  const fetchReservedMember = useCallback((memberData: CallsOfUserType[]) => {
-    if (!memberData) return;
-    setInitData(memberData!);
-  }, []);
-
-  const { refetch, isLoading: isGetLoading } = useReactQuery(
-    memberKeys.getReservedMember,
-    () => memberService.getReservedMember(),
-    {
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-      refetchOnReconnect: true,
-    },
-    (resultData: CallsOfUserType[]) => {
-      fetchReservedMember(resultData);
-    },
-  );
-
   const { mutate: visitMutate, isLoading: isVisitLoading } =
     useReactMutation<UpdateReservationMemberParamType>(
       memberKeys.updateReservationMember,
       memberService.updateReservationMember,
       () => {
-        refetch();
+        refetch?.();
       },
     );
 
   const filteredData = useMemo(
     () =>
-      initData &&
-      initData
+      initialData &&
+      (initialData as CallsOfUserType[])
         ?.map((data: CallsOfUserType) => {
           if (!data) return null;
           const { userInfo, callInfo, deadline, reward, canceledAt } = data;
@@ -127,7 +109,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
         }),
     [
       confirm,
-      initData,
+      initialData,
       isVisitLoading,
       rewardComponent,
       search,
@@ -159,7 +141,7 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
           <Table
             columns={columns}
             data={tableData}
-            loading={loading || isGetLoading}
+            loading={loading || fetching}
             fetchData={fetchData}
             pageSizeList={pageSizeList}
             pageCount={pageCount}
@@ -168,10 +150,6 @@ const ReservedMember: NextPage<MemberProps> = function ReservedMember({
       )}
     </ReservedMemberBlock>
   );
-};
-
-ReservedMember.defaultProps = {
-  search: { type: '', value: '' },
 };
 
 export default ReservedMember;

@@ -1,6 +1,7 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import { useMemo, useEffect, useState, useCallback } from 'react';
+import { dehydrate } from 'react-query';
 import styled from 'styled-components';
 
 import ReservedMember from './ReservedMember';
@@ -9,9 +10,17 @@ import VisitedMember from './VisitedMember';
 import Divider from '@components/BasicComponent/Divider';
 import Header from '@components/BasicComponent/Header';
 import SelectInputText from '@components/BasicComponent/SelectInputText';
+import { memberKeys } from '@constants/queryKeys';
 import * as Columns from '@constants/tableColumns';
 import { SearchType } from '@constants/types/components';
-import { MemberRouterType } from '@constants/types/member';
+import {
+  CallsOfUserType,
+  MemberRouterType,
+  StoresOfUserType,
+} from '@constants/types/member';
+import { useReactQuery } from '@hooks/useReactQuery';
+import { memberService } from '@services/member';
+import queryClient from '@utils/queryUtils';
 
 const MemberBlock = styled.main`
   min-width: ${({ theme }) => theme.componentSizes.table.width}px;
@@ -54,6 +63,25 @@ const optionList = [
   { name: '닉네임', value: ['userInfo', 'name'] },
 ];
 
+export const getServerSideProps: GetServerSideProps = async () => {
+  await Promise.all([
+    queryClient.prefetchQuery(
+      memberKeys.getVisitedMember,
+      () => memberService.getVisitedMember,
+    ),
+    queryClient.prefetchQuery(
+      memberKeys.getReservedMember,
+      () => memberService.getReservedMember,
+    ),
+  ]);
+
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
+};
+
 const Member: NextPage<WithRouterProps> = function Member({
   router: routerProps,
 }) {
@@ -63,10 +91,50 @@ const Member: NextPage<WithRouterProps> = function Member({
   );
   const [input, setInput] = useState<SearchType>();
   const [search, setSearch] = useState<SearchType>();
+  const [visitedMemberList, setVisitedMemberList] = useState<
+    StoresOfUserType[]
+  >([]);
+  const [reservedMemberList, setReservedMemberList] = useState<
+    CallsOfUserType[]
+  >([]);
 
   useEffect(() => {
     setSearch(undefined);
   }, [memberType]);
+
+  const {
+    refetch: getVisitedMemberRefetch,
+    isLoading: isGetVisitedMemberLoading,
+  } = useReactQuery(
+    memberKeys.getVisitedMember,
+    () => memberService.getVisitedMember(),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
+    (resultData: StoresOfUserType[]) => {
+      if (!resultData) return;
+      setVisitedMemberList(resultData);
+    },
+  );
+
+  const {
+    refetch: getReservedMemberRefetch,
+    isLoading: isGetReservedMemberLoading,
+  } = useReactQuery(
+    memberKeys.getReservedMember,
+    () => memberService.getReservedMember(),
+    {
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+    },
+    (resultData: CallsOfUserType[]) => {
+      if (!resultData) return;
+      setReservedMemberList(resultData);
+    },
+  );
 
   const handleInputChange = useCallback((e: any) => {
     setInput(e.target.valueObject);
@@ -123,9 +191,23 @@ const Member: NextPage<WithRouterProps> = function Member({
         rightComponent={headerRightComponent}
       />
       {memberType === 'visited' ? (
-        <VisitedMember columns={Columns.VisitedMember} search={search} />
+        <VisitedMember
+          columns={Columns.VisitedMember}
+          search={search}
+          initialData={visitedMemberList}
+          fetching={isGetVisitedMemberLoading}
+        />
       ) : (
-        <ReservedMember columns={Columns.ReservedMember} search={search} />
+        <ReservedMember
+          columns={Columns.ReservedMember}
+          search={search}
+          initialData={reservedMemberList}
+          fetching={isGetReservedMemberLoading}
+          refetch={() => {
+            getReservedMemberRefetch();
+            getVisitedMemberRefetch();
+          }}
+        />
       )}
     </MemberBlock>
   );

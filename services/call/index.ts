@@ -10,8 +10,9 @@ import {
   CommentType,
   CallType,
 } from '@constants/types/call';
-import { FirebaseTimestamp, LocationType } from '@constants/types/common';
+import { FirebaseTimestamp } from '@constants/types/common';
 import { functions } from '@services/app';
+import store from '@store/rootStore';
 import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
 const createCall = async (params: CreateCallParamType) => {
@@ -19,7 +20,7 @@ const createCall = async (params: CreateCallParamType) => {
   try {
     await httpsCallable(functions, 'createCall')(params);
   } catch (error: any) {
-    alert('제안을 생성하는 도중 오류가 발생하였습니다.');
+    throw new Error('제안을 생성하는 도중 오류가 발생하였습니다.');
   }
 };
 
@@ -31,13 +32,13 @@ const confirmCall = async (params: ConfirmCallParamType) => {
     if (
       error?.message === errorMessage.firebase.internal['already-confirmed']
     ) {
-      alert('이미 확정되었습니다.');
+      throw new Error('이미 확정되었습니다.');
     } else if (
       error?.message === errorMessage.firebase.internal['invalid-status']
     ) {
-      alert('제안 상태가 바뀌어 확정이 불가합니다.');
+      throw new Error('제안 상태가 바뀌어 확정이 불가합니다.');
     } else {
-      alert('제안을 확정하는 도중 오류가 발생하였습니다.');
+      throw new Error('제안을 확정하는 도중 오류가 발생하였습니다.');
     }
   }
 };
@@ -48,13 +49,13 @@ const cancelCall = async (callId: string) => {
     await httpsCallable(functions, 'cancelCall')(callId);
   } catch (error: any) {
     if (error?.message === errorMessage.firebase.internal['already-canceled']) {
-      alert('이미 취소되었습니다.');
+      throw new Error('이미 취소되었습니다.');
     } else if (
       error?.message === errorMessage.firebase.internal['invalid-status']
     ) {
-      alert('제안 상태가 바뀌어 취소가 불가합니다.');
+      throw new Error('제안 상태가 바뀌어 취소가 불가합니다.');
     } else {
-      alert('제안을 취소하는 도중 오류가 발생하였습니다.');
+      throw new Error('제안을 취소하는 도중 오류가 발생하였습니다.');
     }
   }
 };
@@ -65,13 +66,13 @@ const deleteCall = async (callId: string) => {
     await httpsCallable(functions, 'deleteCall')(callId);
   } catch (error: any) {
     if (error?.message === errorMessage.firebase.internal['already-deleted']) {
-      alert('이미 삭제되었습니다.');
+      throw new Error('이미 삭제되었습니다.');
     } else if (
       error?.message === errorMessage.firebase.internal['invalid-status']
     ) {
-      alert('제안 상태가 바뀌어 삭제가 불가합니다.');
+      throw new Error('제안 상태가 바뀌어 삭제가 불가합니다.');
     } else {
-      alert('제안을 삭제하는 도중 오류가 발생하였습니다.');
+      throw new Error('제안을 삭제하는 도중 오류가 발생하였습니다.');
     }
   }
 };
@@ -84,13 +85,13 @@ const acceptRequestCall = async (params: AcceptRequestCallParamType) => {
     if (
       error?.message === errorMessage.firebase.internal['exceeded-num-of-user']
     ) {
-      alert('모집 인원이 초과되어 더 이상 수락할 수 없습니다.');
+      throw new Error('모집 인원이 초과되어 더 이상 수락할 수 없습니다.');
     } else if (
       error?.message === errorMessage.firebase.internal['invalid-status']
     ) {
-      alert('제안 상태가 바뀌어 참여 수락이 불가합니다.');
+      throw new Error('제안 상태가 바뀌어 참여 수락이 불가합니다.');
     } else {
-      alert('참여 수락하는 도중 오류가 발생하였습니다.');
+      throw new Error('참여 수락하는 도중 오류가 발생하였습니다.');
     }
   }
 };
@@ -101,9 +102,9 @@ const rejectRequestCall = async (params: RejectRequestCallParamType) => {
     await httpsCallable(functions, 'rejectRequestCall')(params);
   } catch (error: any) {
     if (error?.message === errorMessage.firebase.internal['invalid-status']) {
-      alert('제안 상태가 바뀌어 참여 거절이 불가합니다.');
+      throw new Error('제안 상태가 바뀌어 참여 거절이 불가합니다.');
     } else {
-      alert('참여 거절하는 도중 오류가 발생하였습니다.');
+      throw new Error('참여 거절하는 도중 오류가 발생하였습니다.');
     }
   }
 };
@@ -114,18 +115,18 @@ const registerCommentCall = async (params: RegisterCommentCallParamType) => {
     await httpsCallable(functions, 'registerCommentCall')(params);
   } catch (error: any) {
     if (error?.message === errorMessage.firebase.internal['invalid-status']) {
-      alert('제안 상태가 바뀌어 어필이 불가합니다.');
+      throw new Error('제안 상태가 바뀌어 어필이 불가합니다.');
     } else {
-      alert('어필하는 도중 오류가 발생하였습니다.');
+      throw new Error('어필하는 도중 오류가 발생하였습니다.');
     }
   }
 };
 
-const getSendCall = async (storeId: string): Promise<CallType[] | null> => {
+const getSendCall = async (): Promise<CallType[] | null> => {
   const storeCallList = (await httpsCallable(
     functions,
     'getSendCall',
-  )(storeId)) as HttpsCallableResult<CallType[]>;
+  )()) as HttpsCallableResult<CallType[]>;
   if (!storeCallList?.data) return null;
   return storeCallList.data.map((callData: CallType) => {
     return {
@@ -141,13 +142,19 @@ const getSendCall = async (storeId: string): Promise<CallType[] | null> => {
   });
 };
 
-const getReceiveCall = async (params: {
-  location: LocationType;
-  mainCategory: string;
-}): Promise<CallType[] | null> => {
-  if (!params) return null;
+const getReceiveCall = async (): Promise<CallType[] | null> => {
+  const {
+    storeUser: { currentStoreUser },
+  } = store.getState();
 
-  const { location, mainCategory } = params;
+  if (
+    !currentStoreUser ||
+    !currentStoreUser?.location ||
+    !currentStoreUser?.category
+  )
+    return null;
+
+  const { location, category } = currentStoreUser;
 
   const storeCallList = (await httpsCallable(
     functions,
@@ -157,7 +164,7 @@ const getReceiveCall = async (params: {
       latitude: Number(location.latitude),
       longitude: Number(location.longitude),
     },
-    mainCategory,
+    mainCategory: category,
   })) as HttpsCallableResult<CallType[]>;
   if (!storeCallList?.data) return null;
   return storeCallList.data.map((callData: CallType) => {

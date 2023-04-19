@@ -31,7 +31,6 @@ const authPersistConfig = {
   blacklist: [],
 };
 
-// TODO-redux-wrapper 관련 로직 추가
 const appReducer = combineReducers({
   auth: persistReducer(authPersistConfig, auth),
   storeUser: persistReducer(storeUserPersistConfig, storeUser),

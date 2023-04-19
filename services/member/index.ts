@@ -18,18 +18,18 @@ const updateReservationMember = async (
     await httpsCallable(functions, 'updateReservationMember')(params);
   } catch (error: any) {
     if (error?.message === errorMessage.firebase.internal['already-visited']) {
-      alert('이미 방문 확인되었습니다.');
+      throw new Error('이미 방문 확인되었습니다.');
     } else if (
       error?.message === errorMessage.firebase.internal['invalid-status']
     ) {
-      alert('제안 상태가 바뀌어 방문 확인이 불가합니다.');
+      throw new Error('제안 상태가 바뀌어 방문 확인이 불가합니다.');
     } else if (
       error?.message ===
       errorMessage.firebase.internal['calls-of-users-not-found']
     ) {
       throw new Error(error);
     } else {
-      alert('방문 확인하는 도중 오류가 발생하였습니다.');
+      throw new Error('방문 확인하는 도중 오류가 발생하였습니다.');
     }
   }
 };

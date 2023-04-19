@@ -5,11 +5,6 @@ import { FirebaseTimestamp } from '@constants/types/common';
 import { SearchType } from '@constants/types/components';
 import { RewardInfo } from '@constants/types/reward';
 
-export interface MemberProps {
-  search?: SearchType;
-  columns: any;
-}
-
 export type UpdateReservationMemberParamType = {
   callId: string | undefined;
   userId: string | undefined;
@@ -41,3 +36,11 @@ export type MemberRouterType = NextRouter & {
     memberType: 'visited' | 'reserved';
   };
 };
+
+export interface MemberProps {
+  search?: SearchType;
+  columns: any;
+  initialData: StoresOfUserType[] | CallsOfUserType[];
+  fetching: boolean;
+  refetch?: Function;
+}
