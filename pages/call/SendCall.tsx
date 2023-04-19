@@ -1,7 +1,6 @@
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import type { NextPage } from 'next';
-import { useMemo, useCallback, useState } from 'react';
+import { useMemo, useCallback, useState, FC } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -18,7 +17,6 @@ import {
 import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import { useConfirm } from '@hooks/useConfirm';
 import { useReactMutation } from '@hooks/useReactMutation';
-import { useReactQuery } from '@hooks/useReactQuery';
 import { useTableComponent } from '@hooks/useTableComponent';
 import { callService } from '@services/call';
 
@@ -32,9 +30,8 @@ const TableBlock = styled.div`
   width: 100%;
 `;
 
-// TODO : getServerSideProps + react-query prefetch+dehydrate + serverside redux store approaching logic add
-const SendCall: NextPage<CallProps> = function SendCall(props) {
-  const { columns, search, type } = props;
+const SendCall: FC<CallProps> = function SendCall(props) {
+  const { columns, search, type, initialData, fetching, refetch } = props;
   const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
     ({ storeUser }) => storeUser?.currentStoreUser,
   );
@@ -43,7 +40,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<any>([]);
   const [pageCount, setPageCount] = useState<number>(0);
-  const [initData, setInitData] = useState<CallType[]>([]);
   const pageSizeList = [10, 25, 50, 75, 100];
 
   const {
@@ -56,33 +52,12 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
     renderRowSubComponent,
   } = useTableComponent();
 
-  const fetchSendCall = useCallback((callData: CallType[]) => {
-    if (!callData) return;
-    setInitData(callData);
-  }, []);
-
-  const { refetch, isLoading: isGetLoading } = useReactQuery(
-    callKeys.getSendCall(currentStoreUser?.id),
-    () => {
-      if (!currentStoreUser || !currentStoreUser?.id) return null;
-      return callService.getSendCall(currentStoreUser?.id);
-    },
-    {
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-      refetchOnReconnect: true,
-    },
-    (resultData: CallType[]) => {
-      fetchSendCall(resultData);
-    },
-  );
-
   const { mutate: confirmMutate, isLoading: isConfirmLoading } =
     useReactMutation<ConfirmCallParamType>(
       callKeys.confirmCall,
       callService.confirmCall,
       () => {
-        refetch();
+        refetch?.();
       },
     );
 
@@ -91,7 +66,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       callKeys.cancelCall,
       callService.cancelCall,
       () => {
-        refetch();
+        refetch?.();
       },
     );
 
@@ -100,7 +75,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       callKeys.deleteCall,
       callService.deleteCall,
       () => {
-        refetch();
+        refetch?.();
       },
     );
 
@@ -109,7 +84,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       callKeys.acceptRequestCall,
       callService.acceptRequestCall,
       () => {
-        refetch();
+        refetch?.();
       },
     );
 
@@ -118,14 +93,14 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       callKeys.rejectRequestCall,
       callService.rejectRequestCall,
       () => {
-        refetch();
+        refetch?.();
       },
     );
 
   const filteredData = useMemo(
     () =>
-      initData &&
-      initData
+      initialData &&
+      initialData
         ?.map((data: CallType) => {
           const {
             callHost,
@@ -241,7 +216,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       currentStoreUser?.location.longitude,
       currentStoreUser?.name,
       deleteMutate,
-      initData,
+      initialData,
       isAcceptLoading,
       isCancelLoading,
       isConfirmLoading,
@@ -269,7 +244,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
 
   return (
     <SendCallBlock>
-      {!!initData && (
+      {!!initialData && (
         <TableBlock>
           <Table
             columns={columns}
@@ -277,7 +252,7 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
             expandEnable
             renderRowSubComponent={renderRowSubComponent}
             fetchData={fetchData}
-            loading={loading || isGetLoading}
+            loading={loading || fetching}
             pageSizeList={pageSizeList}
             pageCount={pageCount}
             type={type}
@@ -286,11 +261,6 @@ const SendCall: NextPage<CallProps> = function SendCall(props) {
       )}
     </SendCallBlock>
   );
-};
-
-SendCall.defaultProps = {
-  search: { type: '', value: '' },
-  type: '',
 };
 
 export default SendCall;

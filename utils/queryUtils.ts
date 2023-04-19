@@ -3,14 +3,13 @@ import { QueryClient } from 'react-query';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      useErrorBoundary: true,
+      useErrorBoundary: false,
       retry: 0,
-      refetchOnWindowFocus: false,
       refetchOnMount: true,
       refetchOnReconnect: true,
     },
     mutations: {
-      useErrorBoundary: true,
+      useErrorBoundary: false,
     },
   },
 });

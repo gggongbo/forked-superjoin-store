@@ -12,6 +12,7 @@ import {
 import { FirebaseTimestamp } from '@constants/types/common';
 import { RewardInfo, RewardType } from '@constants/types/reward';
 import { auth, db } from '@services/app';
+import store from '@store/rootStore';
 import { firebaseTimestampToDate } from '@utils/firebaseUtils';
 
 const createReward = async (rewardName: string) => {
@@ -29,7 +30,7 @@ const createReward = async (rewardName: string) => {
       updatedAt: now,
     });
   } catch (error: any) {
-    alert('리워드를 추가하는 도중 오류가 발생하였습니다.');
+    throw new Error('리워드를 추가하는 도중 오류가 발생하였습니다.');
   }
 };
 
@@ -43,7 +44,7 @@ const updateReward = async (reward: RewardInfo) => {
       updatedAt: now,
     });
   } catch (error: any) {
-    alert('리워드를 수정하는 도중 오류가 발생하였습니다.');
+    throw new Error('리워드를 수정하는 도중 오류가 발생하였습니다.');
   }
 };
 
@@ -57,16 +58,20 @@ const deleteReward = async (rewardId: string) => {
       updatedAt: now,
     });
   } catch (error: any) {
-    alert('리워드를 삭제하는 도중 오류가 발생하였습니다.');
+    throw new Error('리워드를 삭제하는 도중 오류가 발생하였습니다.');
   }
 };
 
-const getRewardList = async (storeId: string): Promise<RewardType[] | null> => {
-  if (!storeId) return [];
+const getRewardList = async (): Promise<RewardType[] | null> => {
+  const {
+    storeUser: { currentStoreUser },
+  } = store.getState();
+
+  if (!currentStoreUser || !currentStoreUser?.id) return [];
 
   const q = query(
     collection(db, 'reward'),
-    where('storeId', '==', storeId),
+    where('storeId', '==', currentStoreUser.id),
     where('deleted', '==', false),
   );
   const querySnapshot = await getDocs(q);

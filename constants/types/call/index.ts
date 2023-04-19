@@ -84,9 +84,12 @@ export type CallType = {
 };
 
 export interface CallProps {
-  columns: any;
   search?: SearchType;
-  type?: string;
+  columns: any;
+  type?: string; // Table>SubRow 구분시 사용
+  initialData: CallType[];
+  fetching: boolean;
+  refetch?: Function;
 }
 
 export type CreateCallParamType = {

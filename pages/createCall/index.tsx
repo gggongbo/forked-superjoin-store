@@ -108,7 +108,7 @@ const CreateCall: NextPage<WithRouterProps> = function CreateCall({
 
   const { isLoading: isRewardLoading } = useReactQuery(
     rewardKeys.getRewardList,
-    () => rewardService.getRewardList(currentStoreUser.id),
+    () => rewardService.getRewardList(),
     {
       refetchOnWindowFocus: false,
       refetchOnMount: true,

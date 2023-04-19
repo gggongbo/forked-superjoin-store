@@ -1,7 +1,7 @@
-import type { NextPage } from 'next';
 import {
   ChangeEvent,
   Dispatch,
+  FC,
   SetStateAction,
   useCallback,
   useState,
@@ -44,9 +44,7 @@ interface AskSupportProps {
   supportType: Dispatch<SetStateAction<string>>;
 }
 
-const AskSupport: NextPage<AskSupportProps> = function AskSupport({
-  supportType,
-}) {
+const AskSupport: FC<AskSupportProps> = function AskSupport({ supportType }) {
   const email = useSelector<ReduxStoreType, string | null>(
     ({ auth }) => auth?.currentUser?.email,
   );

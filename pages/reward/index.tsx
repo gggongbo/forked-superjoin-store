@@ -1,6 +1,6 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { dehydrate } from 'react-query';
 import styled, { css } from 'styled-components';
 
 import RewardItem from './RewardItem';
@@ -10,7 +10,6 @@ import Header from '@components/BasicComponent/Header';
 import InputText from '@components/BasicComponent/InputText';
 import ListBox from '@components/BasicComponent/ListBox';
 import { rewardKeys } from '@constants/queryKeys';
-import { CurrentStoreUserType, ReduxStoreType } from '@constants/types/redux';
 import {
   RewardInfo,
   RewardItemType,
@@ -21,6 +20,7 @@ import { useReactMutation } from '@hooks/useReactMutation';
 import { useReactQuery } from '@hooks/useReactQuery';
 import emptyImage from '@resources/svg/img/service-gift-gray.svg';
 import { rewardService } from '@services/reward';
+import queryClient from '@utils/queryUtils';
 
 const RewardBlock = styled.main`
   display: flex;
@@ -97,11 +97,21 @@ const EmptyTextBlock = styled.div`
   font-size: 16px;
 `;
 
+export const getServerSideProps: GetServerSideProps = async () => {
+  await queryClient.prefetchQuery(
+    rewardKeys.getRewardList,
+    () => rewardService.getRewardList,
+  );
+
+  return {
+    props: {
+      dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+    },
+  };
+};
+
 const Reward: NextPage = function Reward() {
   const { confirm } = useConfirm();
-  const currentStoreUser = useSelector<ReduxStoreType, CurrentStoreUserType>(
-    ({ storeUser }) => storeUser?.currentStoreUser,
-  );
 
   const [newReward, setNewReward] = useState<string>();
   const [rewardList, setRewardList] = useState<RewardType[]>();
@@ -113,7 +123,7 @@ const Reward: NextPage = function Reward() {
 
   const { refetch, isLoading: isGetLoading } = useReactQuery(
     rewardKeys.getRewardList,
-    () => rewardService.getRewardList(currentStoreUser.id),
+    () => rewardService.getRewardList(),
     {
       refetchOnWindowFocus: false,
       refetchOnMount: true,

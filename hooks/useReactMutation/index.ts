@@ -14,8 +14,11 @@ const useReactMutation = <T>(
       onSuccess(data: T) {
         onSuccess?.(data);
       },
+      /* eslint-disable no-console */
+      /* eslint-disable no-alert */
       onError(error: Error) {
         onError?.(error);
+        alert(error.message);
         console.log('react-mutation error : ', error);
       },
     },

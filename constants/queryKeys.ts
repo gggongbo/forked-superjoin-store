@@ -1,10 +1,7 @@
-import { LocationType } from '@constants/types/common';
-
 const callKeys = {
   createCall: ['createCall'] as const,
-  getSendCall: (storeId: string) => ['getSendCall', storeId] as const,
-  getReceiveCall: (params: Omit<LocationType, 'geohash'>) =>
-    ['getReceiveCall', params] as const,
+  getSendCall: ['getSendCall'] as const,
+  getReceiveCall: ['getReceiveCall'] as const,
   cancelCall: ['cancelCall'] as const,
   confirmCall: ['confirmCall'] as const,
   deleteCall: ['deleteCall'] as const,
