@@ -92,6 +92,12 @@ const Layout: NextPage<LayoutProps> = function Layout(props) {
       <Head>
         <title>Superjoin</title>
         <meta name="description" content="Superjoin" />
+        <meta name="theme-color" content="#F92A7E" />
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+        />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {children && type?.displayName !== 'Login' ? (
