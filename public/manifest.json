@@ -1,0 +1,18 @@
+{
+  "theme_color": "#F92A7E",
+  "background_color": "#16CBDE",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "name": "superjoin-store",
+  "short_name": "sj-store",
+  "description": "superjoin for store",
+  "icons": [
+    {
+      "src": "icons/logo-icon-white.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  publicExcludes: ['!robots.txt'],
+});
+
+const nextConfig = withPWA({
   reactStrictMode: true,
   trailingSlash: true,
   devIndicators: {
@@ -34,6 +39,6 @@ const nextConfig = {
     loader: 'akamai',
     path: '/',
   },
-};
+});
 
 module.exports = nextConfig;
